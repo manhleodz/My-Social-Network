@@ -147,7 +147,6 @@ export default function SinglePost({ post, setPost, user, authId }) {
                                     url={videos[0].link}
                                     width="100%"
                                     controls={true}
-                                    height="100%"
                                     style={{ minHeight: '480px' }}
                                 />
                             </>

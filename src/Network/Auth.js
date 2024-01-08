@@ -43,7 +43,7 @@ export const Auth = {
     async signUp({ password, email }, success, failure) {
         return axios.post(`${ApiUrl}/auth`, { password, email })
             .then((response) => {
-                localStorage.setItem("accessToken", response.data);
+                sessionStorage.setItem("accessToken", response.data);
                 const myTimeout = setTimeout(() => window.location.assign("/"), 1000);
                 myTimeout();
             }).catch((err) => {
