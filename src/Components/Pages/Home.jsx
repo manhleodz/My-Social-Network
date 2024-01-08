@@ -118,12 +118,12 @@ export default function Home() {
             </li>
           </ul>
         </div>
-        <div className='px-12 w-3/5 flex flex-col justify-center items-center space-y-5'>
+        <div className='w-3/5 px-24 max-2xl:px-16 max-xl:px-0 max-md:w-full max-xl:w-4/5 flex flex-col justify-center items-center space-y-5'>
           <Story />
           <MakePost />
           <Post />
         </div>
-        <div className=' w-1/5 max-sm:hidden flex justify-end'>
+        <div className=' w-1/5 max-md:hidden flex justify-end'>
           <OnlineBar userId={user.id} />
         </div>
       </div>

@@ -34,13 +34,13 @@ export default function SinglePost({ post, setPost, user, authId }) {
             PostId: post.id,
             UserId: authId,
         }).then((response) => {
-            PostApi.updateLikeNum(post.id);
             setIsClicked(response.data);
             if (isClicked === false) {
                 setLikeNum((likeNum) => (likeNum = likeNum + 1));
             } else {
                 setLikeNum((likeNum) => (likeNum = likeNum - 1));
             }
+            PostApi.updateLikeNum(post.id);
         });
     };
 
@@ -50,8 +50,10 @@ export default function SinglePost({ post, setPost, user, authId }) {
 
     if (openComment || openLike) {
         document.querySelector('body').style.overflow = 'hidden';
+        document.querySelector('body').style.paddingRight = "12px"
     } else {
         document.querySelector('body').style.overflow = 'auto';
+        document.querySelector('body').style.paddingRight = "0px"
     }
 
     useEffect(() => {

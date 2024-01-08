@@ -38,7 +38,7 @@ export default function Story() {
 
   var length = Math.floor((stories.length + 1) / 5);
 
-  if ((stories.length + 1) / 5 > length) {
+  if ((stories.length + 1) / 3 > length) {
     length = length + 1;
   }
 
@@ -58,7 +58,7 @@ export default function Story() {
         </button>
       )}
       <div className=' flex items-center overflow-x-hidden overflow-y-hidden transform relative w-full scroll-smooth' id='container'>
-        <div className=' flex flex-row items-center justify-start space-x-1 w-full scroll-smooth' style={{ width: `${stories.length === 1 ? `${(stories.length + 0.5) * 185}px` : `${(stories.length) * 185}px`}` }}>
+        <div className=' flex flex-row items-center justify-start space-x-1 w-full scroll-smooth' style={{ width: `${stories.length === 0 ? `${185}px` : `${(stories.length + 0.5) * 185}px`}` }}>
           <div
             onMouseEnter={() => {
               document.getElementById('new').style.display = 'block';
@@ -94,7 +94,7 @@ export default function Story() {
                 onClick={(e) => navigate(`story/${story.id}`)}
                 onMouseEnter={() => {
                   document.getElementById(`reel-${story.id}`).style.display = 'block';
-                  document.getElementById(`content_${key}`).style.transform = 'scale(1.07)'
+                  document.getElementById(`content_${key}`).style.transform = 'scale(1.06)'
                 }}
                 onMouseLeave={() => {
                   document.getElementById(`reel-${story.id}`).style.display = 'none';
@@ -107,15 +107,16 @@ export default function Story() {
                   <>
                     <ReactPlayer
                       id={`content_${key}`}
-                      className='react-player'
+                      className='react-player transition-all'
                       url={story.link}
                       width='100%'
                       height='100%'
+                      style={{transitionDuration: "500ms"}}
                     />
                   </>
                 ) : (
                   <>
-                    <img id={`content_${key}`} alt={`${story.id}`} src={`${story.link}`} className='w-full h-full object-cover block transition-all' style={{scale:"1.1"}}/>
+                    <img id={`content_${key}`} alt={`${story.id}`} src={`${story.link}`} className='w-full h-full object-cover block transition-all duration-500'/>
                   </>
                 )}
                 <div className='absolute top-1 left-1 p-1 bg-blue-600 rounded-full'>
