@@ -1,4 +1,4 @@
-# Trang web vẫn đang trong giai đoạn đầu nên một số tính năng chưa được hoàn thiện. 
+# Trang web vẫn đang trong giai đoạn đầu nên rất nhiều tính năng chưa được hoàn thiện. 
 
 # Giao diện đăng ký tài khoản
 ![image](https://github.com/manhleodz/My-Social-Network/assets/107250543/73b4352d-b163-470b-b249-38fba7da0922)
