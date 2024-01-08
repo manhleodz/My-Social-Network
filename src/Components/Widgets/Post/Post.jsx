@@ -15,8 +15,8 @@ export default function Post() {
     useEffect(() => {
 
         PostApi.getPost().then(res => {
-            setPost(res.data);
-            setData(res.data.slice(0, 4));
+            setPost(res.data.reverse());
+            setData(res.data.slice(0, 3));
         }).catch(() => {
             alert('Lỗi server thông cảm');
         })
@@ -24,11 +24,14 @@ export default function Post() {
 
     if (posts.length === 0 || data.length === 0 || !user) return null;
 
+    console.log(data);
+    console.log(posts);
+
     const fetchMoreData = () => {
         setTimeout(() => {
-            if (page < Math.floor(posts.length / 4)) {
+            if (page < Math.floor(posts.length / 3)) {
                 setPage(prev => prev + 1);
-                setData(data => data = [...data, ...posts.slice(0 + 4 * page, 4 * (page + 1))]);
+                setData(data => data = [...data, ...posts.slice(3 * (page + 1), 3 * (page + 2))]);
             }
         }, 1000);
     };
