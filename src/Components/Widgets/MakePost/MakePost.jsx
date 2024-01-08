@@ -27,9 +27,9 @@ export default function MakePost() {
     }
 
     const onDrop = useCallback((acceptedFiles) => {
-        setImageUploads(acceptedFiles.map(file => Object.assign(file, {
+        setImageUploads(prev => prev = [...prev, ...acceptedFiles.map(file => Object.assign(file, {
             preview: URL.createObjectURL(file)
-        })));
+        }))]);
     }, [])
 
     const { getRootProps, getInputProps } = useDropzone({
@@ -39,8 +39,6 @@ export default function MakePost() {
         },
         onDrop
     })
-
-    console.log(imageUploads);
 
     const onEmojiClick = (event) => {
         setPostText((prevInput) => prevInput + event.emoji);
@@ -60,13 +58,13 @@ export default function MakePost() {
                 <div className='flex items-center justify-between'>
                     {open && (
                         <div className='flex items-center justify-center fixed top-0 left-0 z-50 w-screen h-screen' style={{ backgroundColor: "rgb(0,0,0,0.3)" }}>
-                            <div className='bg-white rounded-lg flex items-center overflow-hidden z-40 scroll-smooth' style={{ width: "500px", backgroundColor: "rgb(0,0,0,0)" }} id='slide1'>
-                                <div className=' flex items-center z-30 duration-1000 scroll-smooth' style={{ width: "1500px", backgroundColor: "rgb(0,0,0,0)" }} >
-                                    <div className={`flex flex-col h-auto justify-center items-center relative bg-white divide-y divide-gray-300 rounded-lg z-20`} style={{ width: "500px" }}>
+                            <div className='bg-white rounded-lg flex items-center overflow-hidden z-40 scroll-smooth' style={{ width: "500px", maxHeight: "100%", backgroundColor: "rgb(0,0,0,0)" }} id='slide1'>
+                                <div className=' flex items-center z-30 duration-1000 scroll-smooth' style={{ width: "1500px", backgroundColor: "rgb(0,0,0,0)", maxHeight: "100%" }}>
+                                    <div className={`flex flex-col p-1 h-auto justify-center items-center relative bg-white divide-y divide-gray-300 rounded-lg z-20`} style={{ width: "500px", maxHeight: "800px" }}>
                                         <div className=' flex justify-center items-center text-xl font-bold w-full relative'>
                                             <h1 className=' py-3'>Tạo bài viết</h1>
                                             <div
-                                                className=' cursor-pointer absolute right-5 w-10 h-10 bg-gray-200 rounded-full flex justify-center items-center'
+                                                className=' cursor-pointer absolute right-1 top-1 w-10 h-10 bg-gray-200 rounded-full flex justify-center items-center'
                                                 onClick={() => {
                                                     setOpen(false);
                                                 }}
@@ -76,7 +74,7 @@ export default function MakePost() {
                                                 </svg>
                                             </div>
                                         </div>
-                                        <div className=' p-3 w-full space-y-3'>
+                                        <div className=' p-3 w-full space-y-3 overflow-y-auto'>
                                             <div className='flex items-center space-x-2'>
                                                 <img alt='avatar1' src={user.avatar} className=' w-12 h-12 rounded-full object-cover' />
                                                 <div className=''>
@@ -97,9 +95,9 @@ export default function MakePost() {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div>
-                                                <textarea onChange={(e) => setPostText(e.target.value)} value={postText} className={` w-full ring-0 resize-none overflow-hidden border-none outline-none focus:outline-none active:outline-none ${!imageUploads ? 'text-2xl ' : 'text-xl '}`} style={{ height: `${!imageUploads ? '150px' : '80px'}` }} placeholder={`${user.nickname} ơi, bạn đang nghĩ gì thế?`}></textarea>
-                                                <div className=' flex items-center justify-end w-full z-50'>
+                                            <div className='space-y-2 border-none outline-none'>
+                                                <textarea onChange={(e) => setPostText(e.target.value)} value={postText} className={` w-full ring-0 resize-none overflow-hidden border-none outline-none ${!imageUploads ? 'text-2xl' : 'text-xl'}`} style={{ height: `${!imageUploads ? '150px' : '60px'}` }} placeholder={`${user.nickname} ơi, bạn đang nghĩ gì thế?`}></textarea>
+                                                <div className=' flex items-center justify-end w-full z-50 border-none outline-none'>
                                                     <div
                                                         className=' cursor-pointer'
                                                         onClick={() => setShowPicker(!showPicker)}
@@ -114,54 +112,77 @@ export default function MakePost() {
                                                         </div>
                                                     )}
                                                 </div>
-                                            </div>
-                                            {imageUploads && (
-                                                <div className=' cursor-pointer border border-gray-300 rounded-lg relative'>
-                                                    <button className=' absolute z-40 top-3 right-3 p-2 rounded-full bg-white hover:bg-gray-200' onClick={() => setImageUploads(null)}>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 384 512">
-                                                            <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
-                                                        </svg>
-                                                    </button>
-                                                    <div {...getRootProps()} className='z-0'>
-                                                        <input {...getInputProps()} className='z-0' />
-                                                        {imageUploads.length > 0 ? (
+                                                {imageUploads && (
+                                                    <div
+                                                        className=' cursor-pointer border border-gray-300 rounded-lg relative'
+                                                        onMouseEnter={(e) => {
+                                                            document.getElementById("list-image").style.display = "block";
+                                                        }}
+                                                        onMouseLeave={(e) => {
+                                                            document.getElementById("list-image").style.display = "none";
+                                                        }}
+                                                    >
+                                                        <button className=' absolute z-40 top-3 right-3 p-2 rounded-full bg-white hover:bg-gray-200' onClick={() => setImageUploads(null)}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 384 512">
+                                                                <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                                                            </svg>
+                                                        </button>
+                                                        {(imageUploads.length > 0 || videoUploads.length > 0) && (
                                                             <>
-                                                                {imageUploads.map((image, index) => (
-                                                                    <img src={image.preview} alt={`anh-${index}`}/>
-                                                                ))}
+                                                                <div className=' absolute z-30 w-full h-full space-x-2 p-2 hidden' id='list-image' style={{ backgroundColor: "rgb(0,0,0,0.1)" }}>
+                                                                    <button className=' rounded-lg bg-white p-2 font-semibold text-sm' {...getRootProps()}>
+                                                                        <h1>Chỉnh sửa tất cả</h1>
+                                                                    </button>
+                                                                    <button className=' rounded-lg bg-white p-2 font-semibold text-sm' {...getRootProps()}>
+                                                                        <h1>Thêm ảnh/videos</h1>
+                                                                    </button>
+                                                                </div>
                                                             </>
-                                                        ) : (
-                                                            <div className='w-full rounded-lg p-2 z-0 h-60'>
-                                                                <div className='rounded-lg p-2 flex justify-center items-center relative bg-gray-100 hover:bg-gray-200 h-60'>
-                                                                    <div className='flex flex-col items-center'>
-                                                                        <div className='p-3 rounded-full bg-gray-300'>
-                                                                            <img alt='add-btn' src={addSvg} className='w-9 h-9' />
+                                                        )}
+                                                        <div {...getRootProps()} className='z-0'>
+                                                            <input {...getInputProps()} className='z-0' />
+                                                            {imageUploads.length > 0 ? (
+                                                                <div className='w-full grid grid-cols-2 gap-2 overflow-y-auto'>
+                                                                    {imageUploads.map((image, index) => (
+                                                                        <img src={image.preview} alt={`anh-${index}`} key={index} className=' object-cover z-0' />
+                                                                    ))}
+                                                                </div>
+                                                            ) : (
+                                                                <div className='w-full rounded-lg p-2 z-0 h-60'>
+                                                                    <div className='rounded-lg p-2 flex justify-center items-center relative bg-gray-100 hover:bg-gray-200 h-full'>
+                                                                        <div className='flex flex-col items-center'>
+                                                                            <div className='p-3 rounded-full bg-gray-300'>
+                                                                                <img alt='add-btn' src={addSvg} className='w-9 h-9' />
+                                                                            </div>
+                                                                            <h1 className='text-lg font-semibold'>Thêm ảnh/videos</h1>
+                                                                            <h1>hoặc kéo và thả</h1>
                                                                         </div>
-                                                                        <h1 className='text-lg font-semibold'>Thêm ảnh/videos</h1>
-                                                                        <h1>hoặc kéo và thả</h1>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        )}
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className='w-full space-y-3'>
+                                                <div className='flex items-center justify-between border border-gray-300 rounded-lg p-3 shadow-md'>
+                                                    <h1 className='font-semibold'>Thêm vào bài viết của bạn</h1>
+                                                    <div className='flex items-center space-x-4'>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512" className=' fill-green-500 cursor-pointer' onClick={() => {
+                                                            setImageUploads([]);
+                                                            setVideoUploads([]);
+                                                        }}>
+                                                            <path d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM323.8 202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4 3.9-19.8 10.5l-87 127.6L170.7 297c-4.6-5.7-11.5-9-18.7-9s-14.2 3.3-18.7 9l-64 80c-5.8 7.2-6.9 17.1-2.9 25.4s12.4 13.6 21.6 13.6h96 32H424c8.9 0 17.1-4.9 21.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z" />
+                                                        </svg>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512" className=' fill-yellow-400 cursor-pointer'>
+                                                            <path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm130.7 57.9c-4.2-13.6 7.1-25.9 21.3-25.9H364.5c14.2 0 25.5 12.4 21.3 25.9C369 368.4 318.2 408 258.2 408s-110.8-39.6-127.5-94.1zm86.9-85.1l0 0 0 0-.2-.2c-.2-.2-.4-.5-.7-.9c-.6-.8-1.6-2-2.8-3.4c-2.5-2.8-6-6.6-10.2-10.3c-8.8-7.8-18.8-14-27.7-14s-18.9 6.2-27.7 14c-4.2 3.7-7.7 7.5-10.2 10.3c-1.2 1.4-2.2 2.6-2.8 3.4c-.3 .4-.6 .7-.7 .9l-.2 .2 0 0 0 0 0 0c-2.1 2.8-5.7 3.9-8.9 2.8s-5.5-4.1-5.5-7.6c0-17.9 6.7-35.6 16.6-48.8c9.8-13 23.9-23.2 39.4-23.2s29.6 10.2 39.4 23.2c9.9 13.2 16.6 30.9 16.6 48.8c0 3.4-2.2 6.5-5.5 7.6s-6.9 0-8.9-2.8l0 0 0 0zm160 0l0 0-.2-.2c-.2-.2-.4-.5-.7-.9c-.6-.8-1.6-2-2.8-3.4c-2.5-2.8-6-6.6-10.2-10.3c-8.8-7.8-18.8-14-27.7-14s-18.9 6.2-27.7 14c-4.2 3.7-7.7 7.5-10.2 10.3c-1.2 1.4-2.2 2.6-2.8 3.4c-.3 .4-.6 .7-.7 .9l-.2 .2 0 0 0 0 0 0c-2.1 2.8-5.7 3.9-8.9 2.8s-5.5-4.1-5.5-7.6c0-17.9 6.7-35.6 16.6-48.8c9.8-13 23.9-23.2 39.4-23.2s29.6 10.2 39.4 23.2c9.9 13.2 16.6 30.9 16.6 48.8c0 3.4-2.2 6.5-5.5 7.6s-6.9 0-8.9-2.8l0 0 0 0 0 0z" />
+                                                        </svg>
                                                     </div>
                                                 </div>
-                                            )}
-                                            <div className='flex items-center justify-between border border-gray-300 rounded-lg p-3 shadow-md'>
-                                                <h1 className='font-semibold'>Thêm vào bài viết của bạn</h1>
-                                                <div className='flex items-center space-x-4'>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512" className=' fill-green-500 cursor-pointer' onClick={() => {
-                                                        setImageUploads([]);
-                                                    }}>
-                                                        <path d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM323.8 202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4 3.9-19.8 10.5l-87 127.6L170.7 297c-4.6-5.7-11.5-9-18.7-9s-14.2 3.3-18.7 9l-64 80c-5.8 7.2-6.9 17.1-2.9 25.4s12.4 13.6 21.6 13.6h96 32H424c8.9 0 17.1-4.9 21.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z" />
-                                                    </svg>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512" className=' fill-yellow-400 cursor-pointer'>
-                                                        <path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm130.7 57.9c-4.2-13.6 7.1-25.9 21.3-25.9H364.5c14.2 0 25.5 12.4 21.3 25.9C369 368.4 318.2 408 258.2 408s-110.8-39.6-127.5-94.1zm86.9-85.1l0 0 0 0-.2-.2c-.2-.2-.4-.5-.7-.9c-.6-.8-1.6-2-2.8-3.4c-2.5-2.8-6-6.6-10.2-10.3c-8.8-7.8-18.8-14-27.7-14s-18.9 6.2-27.7 14c-4.2 3.7-7.7 7.5-10.2 10.3c-1.2 1.4-2.2 2.6-2.8 3.4c-.3 .4-.6 .7-.7 .9l-.2 .2 0 0 0 0 0 0c-2.1 2.8-5.7 3.9-8.9 2.8s-5.5-4.1-5.5-7.6c0-17.9 6.7-35.6 16.6-48.8c9.8-13 23.9-23.2 39.4-23.2s29.6 10.2 39.4 23.2c9.9 13.2 16.6 30.9 16.6 48.8c0 3.4-2.2 6.5-5.5 7.6s-6.9 0-8.9-2.8l0 0 0 0zm160 0l0 0-.2-.2c-.2-.2-.4-.5-.7-.9c-.6-.8-1.6-2-2.8-3.4c-2.5-2.8-6-6.6-10.2-10.3c-8.8-7.8-18.8-14-27.7-14s-18.9 6.2-27.7 14c-4.2 3.7-7.7 7.5-10.2 10.3c-1.2 1.4-2.2 2.6-2.8 3.4c-.3 .4-.6 .7-.7 .9l-.2 .2 0 0 0 0 0 0c-2.1 2.8-5.7 3.9-8.9 2.8s-5.5-4.1-5.5-7.6c0-17.9 6.7-35.6 16.6-48.8c9.8-13 23.9-23.2 39.4-23.2s29.6 10.2 39.4 23.2c9.9 13.2 16.6 30.9 16.6 48.8c0 3.4-2.2 6.5-5.5 7.6s-6.9 0-8.9-2.8l0 0 0 0 0 0z" />
-                                                    </svg>
-                                                </div>
+                                                <button
+                                                    className={` w-full p-3 text-lg font-bold rounded-lg ${(imageUploads && imageUploads.length > 0) || (videoUploads && videoUploads.length > 0) || postText.length > 0 ? 'bg-blue-500 text-white' : ' bg-gray-300 text-gray-400'}`}
+                                                >Đăng</button>
                                             </div>
-                                            <button
-                                                className={` w-full p-3 text-lg font-bold rounded-lg ${(imageUploads && imageUploads.length > 0) || (videoUploads && videoUploads.length > 0) || postText.length > 0 ? 'bg-blue-500 text-white' : ' bg-gray-300 text-gray-400'}`}
-                                            >Đăng</button>
                                         </div>
                                     </div>
                                     <div className={`flex flex-col h-auto justify-center items-center bg-white divide-y divide-gray-300 rounded-lg z-0`} style={{ width: "500px" }}>

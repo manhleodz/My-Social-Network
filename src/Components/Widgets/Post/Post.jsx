@@ -24,9 +24,6 @@ export default function Post() {
 
     if (posts.length === 0 || data.length === 0 || !user) return null;
 
-    console.log(data);
-    console.log(posts);
-
     const fetchMoreData = () => {
         setTimeout(() => {
             if (page < Math.floor(posts.length / 3)) {
