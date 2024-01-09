@@ -4,7 +4,8 @@ import { Auth } from '../../Network/Auth';
 import bgsvg from '../../Assets/undraw_Connection_re_lcud.png';
 import Generate from '../../Helper/GenerateOTP';
 import OtpInput from "otp-input-react";
-
+import ConfirmOTP from '../../Helper/ConfirmOTP';
+import Decode from '../../Helper/Encode';
 
 function SignUp() {
 
@@ -229,7 +230,7 @@ function SignUp() {
                                                     <button
                                                         className="bg-blue-500 text-xl text-white font-bold rounded-md px-2 py-3"
                                                         onClick={() => {
-                                                            if (inputOTP === OTP) {
+                                                            if (Decode(inputOTP) === OTP) {
                                                                 signUp();
                                                             } else {
                                                                 setAlert("Sai mã OTP vui lòng kiểm tra lại");

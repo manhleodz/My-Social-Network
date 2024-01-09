@@ -34,7 +34,7 @@ export default function Home() {
   return (
     <div className=' w-full p-3 bg-gray-100' >
       <div className=' relative top-16 flex justify-between'>
-        <div className="h-full w-1/5 max-2xl:w-1/6 px-3 overflow-y-hidden dark:bg-gray-800 max-xl:hidden">
+        <div className="h-full w-1/5 max-xl:w-1/6 px-3 overflow-y-hidden dark:bg-gray-800 max-lg:hidden">
           <ul className="space-y-2 font-medium fixed w-1/5">
             <li>
               <button
@@ -44,7 +44,7 @@ export default function Home() {
                 className="w-full flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group cursor-pointer"
               >
                 <img alt='avatar' src={`${user.avatar}`} className='w-10 h-10 rounded-full object-cover' />
-                <span className="ml-3 text-xl">{user.nickname}</span>
+                <span className="ml-3 text-lg">{user.nickname}</span>
               </button>
             </li>
             <li>
@@ -118,7 +118,7 @@ export default function Home() {
             </li>
           </ul>
         </div>
-        <div className='w-3/5 px-24 max-2xl:px-16 max-xl:px-0 max-md:w-full max-xl:w-4/5 flex flex-col justify-center items-center space-y-5'>
+        <div className='w-3/5 px-24 max-2xl:px-5 max-xl:px-0 max-md:w-full max-xl:w-4/5 flex flex-col justify-center items-center space-y-5'>
           <Story />
           <MakePost />
           <Post />
