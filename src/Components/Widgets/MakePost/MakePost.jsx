@@ -6,6 +6,7 @@ import video from '../../../Assets/Địt mẹ thằng lồn Tiến/video-market
 import Picker from 'emoji-picker-react';
 import { useDropzone } from 'react-dropzone';
 import addSvg from '../../../Assets/Địt mẹ thằng lồn Tiến/add.svg';
+import './MakePost.scss';
 
 export default function MakePost() {
 
@@ -53,14 +54,14 @@ export default function MakePost() {
             <div className=' w-9/12 p-4 rounded-lg flex flex-col justify-center space-y-1 bg-white divide-y divide-gray-300 shadow-md'>
                 <div className=' flex items-center mb-2  space-x-3'>
                     <img alt='avatar' src={user.avatar} className=' w-12 h-12 rounded-full object-cover' />
-                    <div className=' w-full p-2 h-12 rounded-3xl bg-gray-100 hover:bg-gray-200 cursor-pointer flex items-center text-gray-600 text-lg' onClick={(e) => setOpen(true)}>{user.nickname}, bạn đang nghĩ gì thế?</div>
+                    <div className=' w-full p-3 h-12 rounded-3xl bg-gray-100 hover:bg-gray-200 cursor-pointer flex items-center text-gray-600 text-lg max-md:text-base max-md:rounded-2xl' onClick={(e) => setOpen(true)}>{user.nickname}, bạn đang nghĩ gì thế?</div>
                 </div>
                 <div className='flex items-center justify-between'>
                     {open && (
                         <div className='flex items-center justify-center fixed top-0 left-0 z-50 w-screen h-screen' style={{ backgroundColor: "rgb(0,0,0,0.3)" }}>
-                            <div className='bg-white rounded-lg flex items-center overflow-hidden z-40 scroll-smooth' style={{ width: "500px", maxHeight: "100%", backgroundColor: "rgb(0,0,0,0)" }} id='slide1'>
+                            <div className='bg-white rounded-lg flex items-center overflow-hidden z-40 scroll-smooth' id='slide1'>
                                 <div className=' flex items-center z-30 duration-1000 scroll-smooth' style={{ width: "1500px", backgroundColor: "rgb(0,0,0,0)", maxHeight: "100%" }}>
-                                    <div className={`flex flex-col p-1 h-auto justify-center items-center relative bg-white divide-y divide-gray-300 rounded-lg z-20`} style={{ width: "500px", maxHeight: "800px" }}>
+                                    <div className={`flex flex-col p-1 h-auto justify-center items-center relative bg-white divide-y divide-gray-300 rounded-lg z-20`} id="window-1">
                                         <div className=' flex justify-center items-center text-xl font-bold w-full relative'>
                                             <h1 className=' py-3'>Tạo bài viết</h1>
                                             <div
@@ -185,7 +186,7 @@ export default function MakePost() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className={`flex flex-col h-auto justify-center items-center bg-white divide-y divide-gray-300 rounded-lg z-0`} style={{ width: "500px" }}>
+                                    <div className={`flex flex-col h-auto justify-center items-center bg-white divide-y divide-gray-300 rounded-lg z-0`} id='window-2'>
                                         <div className=' flex justify-center items-center text-xl font-bold w-full relative'>
                                             <div
                                                 className=' cursor-pointer absolute left-5 w-10 h-10 bg-gray-200 rounded-full flex justify-center items-center'
@@ -251,11 +252,11 @@ export default function MakePost() {
                         </div>
                     )}
                     <div className=' flex items-center justify-center w-full text-center font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 h-10 py-7 rounded-lg mt-2'>
-                        <img alt='video' src={video} className=' w-10 h-10' />
-                        <h1 className='px-2'>Video trực tiếp</h1>
+                        <img alt='video' src={video} className=' w-8 h-8' />
+                        <h1 className='px-2 max-sm:hidden' style={{fontSize: "15px"}}>Video trực tiếp</h1>
                     </div>
                     <div className=' flex items-center justify-center w-full text-center font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 h-10 py-7 rounded-lg mt-2'>
-                        <svg width="50px" height="50px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="32px" height="32px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
                             <path d="M910.4 843.8H174.6c-27.4 0-49.7-22.3-49.7-49.7V298.2c0-27.4 22.3-49.7 49.7-49.7h735.8c27.4 0 49.7 22.3 49.7 49.7v495.9c0 27.4-22.3 49.7-49.7 49.7z" fill="#A7B8C6" />
                             <path d="M272.1 193.8H118.7c-22.8 0-41.2 18.5-41.2 41.2v512.7c0 22.8 18.5 41.2 41.2 41.2h752.7c22.8 0 41.2-18.5 41.2-41.2V235c0-22.8-18.5-41.2-41.2-41.2H272.1z" fill="#FFFFFF" />
                             <path d="M871.4 802.5H118.7c-30.2 0-54.8-24.6-54.8-54.8V235c0-30.2 24.6-54.8 54.8-54.8h752.7c30.2 0 54.8 24.6 54.8 54.8v512.7c0 30.3-24.6 54.8-54.8 54.8zM118.7 207.3c-15.3 0-27.7 12.4-27.7 27.7v512.7c0 15.3 12.4 27.7 27.7 27.7h752.7c15.3 0 27.7-12.4 27.7-27.7V235c0-15.3-12.4-27.7-27.7-27.7H118.7z" fill="#3E3A39" />
@@ -264,13 +265,13 @@ export default function MakePost() {
                             <path d="M855.1 630L551.5 326.4 194.3 683.7h660.8z" fill="#57B79C" /><path d="M855.1 521.8l-83-83-245 245h328z" fill="#75BFAB" />
                             <path d="M709.9 743.8h-33.1c-0.8 0-1.5-0.7-1.5-1.5v-33.1c0-0.8 0.7-1.5 1.5-1.5h33.1c0.8 0 1.5 0.7 1.5 1.5v33.1c0 0.9-0.7 1.5-1.5 1.5zM774.2 743.8h-33.1c-0.8 0-1.5-0.7-1.5-1.5v-33.1c0-0.8 0.7-1.5 1.5-1.5h33.1c0.8 0 1.5 0.7 1.5 1.5v33.1c0 0.9-0.6 1.5-1.5 1.5zM838.6 743.8h-33.1c-0.8 0-1.5-0.7-1.5-1.5v-33.1c0-0.8 0.7-1.5 1.5-1.5h33.1c0.8 0 1.5 0.7 1.5 1.5v33.1c0 0.9-0.7 1.5-1.5 1.5z" fill="#3E3A39" />
                         </svg>
-                        <h1 className='px-2'>Ảnh/Video</h1>
+                        <h1 className='px-2 max-sm:hidden' style={{fontSize: "15px"}}>Ảnh/Video</h1>
                     </div>
                     <div className=' flex items-center justify-center w-full text-center font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 h-10 py-7 rounded-lg mt-2'>
-                        <svg xmlns="http://www.w3.org/2000/svg" height="35" width="35" fill='#EAB026' className='' viewBox="0 0 512 512">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="32px" width="32px" fill='#EAB026' className='' viewBox="0 0 512 512">
                             <path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm177.6 62.1C192.8 334.5 218.8 352 256 352s63.2-17.5 78.4-33.9c9-9.7 24.2-10.4 33.9-1.4s10.4 24.2 1.4 33.9c-22 23.8-60 49.4-113.6 49.4s-91.7-25.5-113.6-49.4c-9-9.7-8.4-24.9 1.4-33.9s24.9-8.4 33.9 1.4zM144.4 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm192-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" />
                         </svg>
-                        <h1 className='px-2'>Cảm xúc/hoạt động</h1>
+                        <h1 className='px-2 max-sm:hidden' style={{fontSize: "15px"}}>Cảm xúc/hoạt động</h1>
                     </div>
                 </div>
             </div>

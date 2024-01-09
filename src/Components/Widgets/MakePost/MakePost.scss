@@ -1,0 +1,29 @@
+#slide1 {
+  width: 500px;
+  max-height: 100%;
+  background-color: rgb(0,0,0,0);
+}
+
+#window-1 {
+  width: 500px;
+  max-height: 800px;
+}
+
+#window-2 {
+  width: 500px;
+}
+
+@media (max-width: 600px) {
+  #slide1 {
+    width: 450px;
+    max-height: 100%;
+    background-color: rgb(0,0,0,0);
+  }
+  #window-1 {
+    width: 450px;
+  }
+
+  #window-2 {
+    width: 450px;
+  }
+}
