@@ -83,8 +83,8 @@ export default function Story() {
     if (!user || !stories || isPending || !playing) return null;
 
     if (!playing.link.includes("mp4")) {
-        length.current = 7;
-        if (Math.round(now) < 5 && isPlaying) {
+        length.current = 15;
+        if (Math.round(now) < 15 && isPlaying) {
             setTimeout(() => setNow(now => now = (now) + 1), 1000)
         }
     }
@@ -223,7 +223,7 @@ export default function Story() {
                                                 onDuration={(e) => length.current = e}
                                                 onProgress={(e) => setNow(e.playedSeconds)}
                                                 width={400}
-                                                height={780}
+                                                // height={780}
                                                 style={{ "borderRadius": "0.5rem", "maxHeight": "780px" }}
                                                 muted={isMuted}
                                             />
