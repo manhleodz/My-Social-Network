@@ -164,7 +164,7 @@ export default function Story() {
                         <div className=' w-16 h-16 max-sm:hidden'></div>
                     )}
                     <div className='flex flex-col justify-start items-center h-screen pt-20' style={{ width: "520px" }}>
-                        <div className=' !relative mb-5 h-full flex items-center justify-center rounded-lg' style={{ width: "420px" }}>
+                        <div className=' !relative mb-5 h-full flex items-center justify-center rounded-lg' style={{ width: "400px" }}>
                             <div className=' absolute w-full p-3 top-0 z-50'>
                                 <div className=' w-full bg-gray-50 h-1 rounded-xl mb-2' style={{ backgroundColor: "#A7A3A4" }}>
                                     <div
@@ -222,9 +222,9 @@ export default function Story() {
                                                 controls={false}
                                                 onDuration={(e) => length.current = e}
                                                 onProgress={(e) => setNow(e.playedSeconds)}
-                                                width={400}
+                                                // width={400}
                                                 // height={780}
-                                                style={{ "borderRadius": "0.5rem", "maxHeight": "780px" }}
+                                                style={{ "borderRadius": "0.5rem", "maxHeight": "780px", maxWidth: '90%' }}
                                                 muted={isMuted}
                                             />
                                         </div>
