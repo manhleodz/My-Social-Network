@@ -143,7 +143,7 @@ export default function MakePost() {
                                                         <div {...getRootProps()} className='z-0'>
                                                             <input {...getInputProps()} className='z-0' />
                                                             {imageUploads.length > 0 ? (
-                                                                <div className='w-full grid grid-cols-2 gap-2 overflow-y-auto'>
+                                                                <div className={`w-full grid ${imageUploads.length === 1 && 'grid-cols-1'}} ${imageUploads.length >= 2 && 'grid-cols-2'}  gap-2 overflow-y-auto`}>
                                                                     {imageUploads.map((image, index) => (
                                                                         <img src={image.preview} alt={`anh-${index}`} key={index} className=' object-cover z-0' />
                                                                     ))}
