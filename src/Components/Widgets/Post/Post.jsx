@@ -23,7 +23,7 @@ export default function Post() {
 
     const fetchMoreData = () => {
         setTimeout(async () => {
-            await PostApi.getPost(posts.page + 1).then(res => {
+            await PostApi.getPost(posts.page).then(res => {
                 if (res.status === 204) {
                     dispatch(stopFetchData());
                 } else {
