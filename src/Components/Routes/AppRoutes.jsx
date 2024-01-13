@@ -7,16 +7,48 @@ import ForgotPassword from '../Pages/ForgotPassword';
 import NotFound from '../Pages/NotFound';
 import { useDispatch, useSelector } from 'react-redux';
 import { Auth } from '../../Network/Auth';
-import { setUser, signOut } from '../../Redux/UserSlice';
 import ConfirmAccount from '../Pages/ConfirmAccount';
+import { PostApi } from '../../Network/Post';
+import { setUser, signOut } from '../../Redux/UserSlice';
+import { fetchData } from '../../Redux/PostSlice';
+import { StoryApi } from '../../Network/Story';
+import { fetchStory } from '../../Redux/StorySlice';
 
 export default function AppRoutes() {
 
     const user = useSelector(state => state.authentication.user);
+    const stories = useSelector(state => state.stories);
+    const posts = useSelector(state => state.posts);
+
     const dispatch = useDispatch();
 
     const success = (e) => {
         dispatch(setUser(e));
+        getPosts();
+        getStories();
+    }
+
+    const getPosts = async () => {
+        try {
+            await PostApi.getPost(posts.page).then(res => {
+                if (res.status === 200)
+                    dispatch(fetchData(res.data.data))
+            })
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const getStories = async () => {
+        try {
+            await StoryApi.getAll().then(res => {
+                if (res.status === 200)
+                    dispatch(fetchStory(res.data))
+            })
+        } catch (err) {
+            console.log(err);
+        }
+
     }
 
     const failure = () => {

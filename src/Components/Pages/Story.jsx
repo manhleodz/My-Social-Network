@@ -14,8 +14,9 @@ import loveGif from '../../Assets/React Icons/love.gif';
 import loveSvg from '../../Assets/React Icons/love.svg';
 import sadGif from '../../Assets/React Icons/sad.gif';
 import sadSvg from '../../Assets/React Icons/sad.svg';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchStory } from '../../Redux/StorySlice';
 import ReactPlayer from 'react-player';
 
 export default function Story() {
@@ -24,7 +25,7 @@ export default function Story() {
     const id = useParams().id;
     const [isPending, startTransition] = useTransition();
     const [seen, setSeen] = useState(id);
-    const [stories, setStory] = useState([]);
+    const stories = useSelector(state => state.stories.stories);
     const [playing, setPlaying] = useState();
     const [isPlaying, setIsPlaying] = useState(true);
     const [isMuted, setIsMuted] = useState(false);
@@ -42,6 +43,8 @@ export default function Story() {
     const [answer, setAnswer] = useState(null);
     const length = useRef();
 
+    const dispatch = useDispatch();
+    const location = useLocation();
     const navigate = useNavigate();
     const fac = new FastAverageColor();
 
@@ -56,10 +59,29 @@ export default function Story() {
     }
 
     useEffect(() => {
+        if (stories.length !== 0) {
+            for (let i = 0; i < stories.length; i++) {
+                if (stories[i].seen.includes(user.id)) {
+                    setSeen(seen => seen = seen + "," + stories[i].id);
+                }
+            }
+            let playing = stories.filter((story, idx) => {
+                if (story.id == id) {
+                    setIndex(idx);
+                    return story;
+                }
+            })
+            setPlaying(playing[0]);
+        } else {
+            getStory();
+        }
+    }, []);
+
+    const getStory = async () => {
         startTransition(() => {
             if (user) {
                 StoryApi.getAll().then(res => {
-                    setStory(res.data);
+                    dispatch(fetchStory(res.data))
 
                     for (let i = 0; i < res.data.length; i++) {
                         if (res.data[i].seen.includes(user.id)) {
@@ -78,7 +100,7 @@ export default function Story() {
                 });
             }
         })
-    }, []);
+    }
 
     if (!user || !stories || isPending || !playing) return null;
 
@@ -113,6 +135,13 @@ export default function Story() {
                         <h1 className=' cursor-pointer'>Cài đặt</h1>
                     </div>
                     <h1>Tin của bạn</h1>
+                    <button
+                        onClick={() => {
+                            navigate('/', { state: location.state })
+                        }}
+                    >
+                        Go back to Home
+                    </button>
                     <div className=' flex items-center text-sm space-x-1'>
                         <div className=' w-16 h-16 flex justify-center items-center cursor-pointer bg-slate-700 rounded-full'>
                             <svg xmlns="http://www.w3.org/2000/svg" height="30" width="30" viewBox="0 0 448 512" fill='blue'>
@@ -168,7 +197,7 @@ export default function Story() {
                             <div className=' absolute w-full p-3 top-0 z-50'>
                                 <div className=' w-full bg-gray-50 h-1 rounded-xl mb-2' style={{ backgroundColor: "#A7A3A4" }}>
                                     <div
-                                        className='h-1 bg-white rounded-xl' 
+                                        className='h-1 bg-white rounded-xl'
                                         style={{ width: `${playing.link.includes("mp4") ? `${now * 100 / length.current}%` : `${Math.round(now) * 100 / 7}%`}`, transitionDuration: `${now !== 0 ? '3000ms' : '0ms'}` }}
                                     ></div>
                                 </div>

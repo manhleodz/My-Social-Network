@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import './Story.scss'
 import ReactPlayer from 'react-player'
 import { useSelector } from 'react-redux'
-import { StoryApi } from '../../../Network/Story';
 import { useNavigate } from 'react-router-dom';
 import { FastAverageColor } from 'fast-average-color';
 
@@ -10,7 +9,7 @@ export default function Story() {
 
   const user = useSelector(state => state.authentication.user);
   const [page, setPage] = useState(1);
-  const [stories, setReel] = useState([]);
+  const stories = useSelector(state => state.stories.stories);
 
   const navigate = useNavigate();
 
@@ -25,14 +24,6 @@ export default function Story() {
         console.log(e);
       });
   }
-
-  useEffect(() => {
-    StoryApi.getAll().then(res => {
-      setReel(res.data);
-    }).catch(() => {
-      alert('Error');
-    })
-  }, []);
 
   if (!user || !stories) return null;
 
@@ -58,7 +49,7 @@ export default function Story() {
         </button>
       )}
       <div className=' flex items-center overflow-x-hidden overflow-y-hidden transform relative w-full scroll-smooth' id='container'>
-        <div className=' flex flex-row items-center justify-start space-x-1 w-full scroll-smooth' style={{ width: `${stories.length === 0 ? `${185}px` : `${(stories.length + 0.5) * 185}px`}` }}>
+        <div className=' flex flex-row items-center justify-start space-x-1 w-full scroll-smooth' key={234} style={{ width: `${stories.length === 0 ? `${185}px` : `${(stories.length + 0.5) * 185}px`}` }}>
           <div
             onMouseEnter={() => {
               document.getElementById('new').style.display = 'block';
@@ -90,8 +81,8 @@ export default function Story() {
             <>
               <div
                 id={`story_${key}`}
-                
-                onClick={(e) => navigate(`story/${story.id}`)}
+
+                onClick={(e) => navigate(`story/${story.id}`, { state: { stories: stories } })}
                 onMouseEnter={() => {
                   document.getElementById(`reel-${story.id}`).style.display = 'block';
                   document.getElementById(`content_${key}`).style.transform = 'scale(1.06)'
@@ -111,12 +102,12 @@ export default function Story() {
                       url={story.link}
                       width='100%'
                       height='100%'
-                      style={{transitionDuration: "500ms"}}
+                      style={{ transitionDuration: "500ms" }}
                     />
                   </>
                 ) : (
                   <>
-                    <img id={`content_${key}`} alt={`${story.id}`} src={`${story.link}`} className='w-full h-full object-cover block transition-all duration-500'/>
+                    <img id={`content_${key}`} alt={`${story.id}`} src={`${story.link}`} className='w-full h-full object-cover block transition-all duration-500' />
                   </>
                 )}
                 <div className='absolute top-1 left-1 p-1 bg-blue-600 rounded-full'>

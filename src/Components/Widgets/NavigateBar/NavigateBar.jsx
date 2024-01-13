@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import leo from '../../../Assets/leo.png';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 import Search from '../Search/Search';
 import { Auth } from '../../../Network/Auth';
@@ -12,6 +12,8 @@ export default function NavigateBar() {
     const user = useSelector(state => state.authentication.user);
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+
     const link = useParams();
 
     if (!user) return null;

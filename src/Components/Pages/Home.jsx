@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import OnlineBar from '../Widgets/OnlineBar/OnlineBar';
 import Post from '../Widgets/Post/Post';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Story from '../Widgets/Story/Story';
 import MakePost from '../Widgets/MakePost/MakePost';
 import friends from '../../Assets/Địt mẹ thằng lồn Tiến/friends.svg';
@@ -21,10 +21,25 @@ const Loading = () => (
 export default function Home() {
 
   const user = useSelector(state => state.authentication.user);
+  const [scrollPosition, setScrollPosition] = useState();
+  const scrollRef = useRef();
+
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleScroll = (event) => {
+    setScrollPosition(event.target.scrollTop)
+    console.log(event);
+  }
 
   useEffect(() => {
 
+    if (location.state) {
+      const { scrollPosition } = location.state;
+      setTimeout(() => {
+        scrollRef.current.scrollTop = scrollPosition
+      }, (10));
+    }
     document.title = "ML"
 
   }, []);
@@ -32,7 +47,7 @@ export default function Home() {
   if (!user) return null;
 
   return (
-    <div className=' w-full p-3 bg-gray-100' >
+    <div className=' w-full h-full p-3 bg-gray-100' ref={scrollRef} onScroll={handleScroll}>
       <div className=' relative top-16 flex justify-between'>
         <div className="h-full w-1/5 max-xl:w-1/6 px-3 overflow-y-hidden dark:bg-gray-800 max-lg:hidden">
           <ul className="space-y-2 font-medium fixed w-1/5">
@@ -50,7 +65,7 @@ export default function Home() {
             <li>
               <button
                 onClick={() => {
-                  navigate("/friends");
+                  navigate("/friends", { state: { homePosition: scrollPosition } });
                 }}
                 className="w-full flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group cursor-pointer"
               >
@@ -61,7 +76,7 @@ export default function Home() {
             <li>
               <button
                 onClick={() => {
-                  navigate("/");
+                  navigate("/", { state: { homePosition: scrollPosition } });
                 }}
                 className="w-full flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group cursor-pointer"
               >
@@ -72,7 +87,7 @@ export default function Home() {
             <li>
               <button
                 onClick={() => {
-                  navigate("/community");
+                  navigate("/community", { state: { homePosition: scrollPosition } });
                 }}
                 className="w-full flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group cursor-pointer"
               >
@@ -83,7 +98,7 @@ export default function Home() {
             <li>
               <button
                 onClick={() => {
-                  navigate("/inbox");
+                  navigate("/inbox", { state: { homePosition: scrollPosition } });
                 }}
                 className="w-full flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group cursor-pointer"
               >
@@ -91,11 +106,10 @@ export default function Home() {
                 <span className="ml-3">Tin nhắn</span>
               </button>
             </li>
-
             <li>
               <button
                 onClick={() => {
-                  navigate("/watch");
+                  navigate("/watch", { state: { homePosition: scrollPosition } });
                 }}
                 className="w-full flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group cursor-pointer"
               >
@@ -108,7 +122,7 @@ export default function Home() {
             <li>
               <button
                 onClick={() => {
-                  navigate("/music");
+                  navigate("/music", { state: { homePosition: scrollPosition } });
                 }}
                 className="w-full flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group cursor-pointer"
               >
@@ -118,10 +132,10 @@ export default function Home() {
             </li>
           </ul>
         </div>
-        <div className='w-3/5 px-24 max-2xl:px-5 max-xl:px-0 max-md:w-full max-xl:w-4/5 flex flex-col justify-center items-center space-y-5'>
+        <div className='w-3/5 px-24 max-2xl:px-5 max-xl:px-0 max-md:w-full max-xl:w-8/12 max-lg:w-4/5 flex flex-col justify-center items-center space-y-5'>
           <Story />
           <MakePost />
-          <Post />
+          <Post/>
         </div>
         <div className=' w-1/5 max-md:hidden flex justify-end'>
           <OnlineBar userId={user.id} />

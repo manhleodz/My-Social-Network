@@ -2,11 +2,19 @@ import React, { useState, useCallback } from 'react'
 import { useSelector } from 'react-redux';
 import { storage } from '../../../Firebase/Firebase';
 import { v4 } from "uuid";
+import {
+    ref,
+    uploadBytes,
+    getDownloadURL,
+} from "firebase/storage";
+import ReactPlayer from "react-player";
+import { UploadApi } from '../../../Network/Upload';
 import video from '../../../Assets/Địt mẹ thằng lồn Tiến/video-marketing-movie-camera-svgrepo-com.svg';
 import Picker from 'emoji-picker-react';
 import { useDropzone } from 'react-dropzone';
 import addSvg from '../../../Assets/Địt mẹ thằng lồn Tiến/add.svg';
 import './MakePost.scss';
+import { PostApi } from '../../../Network/Post';
 
 export default function MakePost() {
 
@@ -15,9 +23,10 @@ export default function MakePost() {
     const [isPublic, setPublic] = useState(true);
     const [showPicker, setShowPicker] = useState(false);
     const [postText, setPostText] = useState("");
-    const [imageUploads, setImageUploads] = useState(null);
-    const [videoUploads, setVideoUploads] = useState(null);
-    const [imageUrls, setImageUrls] = useState("");
+    const [fileUploads, setFileUploads] = useState(null);
+    const [imageUrls, setImageUrls] = useState([]);
+    const [videosUrls, setVideoUrls] = useState([]);
+    const [processing, setProcessing] = useState(false);
 
     if (open) {
         document.querySelector('body').style.overflow = 'hidden';
@@ -28,15 +37,18 @@ export default function MakePost() {
     }
 
     const onDrop = useCallback((acceptedFiles) => {
-        setImageUploads(prev => prev = [...prev, ...acceptedFiles.map(file => Object.assign(file, {
-            preview: URL.createObjectURL(file)
-        }))]);
+        acceptedFiles.map(file => {
+            Object.assign(file, {
+                preview: URL.createObjectURL(file)
+            })
+            setFileUploads(prev => prev = [...prev, file]);
+        })
     }, [])
 
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
+            'video/*': [],
             'image/*': [],
-            'video/.mp4': [],
         },
         onDrop
     })
@@ -46,6 +58,58 @@ export default function MakePost() {
         setShowPicker(false);
     };
 
+    const newPost = async () => {
+        setProcessing(true);
+        const promises = [];
+        fileUploads && fileUploads.map((fileUpload => {
+            if (fileUpload.type.includes("image")) {
+                const fileRef = ref(storage, `images/${fileUpload.name + v4()}`);
+                promises.push(fileRef);
+                uploadBytes(fileRef, fileUpload).then((snapshot) => {
+                    getDownloadURL(snapshot.ref).then((url) => {
+                        if (url !== undefined) {
+                            setImageUrls(prev => prev = [...prev, url])
+                        }
+                    });
+                });
+            } else if (fileUpload.type.includes("mp4")) {
+                const fileRef = ref(storage, `videos/${fileUpload.name + v4()}`);
+                promises.push(fileRef);
+                uploadBytes(fileRef, fileUpload).then((snapshot) => {
+                    getDownloadURL(snapshot.ref).then((url) => {
+                        if (url !== undefined) {
+                            setVideoUrls(prev => prev = [...prev, url])
+                        }
+                    });
+                });
+            }
+        }))
+
+        Promise.all(promises)
+            .then(() => {
+                PostApi.create({ postText, public: isPublic }).then((res) => {
+                    if (imageUrls.length > 0 && videosUrls.length > 0) {
+                        UploadApi.uploadImages({ link: imageUrls, PostId: res.data.newPost.id }).then(() => {
+                            UploadApi.uploadVideos({ link: videosUrls, PostId: res.data.id }).then(() => {
+                                setProcessing(false);
+                            });
+                        });
+                    } else if (imageUrls.length > 0) {
+                        UploadApi.uploadImages({ link: imageUrls, PostId: res.data.newPost.id }).then(() => {
+                            setProcessing(false);
+                        });
+                    } else if (videosUrls.length > 0) {
+                        UploadApi.uploadVideos({ link: videosUrls, PostId: res.data.newPost.id }).then(() => {
+                            setProcessing(false);
+                        });
+                    } else {
+                        setProcessing(false);
+                    }
+                }).catch(() => {
+
+                })
+            }).catch((e) => console.log(e))
+    };
 
     if (!user) return null;
 
@@ -63,7 +127,7 @@ export default function MakePost() {
                                 <div className=' flex items-center z-30 duration-1000 scroll-smooth' style={{ width: "1500px", backgroundColor: "rgb(0,0,0,0)", maxHeight: "100%" }}>
                                     <div className={`flex flex-col p-1 h-auto justify-center items-center relative bg-white divide-y divide-gray-300 rounded-lg z-20`} id="window-1">
                                         <div className=' flex justify-center items-center text-xl font-bold w-full relative'>
-                                            <h1 className=' py-3'>Tạo bài viết</h1>
+                                            <h1 className=' py-3 max-md:text-lg'>Tạo bài viết</h1>
                                             <div
                                                 className=' cursor-pointer absolute right-1 top-1 w-10 h-10 bg-gray-200 rounded-full flex justify-center items-center'
                                                 onClick={() => {
@@ -78,10 +142,10 @@ export default function MakePost() {
                                         <div className=' p-3 w-full space-y-3 overflow-y-auto'>
                                             <div className='flex items-center space-x-2'>
                                                 <img alt='avatar1' src={user.avatar} className=' w-12 h-12 rounded-full object-cover' />
-                                                <div className=''>
+                                                <div className='flex flex-col items-start'>
                                                     <h1 className=' font-semibold'>{user.nickname}</h1>
                                                     <div
-                                                        className='flex items-center space-x-1 p-1 bg-gray-200 rounded-lg cursor-pointer' title={`${isPublic ? "Công khai" : "Chỉ mình tôi"}`}
+                                                        className='flex items-center space-x-1 p-1 px-1.5 bg-gray-200 rounded-lg cursor-pointer' title={`${isPublic ? "Công khai" : "Chỉ mình tôi"}`}
                                                         onClick={() => {
                                                             document.getElementById('slide1').scrollLeft += 500;
                                                         }}
@@ -97,13 +161,13 @@ export default function MakePost() {
                                                 </div>
                                             </div>
                                             <div className='space-y-2 border-none outline-none'>
-                                                <textarea onChange={(e) => setPostText(e.target.value)} value={postText} className={` w-full ring-0 resize-none overflow-hidden border-none outline-none ${!imageUploads ? 'text-2xl' : 'text-xl'}`} style={{ height: `${!imageUploads ? '150px' : '60px'}` }} placeholder={`${user.nickname} ơi, bạn đang nghĩ gì thế?`}></textarea>
+                                                <textarea onChange={(e) => setPostText(e.target.value)} value={postText} className={` w-full ring-0 rounded-lg resize-none overflow-hidden border-none outline-none ${!fileUploads ? 'text-2xl' : 'text-xl'}`} style={{ height: `${!fileUploads ? '150px' : '60px'}` }} placeholder={`${user.nickname} ơi, bạn đang nghĩ gì thế?`}></textarea>
                                                 <div className=' flex items-center justify-end w-full z-50 border-none outline-none'>
                                                     <div
                                                         className=' cursor-pointer'
                                                         onClick={() => setShowPicker(!showPicker)}
                                                     >
-                                                        <svg xmlns="http://www.w3.org/2000/svg" height="25" width="25" viewBox="0 0 512 512">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" height="25" width="25" viewBox="0 0 512 512" fill='green'>
                                                             <path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm177.6 62.1C192.8 334.5 218.8 352 256 352s63.2-17.5 78.4-33.9c9-9.7 24.2-10.4 33.9-1.4s10.4 24.2 1.4 33.9c-22 23.8-60 49.4-113.6 49.4s-91.7-25.5-113.6-49.4c-9-9.7-8.4-24.9 1.4-33.9s24.9-8.4 33.9 1.4zM144.4 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm192-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" />
                                                         </svg>
                                                     </div>
@@ -113,25 +177,32 @@ export default function MakePost() {
                                                         </div>
                                                     )}
                                                 </div>
-                                                {imageUploads && (
+                                                {(fileUploads) && (
                                                     <div
                                                         className=' cursor-pointer border border-gray-300 rounded-lg relative'
                                                         onMouseEnter={(e) => {
-                                                            document.getElementById("list-image").style.display = "block";
+                                                            if (document.getElementById("list-image"))
+                                                                document.getElementById("list-image").style.display = "block";
                                                         }}
                                                         onMouseLeave={(e) => {
-                                                            document.getElementById("list-image").style.display = "none";
+                                                            if (document.getElementById("list-image"))
+                                                                document.getElementById("list-image").style.display = "none";
                                                         }}
                                                     >
-                                                        <button className=' absolute z-40 top-3 right-3 p-2 rounded-full bg-white hover:bg-gray-200' onClick={() => setImageUploads(null)}>
+                                                        <button
+                                                            className=' absolute z-40 top-3 right-3 p-2 rounded-full bg-white hover:bg-gray-200'
+                                                            onClick={() => {
+                                                                setFileUploads(null)
+                                                            }}
+                                                        >
                                                             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 384 512">
                                                                 <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
                                                             </svg>
                                                         </button>
-                                                        {(imageUploads.length > 0 || videoUploads.length > 0) && (
+                                                        {(fileUploads && ((fileUploads.length > 0))) && (
                                                             <>
-                                                                <div className=' absolute z-30 w-full h-full space-x-2 p-2 hidden' id='list-image' style={{ backgroundColor: "rgb(0,0,0,0.1)" }}>
-                                                                    <button className=' rounded-lg bg-white p-2 font-semibold text-sm' {...getRootProps()}>
+                                                                <div className=' absolute z-30 w-full h-full space-x-2 p-2' id='list-image' style={{ backgroundColor: "rgb(0,0,0,0.1)" }}>
+                                                                    <button className=' rounded-lg bg-white p-2 font-semibold text-sm'>
                                                                         <h1>Chỉnh sửa tất cả</h1>
                                                                     </button>
                                                                     <button className=' rounded-lg bg-white p-2 font-semibold text-sm' {...getRootProps()}>
@@ -142,10 +213,27 @@ export default function MakePost() {
                                                         )}
                                                         <div {...getRootProps()} className='z-0'>
                                                             <input {...getInputProps()} className='z-0' />
-                                                            {imageUploads.length > 0 ? (
-                                                                <div className={`w-full grid ${imageUploads.length === 1 && 'grid-cols-1'}} ${imageUploads.length >= 2 && 'grid-cols-2'}  gap-2 overflow-y-auto`}>
-                                                                    {imageUploads.map((image, index) => (
-                                                                        <img src={image.preview} alt={`anh-${index}`} key={index} className=' object-cover z-0' />
+                                                            {(fileUploads && fileUploads.length > 0) ? (
+                                                                <div className={`w-full grid auto-cols-max ${fileUploads.length === 1 ? 'grid-cols-1' : ''} ${fileUploads.length >= 2 && 'grid-cols-2'} gap-2 overflow-y-auto`}>
+                                                                    {fileUploads.map((file, index) => (
+                                                                        <>
+                                                                            {file.type.includes('image') && (
+                                                                                <div key={index} className={`w-full h-full ${(((fileUploads.length) % 2 === 1) && (index === fileUploads.length - 1)) ? ' col-span-full' : ''}`}><img src={file.preview} alt={`anh-${index}`} className=' object-cover z-0' /></div>
+                                                                            )}
+                                                                            {file.type.includes('mp4') && (
+                                                                                <div className={`w-full h-full ${(((fileUploads.length) % 2 === 1) && (index === fileUploads.length - 1)) ? ' col-span-full' : ''}`}>
+                                                                                    <ReactPlayer
+                                                                                        key={index}
+                                                                                        className="react-player cursor-pointer"
+                                                                                        playing={false}
+                                                                                        controls={false}
+                                                                                        url={file.preview}
+                                                                                        width="100%"
+                                                                                        height="100%"
+                                                                                    />
+                                                                                </div>
+                                                                            )}
+                                                                        </>
                                                                     ))}
                                                                 </div>
                                                             ) : (
@@ -170,8 +258,7 @@ export default function MakePost() {
                                                     <h1 className='font-semibold'>Thêm vào bài viết của bạn</h1>
                                                     <div className='flex items-center space-x-4'>
                                                         <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512" className=' fill-green-500 cursor-pointer' onClick={() => {
-                                                            setImageUploads([]);
-                                                            setVideoUploads([]);
+                                                            setFileUploads([]);
                                                         }}>
                                                             <path d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM323.8 202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4 3.9-19.8 10.5l-87 127.6L170.7 297c-4.6-5.7-11.5-9-18.7-9s-14.2 3.3-18.7 9l-64 80c-5.8 7.2-6.9 17.1-2.9 25.4s12.4 13.6 21.6 13.6h96 32H424c8.9 0 17.1-4.9 21.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z" />
                                                         </svg>
@@ -181,10 +268,20 @@ export default function MakePost() {
                                                     </div>
                                                 </div>
                                                 <button
-                                                    className={` w-full p-3 text-lg font-bold rounded-lg ${(imageUploads && imageUploads.length > 0) || (videoUploads && videoUploads.length > 0) || postText.length > 0 ? 'bg-blue-500 text-white' : ' bg-gray-300 text-gray-400'}`}
+                                                    onClick={newPost}
+                                                    className={` w-full p-3 text-lg font-bold rounded-lg ${(fileUploads && fileUploads.length > 0) || postText.length > 0 ? 'bg-blue-500 text-white' : ' bg-gray-300 text-gray-400'}`}
                                                 >Đăng</button>
                                             </div>
                                         </div>
+                                        {processing && (
+                                            <div
+                                                className=' w-full h-full absolute flex flex-col justify-center items-center'
+                                                style={{ backgroundColor: "rgb(220,220,220, 0.6)" }}
+                                            >
+                                                <span className="loader"></span>
+                                                <h1 className='text-xl text-black'>Đang đăng</h1>
+                                            </div>
+                                        )}
                                     </div>
                                     <div className={`flex flex-col h-auto justify-center items-center bg-white divide-y divide-gray-300 rounded-lg z-0`} id='window-2'>
                                         <div className=' flex justify-center items-center text-xl font-bold w-full relative'>
@@ -253,7 +350,7 @@ export default function MakePost() {
                     )}
                     <div className=' flex items-center justify-center w-full text-center font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 h-10 py-7 rounded-lg mt-2'>
                         <img alt='video' src={video} className=' w-8 h-8' />
-                        <h1 className='px-2 max-sm:hidden' style={{fontSize: "15px"}}>Video trực tiếp</h1>
+                        <h1 className='px-2 max-sm:hidden' style={{ fontSize: "15px" }}>Video trực tiếp</h1>
                     </div>
                     <div className=' flex items-center justify-center w-full text-center font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 h-10 py-7 rounded-lg mt-2'>
                         <svg width="32px" height="32px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -265,13 +362,13 @@ export default function MakePost() {
                             <path d="M855.1 630L551.5 326.4 194.3 683.7h660.8z" fill="#57B79C" /><path d="M855.1 521.8l-83-83-245 245h328z" fill="#75BFAB" />
                             <path d="M709.9 743.8h-33.1c-0.8 0-1.5-0.7-1.5-1.5v-33.1c0-0.8 0.7-1.5 1.5-1.5h33.1c0.8 0 1.5 0.7 1.5 1.5v33.1c0 0.9-0.7 1.5-1.5 1.5zM774.2 743.8h-33.1c-0.8 0-1.5-0.7-1.5-1.5v-33.1c0-0.8 0.7-1.5 1.5-1.5h33.1c0.8 0 1.5 0.7 1.5 1.5v33.1c0 0.9-0.6 1.5-1.5 1.5zM838.6 743.8h-33.1c-0.8 0-1.5-0.7-1.5-1.5v-33.1c0-0.8 0.7-1.5 1.5-1.5h33.1c0.8 0 1.5 0.7 1.5 1.5v33.1c0 0.9-0.7 1.5-1.5 1.5z" fill="#3E3A39" />
                         </svg>
-                        <h1 className='px-2 max-sm:hidden' style={{fontSize: "15px"}}>Ảnh/Video</h1>
+                        <h1 className='px-2 max-sm:hidden' style={{ fontSize: "15px" }}>Ảnh/Video</h1>
                     </div>
                     <div className=' flex items-center justify-center w-full text-center font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 h-10 py-7 rounded-lg mt-2'>
                         <svg xmlns="http://www.w3.org/2000/svg" height="32px" width="32px" fill='#EAB026' className='' viewBox="0 0 512 512">
                             <path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm177.6 62.1C192.8 334.5 218.8 352 256 352s63.2-17.5 78.4-33.9c9-9.7 24.2-10.4 33.9-1.4s10.4 24.2 1.4 33.9c-22 23.8-60 49.4-113.6 49.4s-91.7-25.5-113.6-49.4c-9-9.7-8.4-24.9 1.4-33.9s24.9-8.4 33.9 1.4zM144.4 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm192-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" />
                         </svg>
-                        <h1 className='px-2 max-sm:hidden' style={{fontSize: "15px"}}>Cảm xúc/hoạt động</h1>
+                        <h1 className='px-2 max-sm:hidden' style={{ fontSize: "15px" }}>Cảm xúc/hoạt động</h1>
                     </div>
                 </div>
             </div>

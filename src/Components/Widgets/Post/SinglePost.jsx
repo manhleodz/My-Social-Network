@@ -7,17 +7,18 @@ import ReactPlayer from "react-player";
 import { FastAverageColor } from 'fast-average-color';
 
 
-export default function SinglePost({ post, setPost, user, authId }) {
+export default function SinglePost({ post, user, authId }) {
 
     const navigate = useNavigate();
-    const [isClicked, setIsClicked] = useState(false);
-    const [videos, setVideos] = useState(post.Videos);
-    const [images, setImages] = useState(post.Images);
-    const [likeNum, setLikeNum] = useState(post.likeNumber);
+    const [isClicked, setIsClicked] = useState(post.isLiked);
+    const [likeNum, setLikeNum] = useState(post.Post.likeNumber);
     const [isSaved, setIsSaved] = useState(false);
     const [dropdown, setDropdown] = useState(false);
     const [openLike, setOpenLike] = useState(false);
     const [openComment, setOpenComment] = useState(false);
+
+    const videos = post.Post.Videos;
+    const images = post.Post.Images;
 
     const getBackgroundColor = async (link) => {
         fac.getColorAsync(link)
@@ -30,17 +31,17 @@ export default function SinglePost({ post, setPost, user, authId }) {
     }
 
     const likeAPost = () => {
+        setIsClicked(!isClicked);
         PostApi.like({
-            PostId: post.id,
+            PostId: post.Post.id,
             UserId: authId,
         }).then((response) => {
-            setIsClicked(response.data);
-            if (isClicked === false) {
+            if (response.data === false) {
                 setLikeNum((likeNum) => (likeNum = likeNum + 1));
             } else {
                 setLikeNum((likeNum) => (likeNum = likeNum - 1));
             }
-            PostApi.updateLikeNum(post.id);
+            PostApi.updateLikeNum(post.Post.id);
         });
     };
 
@@ -56,45 +57,50 @@ export default function SinglePost({ post, setPost, user, authId }) {
         document.querySelector('body').style.paddingRight = "0px"
     }
 
-    useEffect(() => {
-        PostApi.getOwnerLike(post.id, authId).then((res) => {
-            setIsClicked(res.data);
-        });
-    }, [post, user, authId]);
-
     return (
         <div className=" rounded-lg shadow-md bg-white my-5">
             <div className=" p-4 space-y-3 ">
                 <div className=" flex justify-between">
                     <div className=" flex space-x-2">
                         <img
-                            onClick={() => navigate(`/${post.User.username}`)}
+                            onClick={() => navigate(`/${post.Post.User.username}`)}
                             alt="avatar"
-                            src={`${post.User.avatar}`}
+                            src={`${post.Post.User.avatar}`}
                             className=" w-10 h-10 object-cover rounded-full cursor-pointer"
                         />
                         <div className="">
                             <h1
-                                onClick={() => navigate(`/${post.User.username}`)}
+                                onClick={() => navigate(`/${post.Post.User.username}`)}
                                 className=" font-semibold hover:underline cursor-pointer"
                             >
-                                {post.User.nickname}
+                                {post.Post.User.nickname}
                             </h1>
-                            <h1
-                                className=" text-sm text-gray-500 cursor-pointer"
-                                title={`Ngày ${post.createdAt.slice(
-                                    8,
-                                    10
-                                )} tháng ${post.createdAt.slice(
-                                    5,
-                                    7
-                                )} năm ${post.createdAt.slice(
-                                    0,
-                                    4
-                                )}, lúc ${post.createdAt.slice(11, 16)}`}
-                            >
-                                {post.createdAt.slice(0, 10)}
-                            </h1>
+                            <div className="flex items-center space-x-2">
+                                <h1
+                                    className=" text-xs text-gray-500 cursor-pointer font-semibold "
+                                    title={`Ngày ${post.Post.createdAt.slice(
+                                        8,
+                                        10
+                                    )} tháng ${post.Post.createdAt.slice(
+                                        5,
+                                        7
+                                    )} năm ${post.Post.createdAt.slice(
+                                        0,
+                                        4
+                                    )}, lúc ${post.Post.createdAt.slice(11, 16)}`}
+                                >
+                                    {post.Post.createdAt.slice(0, 10)}
+                                </h1>
+                                {post.Post.public == 0 ?
+                                    <svg className=" cursor-pointer" title="Công khai" xmlns="http://www.w3.org/2000/svg" fill='#A8A59C' height="14" width="14" viewBox="0 0 448 512">
+                                        <path d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z" />
+                                    </svg>
+                                    :
+                                    <svg className=" cursor-pointer" title="Công khai" xmlns="http://www.w3.org/2000/svg" fill='#A8A59C' height="14" width="14" viewBox="0 0 512 512">
+                                        <path d="M57.7 193l9.4 16.4c8.3 14.5 21.9 25.2 38 29.8L163 255.7c17.2 4.9 29 20.6 29 38.5v39.9c0 11 6.2 21 16 25.9s16 14.9 16 25.9v39c0 15.6 14.9 26.9 29.9 22.6c16.1-4.6 28.6-17.5 32.7-33.8l2.8-11.2c4.2-16.9 15.2-31.4 30.3-40l8.1-4.6c15-8.5 24.2-24.5 24.2-41.7v-8.3c0-12.7-5.1-24.9-14.1-33.9l-3.9-3.9c-9-9-21.2-14.1-33.9-14.1H257c-11.1 0-22.1-2.9-31.8-8.4l-34.5-19.7c-4.3-2.5-7.6-6.5-9.2-11.2c-3.2-9.6 1.1-20 10.2-24.5l5.9-3c6.6-3.3 14.3-3.9 21.3-1.5l23.2 7.7c8.2 2.7 17.2-.4 21.9-7.5c4.7-7 4.2-16.3-1.2-22.8l-13.6-16.3c-10-12-9.9-29.5 .3-41.3l15.7-18.3c8.8-10.3 10.2-25 3.5-36.7l-2.4-4.2c-3.5-.2-6.9-.3-10.4-.3C163.1 48 84.4 108.9 57.7 193zM464 256c0-36.8-9.6-71.4-26.4-101.5L412 164.8c-15.7 6.3-23.8 23.8-18.5 39.8l16.9 50.7c3.5 10.4 12 18.3 22.6 20.9l29.1 7.3c1.2-9 1.8-18.2 1.8-27.5zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
+                                    </svg>
+                                }
+                            </div>
                         </div>
                     </div>
                     <div className=" flex items-center">
@@ -120,7 +126,7 @@ export default function SinglePost({ post, setPost, user, authId }) {
                         </div>
                     </div>
                 </div>
-                <h1 className=" text-base font-normal">{post.postText}</h1>
+                <h1 className=" text-base font-normal">{post.Post.postText}</h1>
             </div>
             <div className=" flex justify-center items-center max-h-md bg-black">
                 {images.length + videos.length == 0 && (
@@ -298,18 +304,17 @@ export default function SinglePost({ post, setPost, user, authId }) {
                     )}
                     <div className="flex items-center space-x-3">
                         <h1 className=" cursor-pointer hover:underline">
-                            {post.likeNumber} {post.likeNumber < 2 ? "comment" : "comments"}
+                            {post.Post.likeNumber} {post.Post.likeNumber < 2 ? "comment" : "comments"}
                         </h1>
                     </div>
                 </div>
             </div>
             {openLike && (
-                <LikeBox PostId={post.id} setOpenLike={setOpenLike} user={user} />
+                <LikeBox PostId={post.Post.id} setOpenLike={setOpenLike} user={user} />
             )}
             {openComment && (
                 <CommentBox
-                    setPost={setPost}
-                    post={post}
+                    post={post.Post}
                     setOpenComment={setOpenComment}
                     likeAPost={likeAPost}
                     likeNum={likeNum}

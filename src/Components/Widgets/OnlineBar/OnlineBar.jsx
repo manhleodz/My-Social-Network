@@ -29,11 +29,11 @@ export default function OnlineBar({ userId }) {
                 </div>
                 {frs.map(((fr, index) => (
                     <div key={index} className='flex items-center cursor-pointer hover:bg-gray-200 p-1.5 rounded-lg' onClick={() => navigate(`/${fr.User.username}`)}>
-                        <div className='w-12 h-12 rounded-full relative'>
-                            <img alt={fr.User.username} src={fr.User.avatar} className=' w-12 h-12 rounded-full object-cover' />
-                            <div className={`w-3 h-3 rounded-full absolute right-0.5 bottom-0.5 border-2 border-white ${fr.User.online === true ? 'bg-green-600 ' : 'bg-gray-400'}`}></div>
+                        <div className='w-14 h-14 rounded-full relative'>
+                            <img alt={fr.User.username} src={fr.User.avatar} className=' w-full rounded-full object-cover' />
+                            <div className={`w-3 h-3 rounded-full absolute right-0 bottom-3 border-2 border-white ${fr.User.online === true ? 'bg-green-600 ' : 'bg-gray-400'}`}></div>
                         </div>
-                        <h1 className=' font-semibold px-2'>{fr.User.nickname}</h1>
+                        <h1 className=' font-semibold px-2 max-xl:text-sm'>{fr.User.nickname}</h1>
                     </div>
                 )))}
             </div>

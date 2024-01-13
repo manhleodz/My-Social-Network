@@ -3,12 +3,14 @@ import axios from 'axios';
 
 export const PostApi = {
 
-    async getPost() {
+    async getPost(page) {
         return axios.get(`${ApiUrl}/posts`, {
+            params: { page: page },
             headers: {
                 accessToken: localStorage.getItem("accessToken")
             }
-        })
+        }
+        )
     },
 
     async like(data) {
@@ -59,6 +61,14 @@ export const PostApi = {
                 accessToken: localStorage.getItem("accessToken")
             },
         });
+    },
+
+    async uploadImages(data) {
+
+    },
+
+    async uploadVideos(data) {
+
     },
 
     async getOwnerLike(id, authId) {
