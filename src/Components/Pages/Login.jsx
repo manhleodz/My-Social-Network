@@ -2,9 +2,14 @@ import React, { memo, useState } from 'react';
 import { Auth } from '../../Network/Auth';
 import { useNavigate } from 'react-router-dom';
 import bgsvg from '../../Assets/undraw_Connection_re_lcud.png';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../Redux/UserSlice';
-
+import { StoryApi } from '../../Network/Story';
+import { PostApi } from '../../Network/Post';
+import { FriendApi } from '../../Network/Friend';
+import { fetchData } from '../../Redux/PostSlice';
+import { fetchStory } from '../../Redux/StorySlice';
+import { fetchFriend } from '../../Redux/FriendSlice';
 
 const Login = () => {
 
@@ -14,6 +19,7 @@ const Login = () => {
   const [excuting, setExcuting] = useState(true);
   const [alert, setAlert] = useState(null);
 
+  const posts = useSelector(state => state.posts);
   const dispatch = useDispatch();
 
   const onSubmit = (e) => {
@@ -27,6 +33,9 @@ const Login = () => {
         (user) => {
           const timeOut = setTimeout(() => {
             dispatch(setUser(user));
+            getPosts();
+            getListFriends();
+            getStories();
             navigate('/')
             clearTimeout(timeOut);
           }, 100);
@@ -38,6 +47,36 @@ const Login = () => {
     } else {
       setAlert("Nhập đầy đủ thông tin");
     }
+  }
+
+
+  const getListFriends = async () => {
+    await FriendApi.getListFriend().then((res) => {
+      dispatch(fetchFriend(res.data));
+    })
+  }
+
+  const getPosts = async () => {
+    try {
+      await PostApi.getPost(posts.page).then(res => {
+        if (res.status === 200)
+          dispatch(fetchData(res.data.data))
+      })
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const getStories = async () => {
+    try {
+      await StoryApi.getAll().then(res => {
+        if (res.status === 200)
+          dispatch(fetchStory(res.data))
+      })
+    } catch (err) {
+      console.log(err);
+    }
+
   }
 
   return (
