@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './Story.scss'
 import ReactPlayer from 'react-player'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { FastAverageColor } from 'fast-average-color';
+import LoadingStory from './LoadingStory';
 
 export default function Story() {
 
@@ -25,7 +26,7 @@ export default function Story() {
       });
   }
 
-  if (!user || !stories) return null;
+  if (!user) return null;
 
   var length = Math.floor((stories.length + 1) / 5);
 
@@ -76,50 +77,54 @@ export default function Story() {
             </div>
             <div id='new' className='absolute w-40 h-64 rounded-lg hidden' style={{ backgroundColor: 'rgb(0,0,0,0.1)' }}></div>
           </div>
-
-          {stories.map((story, key) => (
+          {stories.length === 0 ? (
+            <LoadingStory />
+          ) : (
             <>
-              <div
-                id={`story_${key}`}
+              {stories.map((story, key) => (
+                <>
+                  <div
+                    id={`story_${key}`}
 
-                onClick={(e) => navigate(`story/${story.id}`, { state: { stories: stories } })}
-                onMouseEnter={() => {
-                  document.getElementById(`reel-${story.id}`).style.display = 'block';
-                  document.getElementById(`content_${key}`).style.transform = 'scale(1.06)'
-                }}
-                onMouseLeave={() => {
-                  document.getElementById(`reel-${story.id}`).style.display = 'none';
-                  document.getElementById(`content_${key}`).style.transform = 'scale(1.01)'
-                }}
-                style={{ backgroundColor: "gray" }}
-                className=' w-40 h-64 p-1 flex justify-center items-center relative rounded-lg shadow-lg border-none cursor-pointer overflow-hidden' key={key}
-              >
-                {story.link.includes("mp4") ? (
-                  <>
-                    <ReactPlayer
-                      id={`content_${key}`}
-                      className='react-player transition-all'
-                      url={story.link}
-                      width='100%'
-                      height='100%'
-                      style={{ transitionDuration: "500ms" }}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <img id={`content_${key}`} alt={`${story.id}`} src={`${story.link}`} className='w-full h-full object-cover block transition-all duration-500' />
-                  </>
-                )}
-                <div className='absolute top-1 left-1 p-1 bg-blue-600 rounded-full'>
-                  <img alt='avatar' src={`${story.User.avatar}`} className=' w-10 h-10 object-cover rounded-full' />
-                </div>
-                <div id={`reel-${story.id}`} className='absolute w-40 h-64 rounded-lg hidden' style={{ backgroundColor: 'rgb(0,0,0,0.1)' }}>
-                </div>
-                <h1 className=' absolute text-white text-xs bottom-3 left-2 font-bold'>{story.User.nickname}</h1>
-              </div>
+                    onClick={(e) => navigate(`story/${story.id}`, { state: { stories: stories } })}
+                    onMouseEnter={() => {
+                      document.getElementById(`reel-${story.id}`).style.display = 'block';
+                      document.getElementById(`content_${key}`).style.transform = 'scale(1.06)'
+                    }}
+                    onMouseLeave={() => {
+                      document.getElementById(`reel-${story.id}`).style.display = 'none';
+                      document.getElementById(`content_${key}`).style.transform = 'scale(1.01)'
+                    }}
+                    style={{ backgroundColor: "gray" }}
+                    className=' w-40 h-64 p-1 flex justify-center items-center relative rounded-lg shadow-lg border-none cursor-pointer overflow-hidden' key={key}
+                  >
+                    {story.link.includes("mp4") ? (
+                      <>
+                        <ReactPlayer
+                          id={`content_${key}`}
+                          className='react-player transition-all'
+                          url={story.link}
+                          width='100%'
+                          height='100%'
+                          style={{ transitionDuration: "500ms" }}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <img id={`content_${key}`} alt={`${story.id}`} src={`${story.link}`} className='w-full h-full object-cover block transition-all duration-500' />
+                      </>
+                    )}
+                    <div className='absolute top-1 left-1 p-1 bg-blue-600 rounded-full'>
+                      <img alt='avatar' src={`${story.User.avatar}`} className=' w-10 h-10 object-cover rounded-full' />
+                    </div>
+                    <div id={`reel-${story.id}`} className='absolute w-40 h-64 rounded-lg hidden' style={{ backgroundColor: 'rgb(0,0,0,0.1)' }}>
+                    </div>
+                    <h1 className=' absolute text-white text-xs bottom-3 left-2 font-bold'>{story.User.nickname}</h1>
+                  </div>
+                </>
+              ))}
             </>
-          ))}
-
+          )}
         </div>
       </div>
       <div></div>

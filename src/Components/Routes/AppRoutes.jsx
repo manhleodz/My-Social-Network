@@ -5,14 +5,16 @@ import Login from '../Pages/Login';
 import SignUp from '../Pages/SignUp';
 import ForgotPassword from '../Pages/ForgotPassword';
 import NotFound from '../Pages/NotFound';
+import ConfirmAccount from '../Pages/ConfirmAccount';
 import { useDispatch, useSelector } from 'react-redux';
 import { Auth } from '../../Network/Auth';
-import ConfirmAccount from '../Pages/ConfirmAccount';
 import { PostApi } from '../../Network/Post';
+import { FriendApi } from '../../Network/Friend';
 import { setUser, signOut } from '../../Redux/UserSlice';
-import { fetchData } from '../../Redux/PostSlice';
 import { StoryApi } from '../../Network/Story';
+import { fetchData } from '../../Redux/PostSlice';
 import { fetchStory } from '../../Redux/StorySlice';
+import { fetchFriend } from '../../Redux/FriendSlice';
 
 export default function AppRoutes() {
 
@@ -26,6 +28,13 @@ export default function AppRoutes() {
         dispatch(setUser(e));
         getPosts();
         getStories();
+        getListFriends();
+    }
+
+    const getListFriends = async () => {
+        await FriendApi.getListFriend().then((res) => {
+            dispatch(fetchFriend(res.data));
+        })
     }
 
     const getPosts = async () => {
@@ -58,6 +67,12 @@ export default function AppRoutes() {
 
     useEffect(() => {
 
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
         Auth.refreshStateUser(success, failure);
 
     }, []);

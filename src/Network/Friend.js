@@ -3,8 +3,8 @@ import axios from 'axios';
 
 export const FriendApi = {
 
-    async getListFriend(id) {
-        return axios.get(`${ApiUrl}/rela/${id}`, {
+    async getListFriend() {
+        return axios.get(`${ApiUrl}/rela`, {
             headers: {
                 accessToken: localStorage.getItem("accessToken"),
             }
