@@ -37,9 +37,9 @@ export default function SinglePost({ post, user, authId }) {
             UserId: authId,
         }).then((response) => {
             if (response.data === false) {
-                setLikeNum((likeNum) => (likeNum = likeNum + 1));
-            } else {
                 setLikeNum((likeNum) => (likeNum = likeNum - 1));
+            } else {
+                setLikeNum((likeNum) => (likeNum = likeNum + 1));
             }
             PostApi.updateLikeNum(post.Post.id);
         });
