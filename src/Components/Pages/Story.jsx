@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useTransition } from 'react';
 import { FastAverageColor } from 'fast-average-color';
 import { StoryApi } from '../../Network/Story';
-import './Pages.scss';
+import './Story.scss';
 import angryGif from '../../Assets/React Icons/angry.gif';
 import angrySvg from '../../Assets/React Icons/angry.svg';
 import careGif from '../../Assets/React Icons/care.gif';
@@ -192,8 +192,8 @@ export default function Story() {
                     ) : (
                         <div className=' w-16 h-16 max-sm:hidden'></div>
                     )}
-                    <div className='flex flex-col justify-start items-center h-screen pt-20' style={{ width: "520px" }}>
-                        <div className=' !relative mb-5 h-full flex items-center justify-center rounded-lg' style={{ width: "400px" }}>
+                    <div className='flex flex-col justify-start items-center h-screen pt-20 w-72' style={{ width: "520px" }} >
+                        <div className=' !relative mb-5 h-full flex items-center justify-center rounded-lg'  id='main-content'>
                             <div className=' absolute w-full p-3 top-0 z-50'>
                                 <div className=' w-full bg-gray-50 h-1 rounded-xl mb-2' style={{ backgroundColor: "#A7A3A4" }}>
                                     <div
@@ -251,8 +251,6 @@ export default function Story() {
                                                 controls={false}
                                                 onDuration={(e) => length.current = e}
                                                 onProgress={(e) => setNow(e.playedSeconds)}
-                                                // width={400}
-                                                // height={780}
                                                 style={{ "borderRadius": "0.5rem", "maxHeight": "780px", maxWidth: '90%' }}
                                                 muted={isMuted}
                                             />
@@ -271,7 +269,7 @@ export default function Story() {
                         </div>
                         <div className='flex items-center mb-3 justify-center w-full space-x-3 h-10'>
                             <input
-                                className=' rounded-3xl p-3 border border-white bg-black w-full text-white outline-none duration-700 transition-all'
+                                className=' rounded-3xl p-3 border max-sm:hidden border-white bg-black w-full text-white outline-none duration-700 transition-all'
                                 placeholder='Trả lời anh đi'
                                 id='input'
                                 onClick={() => setAnswer("")}

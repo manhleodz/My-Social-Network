@@ -1,0 +1,38 @@
+#main-content {
+  width: 400px;
+}
+
+.image-playing {
+  max-width: 780px;
+}
+
+@media (max-width: 400px) {
+  .image-playing {
+    width: 370px;
+  }
+
+  #main-content {
+    width: 370px;
+  }
+}
+
+@media (max-width: 350px) {
+  .image-playing {
+    width: 330px;
+  }
+
+  #main-content {
+    width: 330px;
+  }
+}
+
+@media (max-width: 320px) {
+  .image-playing {
+    width: 290px;
+  }
+
+  #main-content {
+    width: 290px;
+  }
+}
+

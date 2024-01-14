@@ -42,12 +42,31 @@ export default function MakePost() {
                 preview: URL.createObjectURL(file)
             })
             setFileUploads(prev => prev = [...prev, file]);
+            if (file.type.includes("image")) {
+                const fileRef = ref(storage, `images/${file.name + v4()}`);
+                uploadBytes(fileRef, file).then((snapshot) => {
+                    getDownloadURL(snapshot.ref).then((url) => {
+                        if (url !== undefined) {
+                            setImageUrls(prev => prev = [...prev, url])
+                        }
+                    });
+                });
+            } else if (file.type.includes("mp4")) {
+                const fileRef = ref(storage, `videos/${file.name + v4()}`);
+                uploadBytes(fileRef, file).then((snapshot) => {
+                    getDownloadURL(snapshot.ref).then((url) => {
+                        if (url !== undefined) {
+                            setVideoUrls(prev => prev = [...prev, url])
+                        }
+                    });
+                });
+            }
         })
     }, [])
 
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
-            'video/*': [],
+            'video/mp4': [],
             'image/*': [],
         },
         onDrop
@@ -60,55 +79,28 @@ export default function MakePost() {
 
     const newPost = async () => {
         setProcessing(true);
-        const promises = [];
-        fileUploads && fileUploads.map((fileUpload => {
-            if (fileUpload.type.includes("image")) {
-                const fileRef = ref(storage, `images/${fileUpload.name + v4()}`);
-                promises.push(fileRef);
-                uploadBytes(fileRef, fileUpload).then((snapshot) => {
-                    getDownloadURL(snapshot.ref).then((url) => {
-                        if (url !== undefined) {
-                            setImageUrls(prev => prev = [...prev, url])
-                        }
-                    });
-                });
-            } else if (fileUpload.type.includes("mp4")) {
-                const fileRef = ref(storage, `videos/${fileUpload.name + v4()}`);
-                promises.push(fileRef);
-                uploadBytes(fileRef, fileUpload).then((snapshot) => {
-                    getDownloadURL(snapshot.ref).then((url) => {
-                        if (url !== undefined) {
-                            setVideoUrls(prev => prev = [...prev, url])
-                        }
-                    });
-                });
-            }
-        }))
-
-        Promise.all(promises)
-            .then(() => {
-                PostApi.create({ postText, public: isPublic }).then((res) => {
-                    if (imageUrls.length > 0 && videosUrls.length > 0) {
-                        UploadApi.uploadImages({ link: imageUrls, PostId: res.data.newPost.id }).then(() => {
-                            UploadApi.uploadVideos({ link: videosUrls, PostId: res.data.id }).then(() => {
-                                setProcessing(false);
-                            });
-                        });
-                    } else if (imageUrls.length > 0) {
-                        UploadApi.uploadImages({ link: imageUrls, PostId: res.data.newPost.id }).then(() => {
-                            setProcessing(false);
-                        });
-                    } else if (videosUrls.length > 0) {
-                        UploadApi.uploadVideos({ link: videosUrls, PostId: res.data.newPost.id }).then(() => {
-                            setProcessing(false);
-                        });
-                    } else {
+        PostApi.create({ postText, public: isPublic }).then((res) => {
+            if (imageUrls.length > 0 && videosUrls.length > 0) {
+                UploadApi.uploadImages({ link: imageUrls, PostId: res.data.newPost.id }).then(() => {
+                    UploadApi.uploadVideos({ link: videosUrls, PostId: res.data.id }).then(() => {
                         setProcessing(false);
-                    }
-                }).catch(() => {
-
-                })
-            }).catch((e) => console.log(e))
+                    });
+                });
+            } else if (imageUrls.length > 0) {
+                UploadApi.uploadImages({ link: imageUrls, PostId: res.data.newPost.id }).then(() => {
+                    setProcessing(false);
+                });
+            } else if (videosUrls.length > 0) {
+                UploadApi.uploadVideos({ link: videosUrls, PostId: res.data.newPost.id }).then(() => {
+                    setProcessing(false);
+                });
+            } else {
+                setProcessing(false);
+            }
+        }).catch(() => {
+            setProcessing(false);
+            alert("Error uploading");
+        })
     };
 
     if (!user) return null;
