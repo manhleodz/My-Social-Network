@@ -16,7 +16,7 @@ function SignUp() {
     const [loading, setLoading] = useState(false);
     const [OTP, setOTP] = useState(Generate(6))
     const [inputOTP, setInputOTP] = useState('');
-    const [excuting, setExcuting] = useState(true);
+    const [excuting, setExcuting] = useState(false);
     const [alert, setAlert] = useState(null);
 
     const success = () => {

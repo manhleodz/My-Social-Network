@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CommentApi } from '../../../Network/Comment';
 import { useSelector } from 'react-redux';
+import './CommentBox.scss';
 
 export default function Comment({ comment, setComment, comments, newReply, setNewReply }) {
 

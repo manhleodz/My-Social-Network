@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Auth } from '../../Network/Auth';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -49,6 +49,10 @@ const Login = () => {
     }
   }
 
+  useEffect(() => {
+    document.title = "ML-Log in";
+    document.querySelector("body").onclick;
+  }, [])
 
   const getListFriends = async () => {
     await FriendApi.getListFriend().then((res) => {
@@ -123,7 +127,7 @@ const Login = () => {
                           autoCorrect="false"
                           required={true}
                         />
-                        <label className=" absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Tên tài khoản/Email</label>
+                        <label htmlFor='information' className={` absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm`}>Tên tài khoản/Email</label>
                         {(alert === "Tên người dùng hoặc email không tồn tại" || alert === "Nhiều hơn 6 kí tự") && (
                           <h1 className=" text-red-600 font-semibold text-base break-words">
                             {alert}
@@ -131,7 +135,7 @@ const Login = () => {
                         )}
                       </div>
                       <div className="relative">
-                        <input autoComplete="off" id="password" name="password" type="password" className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600 rounded-md"
+                        <input autoComplete="new-password" id="password" name="password" type="password" className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600 rounded-md"
                           placeholder="Password"
                           onChange={(event) => {
                             setPassword(event.target.value);

@@ -7,7 +7,7 @@ export default function LoadingStory() {
             {[0, 1].map((story, key) => (
                 <div
                     key={key}
-                    style={{ backgroundColor: "gray" }}
+                    style={{ backgroundColor: "gray", width: '360px' }}
                     className=' w-40 h-64 hover:p-0 flex justify-center items-center relative rounded-lg shadow-lg border-slate-300 border cursor-pointer'
                 >
 

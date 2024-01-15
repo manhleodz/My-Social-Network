@@ -55,14 +55,14 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
     }
 
     useEffect(() => {
+        document.querySelector('body').style.overflow = 'hidden';
+        document.querySelector('body').style.paddingRight = "12px"
         CommentApi.getCommentsByPostId(post.id).then(res => {
             setComment(res.data);
         });
     }, [])
 
     if (!comments) return null;
-
-    console.log(post);
 
     return (
         <div onClick={(e) => {
@@ -73,7 +73,7 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
             className=' fixed top-0 left-0 z-50 w-screen h-screen flex justify-center items-center p-10' style={{ backgroundColor: 'rgb(0,0,0,0.1)' }}
             id='bg'
         >
-            <div className=' bg-white rounded-lg max-h-lg divide-gray-300 divide-y relative h-full shadow-lg' style={{ minWidth: "700px" }}>
+            <div className=' bg-white z-30 rounded-lg divide-gray-300 divide-y relative h-full shadow-lg ' id='main'>
                 <div className='w-full shadow-sm p-2 flex justify-between items-center relative'>
                     <div></div>
                     <h1 className='text-xl font-bold'>Bài viết của {post.User.nickname}</h1>
@@ -83,8 +83,8 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
                         </svg>
                     </div>
                 </div>
-                <div className='w-full z-0 divide-y divide-gray-300  overflow-auto h-md'>
-                    <div className='p-3 w-full'>
+                <div className='w-full relative divide-y divide-gray-300'>
+                    <div className='p-3 w-full z-50'>
                         <div className=' flex items-center justify-between space-x-2'>
                             <div className='flex items-center'>
                                 <img alt='avatar' src={`${post.User.avatar}`} className=' w-10 h-10 mx-2 object-cover rounded-full cursor-pointer' />
@@ -118,22 +118,24 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
                         </div>
                         <h1 className='p-2'>{post.postText}</h1>
                     </div>
-                    <div className=' flex justify-center items-center bg-white px-4'>
+                    <div className=' relative flex flex-col justify-center items-center bg-white px-4 z-0 overflow-y-auto overflow-x-hidden'>
                         {post.Images.length === 0 ? (
                             <>
                             </>
                         ) : (
-                            <div className='w-full flex items-center justify-center'>
-                                <img alt='image' src={`${post.Images[0].link}`} className=' object-contain' style={{ minWidth: '500px', maxWidth: "900px", maxHeight: "700px" }} />
+                            <div className='flex items-center justify-center'  id='content-container'>
+                                <img alt='image' src={`${post.Images[0].link}`} className='content object-contain' />
                             </div>
                         )}
-                    </div>
-                    <div className=' divide-y divide-gray-300 p-2 w-full pb-20'>
-                        <div className=' space-y-7 py-5'>
-                            {comments.map((comment, id) => (
-                                <Comment comment={comment} setComment={setComment} comments={comments} key={id} newReply={newReply} setNewReply={setNewReply} />
-                            ))}
-                        </div>
+                        {comments.length > 0 && (
+                            <div className=' divide-y divide-gray-300 p-2 w-full pb-20'>
+                                <div className=' space-y-7 py-5'>
+                                    {comments.map((comment, id) => (
+                                        <Comment comment={comment} setComment={setComment} comments={comments} key={id} newReply={newReply} setNewReply={setNewReply} />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div
