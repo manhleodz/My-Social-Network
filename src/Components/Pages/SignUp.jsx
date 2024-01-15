@@ -16,7 +16,7 @@ function SignUp() {
     const [loading, setLoading] = useState(false);
     const [OTP, setOTP] = useState(Generate(6))
     const [inputOTP, setInputOTP] = useState('');
-    const [excuting, setExcuting] = useState(false);
+    const [excuting, setExcuting] = useState(true);
     const [alert, setAlert] = useState(null);
 
     const success = () => {
@@ -71,11 +71,13 @@ function SignUp() {
 
     return (
         <>
-            <section className="flex flex-row items-center justify-center">
-                <div className="max-xl:hidden">
-                    <img src={bgsvg} alt="svgbg" />
-                </div>
-
+            <section className="flex flex-row items-center justify-center" style={{
+                backgroundImage: `url(https://www.intotheminds.com/blog/app/uploads/social-media-marketing-smm-banner.jpg)`,
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'cover',
+                backgroundAttachment: 'fixed',
+                backgroundPosition: 'center'
+            }}>
                 {excuting === false ? (
                     <form
                         className="min-h-screen flex flex-col justify-center sm:py-6"
@@ -87,14 +89,14 @@ function SignUp() {
                         }}
                     >
                         <div>
-                            <div className="relative py-3 sm:max-w-xl sm:mx-auto" >
+                            <div className="relative py-3 sm:mx-auto" >
                                 <div
-                                    className="absolute inset-0 bg-gradient-to-r from-green-300 to-green-600 shadow-lg transhtmlForm -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl max-sm:hidden">
+                                    className="absolute inset-0 bg-gradient-to-r from-green-300 to-green-600 shadow-lg transhtmlForm -skew-y-6 sm:skew-y-0 -rotate-6 max-sm:-rotate-3 rounded-3xl">
                                 </div>
-                                <div className="relative px-4 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+                                <div className="relative px-4 py-10 bg-white shadow-lg rounded-3xl sm:p-20">
                                     <div className="max-w-md mx-auto">
                                         <div>
-                                            <h1 className="text-2xl font-semibold font-mono">Hi! Chúc một ngày tốt lành</h1>
+                                            <h1 className="text-2xl max-sm:text-lg font-semibold font-mono">Hi! Chúc một ngày tốt lành</h1>
                                         </div>
                                         <div className="divide-y divide-gray-200 mt-3">
                                             <div className="text-base leading-6 space-y-8 text-gray-700 sm:text-lg sm:leading-7">
@@ -116,7 +118,7 @@ function SignUp() {
                                                     />
                                                     <label htmlFor="email" className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Email</label>
                                                     {(alert === "Sai email" || alert === "Email đã được sử dụng") && (
-                                                        <h1 className="text-red-600 font-semibold text-base absolute">
+                                                        <h1 className=" text-red-600 font-semibold text-base break-words">
                                                             {alert}
                                                         </h1>
                                                     )}
@@ -139,7 +141,7 @@ function SignUp() {
                                                     />
                                                     <label htmlFor="password" className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Mật khẩu</label>
                                                     {(alert === "Mật khẩu phải nhiều hơn 7 kí tự") && (
-                                                        <h1 className="text-red-600 font-semibold text-base absolute">
+                                                        <h1 className=" text-red-600 font-semibold text-base break-words">
                                                             {alert}
                                                         </h1>
                                                     )}
@@ -162,7 +164,7 @@ function SignUp() {
                                                     />
                                                     <label htmlFor="repassword" className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Xác nhận mật khẩu</label>
                                                     {(alert === "Mật khẩu chưa chính xác") && (
-                                                        <h1 className="text-red-600 font-semibold text-base absolute">
+                                                        <h1 className=" text-red-600 font-semibold text-base break-words">
                                                             {alert}
                                                         </h1>
                                                     )}
@@ -188,30 +190,30 @@ function SignUp() {
                     </form>
                 ) : (
                     <div
-                        className="min-h-screen flex flex-col justify-center sm:py-6"
-
+                        className="min-h-screen flex flex-col justify-center items-center sm:py-6"
                     >
                         <div>
-                            <div className="relative py-3 sm:max-w-xl sm:mx-auto" >
+                            <div className="relative py-3 sm:mx-auto" >
                                 <div
-                                    className="absolute inset-0 bg-gradient-to-r from-green-300 to-green-600 shadow-lg transhtmlForm -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl max-sm:hidden">
+                                    className="absolute inset-0 bg-gradient-to-r from-green-300 to-green-600 shadow-lg transhtmlForm -skew-y-6 sm:skew-y-0 -rotate-6 max-sm:-rotate-3 rounded-3xl">
                                 </div>
-                                <div className="relative px-4 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+                                <div className="relative px-4 py-10 bg-white shadow-lg rounded-3xl sm:p-20">
                                     <div className="max-w-md mx-auto">
                                         <div>
-                                            <h1 className="text-2xl font-semibold font-mono">Hi! Chúc một ngày tốt lành</h1>
+                                            <h1 className="text-2xl max-sm:text-lg font-semibold font-mono">Hi! Chúc một ngày tốt lành</h1>
                                         </div>
-                                        <div className="divide-y divide-gray-200 mt-3">
-                                            <div className="text-base leading-6 space-y-14 text-gray-700 sm:text-lg sm:leading-7">
-                                                <div className='relative'>
+                                        <div className="divide-y divide-gray-200">
+                                            <div className="py-4 text-base leading-6 space-y-8 text-gray-700 sm:text-lg sm:leading-7">
+                                                <div className="relative">
                                                     <OtpInput
                                                         value={inputOTP}
                                                         onChange={setInputOTP}
                                                         OTPLength={6}
+                                                        style={{}}
                                                         otpType="number"
                                                         disabled={false}
                                                         autoFocus
-                                                        className=" p-2 flex justify-center items-center bg-gray-300"
+                                                        className=" p-2 bg-gray-300 max-sm:p-0"
                                                     >
                                                     </OtpInput>
                                                     {alert === "Sai mã OTP vui lòng kiểm tra lại" && (

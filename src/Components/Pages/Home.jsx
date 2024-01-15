@@ -5,12 +5,12 @@ import Post from '../Widgets/Post/Post';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Story from '../Widgets/Story/Story';
 import MakePost from '../Widgets/MakePost/MakePost';
-import friends from '../../Assets/Địt mẹ thằng lồn Tiến/friends.svg';
-import messager from '../../Assets/Địt mẹ thằng lồn Tiến/messager.svg'
-import group from '../../Assets/Địt mẹ thằng lồn Tiến/group.svg'
-import video from '../../Assets/Địt mẹ thằng lồn Tiến/video.svg'
-import music from '../../Assets/Địt mẹ thằng lồn Tiến/music.svg'
-import save from '../../Assets/Địt mẹ thằng lồn Tiến/save.svg'
+import friends from '../../Assets/SVG icons/friends.svg';
+import messager from '../../Assets/SVG icons/messager.svg'
+import group from '../../Assets/SVG icons/group.svg'
+import video from '../../Assets/SVG icons/video.svg'
+import music from '../../Assets/SVG icons/music.svg'
+import save from '../../Assets/SVG icons/save.svg'
 
 const Loading = () => (
   <div className="post loading">

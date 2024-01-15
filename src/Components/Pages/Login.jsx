@@ -1,7 +1,6 @@
 import React, { memo, useState } from 'react';
 import { Auth } from '../../Network/Auth';
 import { useNavigate } from 'react-router-dom';
-import bgsvg from '../../Assets/undraw_Connection_re_lcud.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../Redux/UserSlice';
 import { StoryApi } from '../../Network/Story';
@@ -10,6 +9,7 @@ import { FriendApi } from '../../Network/Friend';
 import { fetchData } from '../../Redux/PostSlice';
 import { fetchStory } from '../../Redux/StorySlice';
 import { fetchFriend } from '../../Redux/FriendSlice';
+import bgImg from '../../Assets/CS-Sep22-Features-1-750x375.jpg';
 
 const Login = () => {
 
@@ -81,24 +81,29 @@ const Login = () => {
 
   return (
     <>
-      <section className="flex flex-row items-center justify-center space-x-6">
-        <div className="max-xl:hidden">
-          <img src={bgsvg} alt="svgbg" />
-        </div>
+      <section
+        className="flex flex-row items-center justify-center w-screen h-screen"
+        style={{
+          backgroundImage: `url(https://www.intotheminds.com/blog/app/uploads/social-media-marketing-smm-banner.jpg)`,
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+          backgroundAttachment: 'fixed',
+          backgroundPosition: 'center'
+        }}
+      >
         <form
           className="min-h-screen  py-6 flex flex-col justify-center sm:py-12"
-
           onSubmit={onSubmit}
         >
           <div>
-            <div className="relative py-3 sm:max-w-xl sm:mx-auto" >
+            <div className="relative py-3 sm:mx-auto" >
               <div
-                className="absolute inset-0 bg-gradient-to-r from-green-300 to-green-600 shadow-lg transhtmlForm -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl max-sm:hidden">
+                className="absolute inset-0 bg-gradient-to-r from-green-300 to-green-600 shadow-lg transhtmlForm -skew-y-6 sm:skew-y-0 -rotate-6 max-sm:-rotate-3 rounded-3xl">
               </div>
-              <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+              <div className="relative px-4 py-10 bg-white shadow-lg rounded-3xl sm:p-20">
                 <div className="max-w-md mx-auto">
                   <div>
-                    <h1 className="text-2xl font-semibold font-mono">Hi! Chúc một ngày tốt lành</h1>
+                    <h1 className="text-2xl max-sm:text-lg font-semibold font-mono">Hi! Chúc một ngày tốt lành</h1>
                   </div>
                   <div className="divide-y divide-gray-200">
                     <div className="py-4 text-base leading-6 space-y-8 text-gray-700 sm:text-lg sm:leading-7">
@@ -120,7 +125,7 @@ const Login = () => {
                         />
                         <label className=" absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Tên tài khoản/Email</label>
                         {(alert === "Tên người dùng hoặc email không tồn tại" || alert === "Nhiều hơn 6 kí tự") && (
-                          <h1 className=" text-red-600 font-semibold text-base absolute">
+                          <h1 className=" text-red-600 font-semibold text-base break-words">
                             {alert}
                           </h1>
                         )}
@@ -141,7 +146,7 @@ const Login = () => {
                         />
                         <label htmlFor="password" className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Password</label>
                         {(alert === "Mật khẩu phải nhiều hơn 7 kí tự" || alert === "Sai mật khẩu") && (
-                          <h1 className="text-red-600 font-semibold text-base absolute">
+                          <h1 className=" text-red-600 font-semibold text-base break-words">
                             {alert}
                           </h1>
                         )}

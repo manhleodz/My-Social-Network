@@ -9,10 +9,10 @@ import {
 } from "firebase/storage";
 import ReactPlayer from "react-player";
 import { UploadApi } from '../../../Network/Upload';
-import video from '../../../Assets/Địt mẹ thằng lồn Tiến/video-marketing-movie-camera-svgrepo-com.svg';
+import video from '../../../Assets/SVG icons/video-marketing-movie-camera-svgrepo-com.svg';
 import Picker from 'emoji-picker-react';
 import { useDropzone } from 'react-dropzone';
-import addSvg from '../../../Assets/Địt mẹ thằng lồn Tiến/add.svg';
+import addSvg from '../../../Assets/SVG icons/add.svg';
 import './MakePost.scss';
 import { PostApi } from '../../../Network/Post';
 
