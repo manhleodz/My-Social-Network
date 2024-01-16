@@ -10,7 +10,7 @@ export default function Story() {
 
   const user = useSelector(state => state.authentication.user);
   const [page, setPage] = useState(1);
-  const stories = useSelector(state => state.stories.stories);
+  const stories = []
 
   const navigate = useNavigate();
 
@@ -50,7 +50,7 @@ export default function Story() {
         </button>
       )}
       <div className=' flex items-center overflow-x-hidden overflow-y-hidden transform relative w-full scroll-smooth' id='container'>
-        <div className=' flex flex-row items-center justify-start space-x-1 w-full scroll-smooth' key={234} style={{ width: `${stories.length === 0 ? `${185}px` : `${(stories.length + 0.5) * 185}px`}` }}>
+        <div className=' flex flex-row items-center justify-start space-x-1 w-full scroll-smooth' key={234} style={{ width: `${stories.length === 0 ? `${430}px` : `${(stories.length + 0.5) * 185}px`}` }}>
           <div
             onMouseEnter={() => {
               document.getElementById('new').style.display = 'block';

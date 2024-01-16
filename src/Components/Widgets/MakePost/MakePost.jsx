@@ -341,11 +341,11 @@ export default function MakePost() {
                         </div>
                     )}
                     <div className=' flex items-center justify-center w-full text-center font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 h-10 py-7 rounded-lg mt-2'>
-                        <img alt='video' src={video} className=' w-8 h-8' />
+                        <img alt='video' src={video} className=' w-8 h-8 max-sm:w-5 max-sm:h-5' />
                         <h1 className='px-2 max-sm:hidden' style={{ fontSize: "15px" }}>Video trực tiếp</h1>
                     </div>
                     <div className=' flex items-center justify-center w-full text-center font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 h-10 py-7 rounded-lg mt-2'>
-                        <svg width="32px" height="32px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                        <svg className=' w-8 h-8 max-sm:w-5 max-sm:h-5' viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
                             <path d="M910.4 843.8H174.6c-27.4 0-49.7-22.3-49.7-49.7V298.2c0-27.4 22.3-49.7 49.7-49.7h735.8c27.4 0 49.7 22.3 49.7 49.7v495.9c0 27.4-22.3 49.7-49.7 49.7z" fill="#A7B8C6" />
                             <path d="M272.1 193.8H118.7c-22.8 0-41.2 18.5-41.2 41.2v512.7c0 22.8 18.5 41.2 41.2 41.2h752.7c22.8 0 41.2-18.5 41.2-41.2V235c0-22.8-18.5-41.2-41.2-41.2H272.1z" fill="#FFFFFF" />
                             <path d="M871.4 802.5H118.7c-30.2 0-54.8-24.6-54.8-54.8V235c0-30.2 24.6-54.8 54.8-54.8h752.7c30.2 0 54.8 24.6 54.8 54.8v512.7c0 30.3-24.6 54.8-54.8 54.8zM118.7 207.3c-15.3 0-27.7 12.4-27.7 27.7v512.7c0 15.3 12.4 27.7 27.7 27.7h752.7c15.3 0 27.7-12.4 27.7-27.7V235c0-15.3-12.4-27.7-27.7-27.7H118.7z" fill="#3E3A39" />
@@ -357,7 +357,7 @@ export default function MakePost() {
                         <h1 className='px-2 max-sm:hidden' style={{ fontSize: "15px" }}>Ảnh/Video</h1>
                     </div>
                     <div className=' flex items-center justify-center w-full text-center font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 h-10 py-7 rounded-lg mt-2'>
-                        <svg xmlns="http://www.w3.org/2000/svg" height="32px" width="32px" fill='#EAB026' className='' viewBox="0 0 512 512">
+                        <svg className=' w-8 h-8 max-sm:w-5 max-sm:h-5'  xmlns="http://www.w3.org/2000/svg" fill='#EAB026' viewBox="0 0 512 512">
                             <path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm177.6 62.1C192.8 334.5 218.8 352 256 352s63.2-17.5 78.4-33.9c9-9.7 24.2-10.4 33.9-1.4s10.4 24.2 1.4 33.9c-22 23.8-60 49.4-113.6 49.4s-91.7-25.5-113.6-49.4c-9-9.7-8.4-24.9 1.4-33.9s24.9-8.4 33.9 1.4zM144.4 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm192-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" />
                         </svg>
                         <h1 className='px-2 max-sm:hidden' style={{ fontSize: "15px" }}>Cảm xúc/hoạt động</h1>

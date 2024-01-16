@@ -2,12 +2,12 @@
   width: 400px;
 }
 
-.image-playing {
+#image-playing {
   max-width: 780px;
 }
 
 @media (max-width: 400px) {
-  .image-playing {
+  #image-playing {
     width: 370px;
   }
 
@@ -17,7 +17,7 @@
 }
 
 @media (max-width: 350px) {
-  .image-playing {
+  #image-playing {
     width: 330px;
   }
 
@@ -27,7 +27,7 @@
 }
 
 @media (max-width: 320px) {
-  .image-playing {
+  #image-playing {
     width: 300px;
   }
 
