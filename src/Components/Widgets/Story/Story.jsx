@@ -10,7 +10,7 @@ export default function Story() {
 
   const user = useSelector(state => state.authentication.user);
   const [page, setPage] = useState(1);
-  const stories = []
+  const stories = useSelector(state => state.stories.stories);
 
   const navigate = useNavigate();
 
