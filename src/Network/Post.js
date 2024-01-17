@@ -4,7 +4,7 @@ import axios from 'axios';
 export const PostApi = {
 
     async getPost(page) {
-        return axios.get(`${ApiUrl}/posts`, {
+        return await axios.get(`${ApiUrl}/posts`, {
             params: { page: page },
             headers: {
                 accessToken: localStorage.getItem("accessToken")
@@ -13,9 +13,18 @@ export const PostApi = {
         )
     },
 
+    async getPostByProfile(id, page) {
+        return await axios.get(`${ApiUrl}/posts/profile/user`, {
+            params: { id: id, page: page },
+            headers: {
+                accessToken: localStorage.getItem("accessToken")
+            }
+        })
+    },
+
     async like(data) {
 
-        return axios.post(
+        return await axios.post(
             `${ApiUrl}/likes`, data, {
             headers: {
                 accessToken: localStorage.getItem("accessToken")
@@ -24,11 +33,11 @@ export const PostApi = {
     },
 
     async getLikeByPost(id) {
-        return axios.get(`${ApiUrl}/likes/${id}`);
+        return await axios.get(`${ApiUrl}/likes/${id}`);
     },
 
     async updateLikeNum(id) {
-        return axios.post(`${ApiUrl}/posts/like/${id}`, {
+        return await axios.post(`${ApiUrl}/posts/like/${id}`, {
             headers: {
                 accessToken: localStorage.getItem("accessToken")
             }
@@ -36,7 +45,7 @@ export const PostApi = {
     },
 
     async getLike(id, authId) {
-        return axios.get(`${ApiUrl}/likes/${id}/${authId}`,
+        return await axios.get(`${ApiUrl}/likes/${id}/${authId}`,
             {
                 headers: {
                     accessToken: localStorage.getItem("accessToken")
@@ -46,7 +55,7 @@ export const PostApi = {
     },
 
     async delete(id) {
-        return axios.delete(`${ApiUrl}/posts/${id}`,
+        return await axios.delete(`${ApiUrl}/posts/${id}`,
             {
                 headers: {
                     accessToken: localStorage.getItem("accessToken")
@@ -56,7 +65,7 @@ export const PostApi = {
     },
 
     async create(data) {
-        return axios.post(`${ApiUrl}/posts`, data, {
+        return await axios.post(`${ApiUrl}/posts`, data, {
             headers: {
                 accessToken: localStorage.getItem("accessToken")
             },
@@ -72,7 +81,7 @@ export const PostApi = {
     },
 
     async getOwnerLike(id, authId) {
-        return axios.get(`${ApiUrl}/likes/${id}/${authId}`, {
+        return await axios.get(`${ApiUrl}/likes/${id}/${authId}`, {
             headers: {
                 accessToken: localStorage.getItem("accessToken")
             },
@@ -80,7 +89,7 @@ export const PostApi = {
     },
 
     async like(data) {
-        return axios.post(`${ApiUrl}/likes`, data, {
+        return await axios.post(`${ApiUrl}/likes`, data, {
             headers: {
                 accessToken: localStorage.getItem('accessToken')
             }

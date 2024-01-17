@@ -4,7 +4,7 @@ import axios from 'axios';
 export const Auth = {
 
     async login(data, success, failure) {
-        return axios.post(`${ApiUrl}/auth/login`, data).then((response) => {
+        return await axios.post(`${ApiUrl}/auth/login`, data).then((response) => {
             if (response) {
                 localStorage.setItem("accessToken", response.data.token);
                 const user = response.data;
@@ -18,7 +18,7 @@ export const Auth = {
     },
 
     async completeConfirm(data, success, failure) {
-        return axios.put(`${ApiUrl}/auth`, data, {
+        return await axios.put(`${ApiUrl}/auth`, data, {
             headers: {
                 accessToken: localStorage.getItem("accessToken"),
             }
@@ -41,7 +41,7 @@ export const Auth = {
     },
 
     async signUp({ password, email }, success, failure) {
-        return axios.post(`${ApiUrl}/auth`, { password, email })
+        return await axios.post(`${ApiUrl}/auth`, { password, email })
             .then((response) => {
                 sessionStorage.setItem("accessToken", response.data);
                 const myTimeout = setTimeout(() => window.location.assign("/"), 1000);
@@ -52,7 +52,7 @@ export const Auth = {
     },
 
     async vefify(data, success, failure) {
-        return axios.post(`${ApiUrl}/auth/verify`, data)
+        return await axios.post(`${ApiUrl}/auth/verify`, data)
             .then((response) => {
                 success();
             }).catch(err => {
@@ -61,12 +61,12 @@ export const Auth = {
     },
 
     async getAllUsers() {
-        return axios.get(`${ApiUrl}/auth/all/users`);
+        return await axios.get(`${ApiUrl}/auth/all/users`);
     },
 
     async changeInfo(data, userId) {
 
-        return axios.put(`${ApiUrl}/auth/changeinfo/${userId}`, data, {
+        return await axios.put(`${ApiUrl}/auth/changeinfo/${userId}`, data, {
             headers: {
                 accessToken: localStorage.getItem("accessToken"),
             }
@@ -78,7 +78,7 @@ export const Auth = {
         const accessToken = localStorage.getItem("accessToken");
 
         if (accessToken !== null) {
-            return axios.get(`${ApiUrl}/auth/user/profile`, {
+            return await axios.get(`${ApiUrl}/auth/user/profile`, {
                 headers: {
                     accessToken: accessToken,
                 }
@@ -93,8 +93,12 @@ export const Auth = {
 
     },
 
-    async getById(id) {
-        return axios.get(`${ApiUrl}/auth/info/${id}`)
+    async getProfile(info) {
+        return await axios.get(`${ApiUrl}/auth/${info}`, {
+            headers: {
+                accessToken: localStorage.getItem("accessToken"),
+            }
+        })
     },
 
     async getAccessToken() {
@@ -102,6 +106,6 @@ export const Auth = {
     },
 
     async getRoom(id) {
-        return axios.get(`${ApiUrl}/rela/room/${id}`);
+        return await axios.get(`${ApiUrl}/rela/room/${id}`);
     },
 }

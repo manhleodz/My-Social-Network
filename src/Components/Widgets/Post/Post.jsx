@@ -38,7 +38,7 @@ export default function Post() {
     if (posts.posts.length === 0 || !user) return null;
 
     return (
-        <div className=' space-y-5 w-9/12' >
+        <>
             <InfiniteScroll
                 dataLength={posts.posts.length}
                 next={fetchMoreData}
@@ -62,9 +62,9 @@ export default function Post() {
                 ref={scrollRef} onScroll={handleScroll}
             >
                 {posts.posts.map((post, key) => (
-                    <SinglePost key={key} post={post} user={user} authId={user.id} />
+                    <SinglePost key={key} post={post} />
                 ))}
             </InfiniteScroll>
-        </div>
+        </>
     )
 }

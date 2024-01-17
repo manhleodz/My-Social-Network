@@ -4,12 +4,12 @@ import { PostApi } from "../../../Network/Post";
 import LikeBox from "../CheckLikes/LikeBox";
 import CommentBox from "../CommentBox/CommentBox";
 import ReactPlayer from "react-player";
-import { FastAverageColor } from 'fast-average-color';
+import { useSelector } from "react-redux";
 
-
-export default function SinglePost({ post, user, authId }) {
+export default function SinglePost({ post }) {
 
     const navigate = useNavigate();
+    const user = useSelector(state => state.authentication.user);
     const [isClicked, setIsClicked] = useState(post.isLiked);
     const [likeNum, setLikeNum] = useState(post.Post.likeNumber);
     const [isSaved, setIsSaved] = useState(false);
@@ -20,21 +20,11 @@ export default function SinglePost({ post, user, authId }) {
     const videos = post.Post.Videos;
     const images = post.Post.Images;
 
-    const getBackgroundColor = async (link) => {
-        fac.getColorAsync(link)
-            .then(color => {
-                return color.rgb;
-            })
-            .catch(e => {
-                console.log(e);
-            });
-    }
-
     const likeAPost = () => {
         setIsClicked(!isClicked);
         PostApi.like({
             PostId: post.Post.id,
-            UserId: authId,
+            UserId: user.id,
         }).then((response) => {
             if (response.data === false) {
                 setLikeNum((likeNum) => (likeNum = likeNum - 1));

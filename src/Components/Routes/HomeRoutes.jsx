@@ -26,9 +26,9 @@ export default function HomeRoutes() {
                 <Layout>
                     <Routes>
                         <Route path="/" element={<Home />}>
-                            <Route path="/:userId/:postId" component={<CommentBox />} />
-                            <Route path="/:username" element={<Profile />} />
+                            <Route path=":userId/:postId" component={<CommentBox />} />
                         </Route>
+                        <Route path="/:username" element={<Profile />} />
                         <Route path="story/:id" element={<Story />} />
                         <Route path="messenger" element={<Messenger />} />
                         <Route path="community" element={<Community />} />
