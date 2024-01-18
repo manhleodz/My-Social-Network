@@ -107,7 +107,7 @@ export default function MakePost() {
 
     return (
         <>
-            <div className=' w-9/12 p-4 rounded-lg flex flex-col justify-center space-y-1 bg-white divide-y divide-gray-300 shadow-md'>
+            <div className=' w-9/12 max-md:w-full p-4 rounded-lg flex flex-col justify-center space-y-1 bg-white divide-y divide-gray-300 shadow-md'>
                 <div className=' flex items-center mb-2  space-x-3'>
                     <img alt='avatar' src={user.avatar} className=' w-12 h-12 rounded-full object-cover' />
                     <div className=' w-full p-3 h-12 rounded-3xl bg-gray-100 hover:bg-gray-200 cursor-pointer flex items-center text-gray-600 text-lg max-md:text-base max-md:rounded-2xl' onClick={(e) => setOpen(true)}>{user.nickname}, bạn đang nghĩ gì thế?</div>

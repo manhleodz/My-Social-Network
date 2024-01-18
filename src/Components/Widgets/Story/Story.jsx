@@ -35,7 +35,7 @@ export default function Story() {
   }
 
   return (
-    <div className=' relative flex justify-between items-center w-9/12'>
+    <div className=' relative flex justify-between items-center w-9/12 max-md:w-full'>
       {page !== 1 && (
         <button
           onClick={() => {

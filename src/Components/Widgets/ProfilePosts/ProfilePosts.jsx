@@ -53,6 +53,7 @@ export default function ProfilePosts() {
                 });
         });
     }, []);
+    
     return (
         <div className='main-container md:space-x-4 bg-gray-100 flex items-start justify-between'>
             <div className='left-main  shrink flex-none'>
