@@ -155,7 +155,7 @@ export default function Profile() {
         </div>
         <div className=' w-full bg-gray-100 flex flex-col justify-center items-center'>
           <div className='w-9/12 bg-gray-100 flex max-lg:flex-col max-lg:items-center max-lg:justify-start items-start justify-between'>
-            <div className=' w-5/12 mx-4'>
+            <div className=' w-5/12 max-lg:w-full mx-4'>
               <div className=' w-full bg-white m-4 p-2  rounded-lg shadow-sm'>
                 <h1 className=' text-xl font-bold'>Giới thiệu</h1>
               </div>
@@ -166,7 +166,7 @@ export default function Profile() {
                 <h1 className=' text-xl font-bold'>Bạn bè</h1>
               </div>
             </div>
-            <div className='w-7/12 mx-4'>
+            <div className='w-7/12 max-lg:w-full mx-4'>
               <div className=' w-full flex justify-between items-center bg-white m-4 p-3 rounded-lg shadow-sm'>
                 <h1 className=' text-xl font-bold'>Bài viết</h1>
                 <div className='flex items-center justify-center p-1 cursor-pointer hover:bg-gray-300 bg-gray-200 rounded-md w-20'>
