@@ -63,7 +63,7 @@ export default function Profile() {
           });
         else
           setPost({
-            posts: posts.posts,
+            posts: [],
             page: posts.page,
             hasMore: false
           });
