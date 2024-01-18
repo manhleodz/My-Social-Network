@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { LoadingPosts } from '../LoadingPost/LoadingPosts'
 import SinglePost from '../Post/SinglePost'
-import { useOutletContext } from 'react-router-dom'
+import { useOutletContext, useParams } from 'react-router-dom'
 import { PostApi } from '../../../Network/Post'
 import '../../../Assets/SCSS/Profile.scss'
 import { Auth } from '../../../Network/Auth'
@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux'
 export default function ProfilePosts() {
 
     const { owner } = useOutletContext();
+    const paramsUsername = useParams().username;
     const [posts, setPost] = useState({
         posts: [],
         page: 0,
@@ -68,7 +69,7 @@ export default function ProfilePosts() {
                     hasMore: false
                 });
         });
-    }, [owner]);
+    }, [paramsUsername, owner]);
 
     return (
         <div className='main-container md:space-x-4 bg-gray-100 flex items-start justify-between'>

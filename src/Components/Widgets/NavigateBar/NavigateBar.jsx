@@ -26,9 +26,9 @@ export default function NavigateBar() {
                 aria-label="Sidebar"
             >
                 <div className=' w-screen shadow-md flex flex-row justify-between items-center bg-white p-2 pr-7'>
-                    <div className=' flex items-center w-1/3 space-x-3 max-md:hidden'>
-                        <div className="flex items-center mb-4 sm:mb-0 cursor-pointer" onClick={() => navigate('/')}>
-                            <img src={leo} alt="logo" className="w-12 h-12" />
+                    <div className=' flex items-center w-96 space-x-3 max-md:hidden'>
+                        <div className="flex items-center w-12 h-12 rounded-full mb-4 sm:mb-0 cursor-pointer" onClick={() => navigate('/')}>
+                            <img src={leo} alt="logo" className="w-12 h-12 rounded-full" />
                         </div>
                         <Search />
                     </div>

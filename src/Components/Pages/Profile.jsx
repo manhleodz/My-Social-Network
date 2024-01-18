@@ -46,7 +46,7 @@ export default function Profile() {
               <h1 className=' text-3xl max-lg:text-xl font-semibold text-start'>{profile.nickname}</h1>
               <h1 className=' text-base max-lg:text-sm text-gray-500 font-mono'>8 bạn chung</h1>
             </div>
-            <div className='h-full grid sm:grid-flow-col max-sm:grid-flow-dense max-sm:grid-rows-2 max-sm:content-center items-end justify-end space-x-3 max-sm:space-x-0'>
+            <div className='h-full grid sm:grid-flow-col max-sm:grid-flow-dense max-sm:grid-rows-2 max-sm:content-center items-end justify-end space-x-3 max-sm:space-x-0 max-sm:space-y-2'>
               {profile.id === user.id ? (
                 <>
                   <button className=' w-36 max-sm:w-56 p-2 bg-gray-300 rounded-lg text-base font-semibold text-black hover:bg-gray-400 flex items-center justify-center h-10'>
