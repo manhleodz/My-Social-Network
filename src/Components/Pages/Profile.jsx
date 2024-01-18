@@ -57,7 +57,7 @@ export default function Profile() {
       PostApi.getPostByProfile(res.data.profile.id, page).then(res => {
         if (res.status !== 204)
           setPost({
-            posts: [...posts.posts, ...newPosts],
+            posts: [...posts.posts, ...res.data.data],
             page: posts.page + 1,
             hasMore: true
           });
