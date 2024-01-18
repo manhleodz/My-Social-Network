@@ -154,7 +154,7 @@ export default function Profile() {
           </div>
         </div>
         <div className=' w-full bg-gray-100 flex flex-col justify-center items-center'>
-          <div className='w-9/12 bg-gray-100 flex items-start justify-between'>
+          <div className='w-9/12 bg-gray-100 flex max-lg:flex-col max-lg:items-center max-lg:justify-start items-start justify-between'>
             <div className=' w-5/12 mx-4'>
               <div className=' w-full bg-white m-4 p-2  rounded-lg shadow-sm'>
                 <h1 className=' text-xl font-bold'>Giới thiệu</h1>
