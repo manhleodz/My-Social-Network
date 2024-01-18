@@ -64,9 +64,9 @@ export const Auth = {
         return await axios.get(`${ApiUrl}/auth/all/users`);
     },
 
-    async changeInfo(data, userId) {
+    async changeInfo(data) {
 
-        return await axios.put(`${ApiUrl}/auth/changeinfo/${userId}`, data, {
+        return await axios.put(`${ApiUrl}/auth/changeinfo`, data, {
             headers: {
                 accessToken: localStorage.getItem("accessToken"),
             }

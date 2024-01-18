@@ -5,6 +5,9 @@ import SinglePost from '../Post/SinglePost'
 import { useOutletContext } from 'react-router-dom'
 import { PostApi } from '../../../Network/Post'
 import '../../../Assets/SCSS/Profile.scss'
+import { Auth } from '../../../Network/Auth'
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser } from '../../../Redux/UserSlice';
 
 export default function ProfilePosts() {
 
@@ -14,6 +17,10 @@ export default function ProfilePosts() {
         page: 0,
         hasMore: true
     });
+    const [newStory, setNewStory] = useState(null);
+
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.authentication.user);
 
     const fetchMoreData = () => {
         setTimeout(async () => {
@@ -37,6 +44,15 @@ export default function ProfilePosts() {
         }, 1000);
     };
 
+    const updateStory = async () => {
+        Auth.changeInfo({ story: newStory.replace(/\n/g, '@@newline@@') }).then(res => {
+            dispatch(setUser({ ...user, story: newStory }));
+            setNewStory(null);
+        }).catch((error) => {
+            console.log(error.data);
+        });
+    }
+
     useEffect(() => {
         PostApi.getPostByProfile(owner.id, posts.page).then(res => {
             if (res.status !== 204)
@@ -52,22 +68,55 @@ export default function ProfilePosts() {
                     hasMore: false
                 });
         });
-    }, []);
-    
+    }, [owner]);
+
     return (
         <div className='main-container md:space-x-4 bg-gray-100 flex items-start justify-between'>
             <div className='left-main  shrink flex-none'>
-                <div className=' w-full bg-white  my-4 p-2  rounded-lg shadow-sm'>
+                <div className=' w-full bg-white  my-4 p-3  rounded-lg shadow-sm'>
                     <h1 className=' text-xl font-bold'>Giới thiệu</h1>
                     <div className=' w-full flex flex-col items-center justify-center'>
-                        <h1>{owner.story}</h1>
-                        <button>Chỉnh sửa tiểu sử</button>
+                        {newStory !== null ? (
+                            <>
+                                <textarea
+                                    defaultValue={owner.story.replace(/@@newline@@/g, '\n')}
+                                    className=' w-full resize-none m-1 rounded-lg bg-gray-200 focus:out-blue-400 overflow-auto text-center'
+                                    onChange={(e) => setNewStory(e.target.value)}
+                                    autoFocus
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <pre className=" text-base font-normal break-words font-noto text-center">{owner.story.replace(/@@newline@@/g, '\n')}</pre>
+                            </>
+                        )}
+                        {(user.id === owner.id) && (
+                            <>
+                                {(newStory !== null) ? (
+                                    <div className=' w-full flex justify-end items-center space-x-1'>
+                                        <button className='p-1.5 bg-gray-200 hover:bg-gray-300 font-semibold rounded-md' onClick={() => setNewStory(null)}>Hủy</button>
+                                        <button
+                                            onClick={() => {
+                                                if (newStory !== null) {
+                                                    updateStory(newStory);
+                                                }
+                                            }}
+                                            className={`p-1.5 bg-gray-200 font-semibold rounded-md ${newStory.length > 0 ? ' cursor-pointer' : ' cursor-not-allowed text-gray-500'}`}
+                                        >Lưu</button>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <button className=' bg-gray-200 rounded-lg text-center hover:bg-gray-300 w-full p-2 font-semibold' onClick={() => setNewStory("")}>Chỉnh sửa tiểu sử</button>
+                                    </>
+                                )}
+                            </>
+                        )}
                     </div>
                 </div>
-                <div className=' w-full bg-white my-4 p-2  rounded-lg shadow-sm'>
+                <div className=' w-full bg-white my-4 p-3  rounded-lg shadow-sm'>
                     <h1 className=' text-xl font-bold'>Ảnh</h1>
                 </div>
-                <div className=' w-full bg-white my-4 p-2  rounded-lg shadow-sm'>
+                <div className=' w-full bg-white my-4 p-3  rounded-lg shadow-sm'>
                     <h1 className=' text-xl font-bold'>Bạn bè</h1>
                 </div>
             </div>

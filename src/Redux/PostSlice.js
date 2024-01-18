@@ -12,6 +12,9 @@ export const postSlice = createSlice({
             state.page++;
             state.posts = [...state.posts, ...action.payload];
         },
+        setPosts(state, action) {
+            state.posts = action.payload;
+        },
         stopFetchData(state) {
             state.hasMore = false;
         },
@@ -25,6 +28,6 @@ export const postSlice = createSlice({
     }
 })
 
-export const { fetchData, stopFetchData, addPost, deletePost } = postSlice.actions;
+export const { fetchData, stopFetchData, addPost, deletePost, setPosts } = postSlice.actions;
 
 export const postReducer = postSlice.reducer;

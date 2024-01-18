@@ -79,7 +79,7 @@ export default function MakePost() {
 
     const newPost = async () => {
         setProcessing(true);
-        PostApi.create({ postText, public: isPublic }).then((res) => {
+        PostApi.create({ postText: postText.replace(/\n/g, '@@newline@@'), public: isPublic }).then((res) => {
             if (imageUrls.length > 0 && videosUrls.length > 0) {
                 UploadApi.uploadImages({ link: imageUrls, PostId: res.data.newPost.id }).then(() => {
                     UploadApi.uploadVideos({ link: videosUrls, PostId: res.data.id }).then(() => {
@@ -153,7 +153,13 @@ export default function MakePost() {
                                                 </div>
                                             </div>
                                             <div className='space-y-2 border-none outline-none'>
-                                                <textarea onChange={(e) => setPostText(e.target.value)} value={postText} className={` w-full ring-0 rounded-lg resize-none overflow-hidden border-none outline-none ${!fileUploads ? 'text-2xl' : 'text-xl'}`} style={{ height: `${!fileUploads ? '150px' : '60px'}` }} placeholder={`${user.nickname} ơi, bạn đang nghĩ gì thế?`}></textarea>
+                                                <textarea
+                                                    onChange={(e) => {
+                                                        setPostText(e.target.value);
+                                                    }}
+                                                    value={postText}
+                                                    className={` w-full ring-0 rounded-lg resize-none overflow-hidden border-none outline-none ${!fileUploads ? 'text-2xl' : 'text-xl'}`} style={{ height: `${!fileUploads ? '150px' : '60px'}` }} placeholder={`${user.nickname} ơi, bạn đang nghĩ gì thế?`}
+                                                ></textarea>
                                                 <div className=' flex items-center justify-end w-full z-50 border-none outline-none'>
                                                     <div
                                                         className=' cursor-pointer'
@@ -357,7 +363,7 @@ export default function MakePost() {
                         <h1 className='px-2 max-sm:hidden' style={{ fontSize: "15px" }}>Ảnh/Video</h1>
                     </div>
                     <div className=' flex items-center justify-center w-full text-center font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 h-10 py-7 rounded-lg mt-2'>
-                        <svg className=' w-8 h-8 max-sm:w-5 max-sm:h-5'  xmlns="http://www.w3.org/2000/svg" fill='#EAB026' viewBox="0 0 512 512">
+                        <svg className=' w-8 h-8 max-sm:w-5 max-sm:h-5' xmlns="http://www.w3.org/2000/svg" fill='#EAB026' viewBox="0 0 512 512">
                             <path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm177.6 62.1C192.8 334.5 218.8 352 256 352s63.2-17.5 78.4-33.9c9-9.7 24.2-10.4 33.9-1.4s10.4 24.2 1.4 33.9c-22 23.8-60 49.4-113.6 49.4s-91.7-25.5-113.6-49.4c-9-9.7-8.4-24.9 1.4-33.9s24.9-8.4 33.9 1.4zM144.4 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm192-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" />
                         </svg>
                         <h1 className='px-2 max-sm:hidden' style={{ fontSize: "15px" }}>Cảm xúc/hoạt động</h1>

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PostApi } from "../../../Network/Post";
 import LikeBox from "../CheckLikes/LikeBox";
 import CommentBox from "../CommentBox/CommentBox";
 import ReactPlayer from "react-player";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setPosts } from '../../../Redux/PostSlice';
 
 export default function SinglePost({ post }) {
 
@@ -17,6 +18,8 @@ export default function SinglePost({ post }) {
     const [openLike, setOpenLike] = useState(false);
     const [openComment, setOpenComment] = useState(false);
 
+    const posts = useSelector(state => state.posts.posts);
+    const dispatch = useDispatch();
     const videos = post.Post.Videos;
     const images = post.Post.Images;
 
@@ -34,6 +37,20 @@ export default function SinglePost({ post }) {
             PostApi.updateLikeNum(post.Post.id);
         });
     };
+
+    const deletePost = async (id) => {
+        await PostApi.delete(id).then((res) => {
+            const newLists = posts.filter(post => post.Post.id !== id);
+            dispatch(setPosts(newLists));
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
+    const hidePost = (id) => {
+        const newLists = posts.filter(post => post.Post.id !== id);
+        dispatch(setPosts(newLists));
+    }
 
     const save = () => {
         setIsSaved(!isSaved);
@@ -61,7 +78,7 @@ export default function SinglePost({ post }) {
                         <div className="">
                             <h1
                                 onClick={() => navigate(`/${post.Post.User.username}`)}
-                                className=" font-semibold hover:underline cursor-pointer"
+                                className=" break-words font-semibold hover:underline cursor-pointer"
                             >
                                 {post.Post.User.nickname}
                             </h1>
@@ -93,8 +110,22 @@ export default function SinglePost({ post }) {
                             </div>
                         </div>
                     </div>
-                    <div className=" flex items-center">
-                        <div className=" flex justify-center items-center cursor-pointer w-9 h-9 active:bg-gray-300 hover:bg-gray-200 rounded-full">
+                    <div className=" flex items-center relative">
+                        {user.username === post.Post.User.username && (
+                            <>
+                                {dropdown && (
+                                    <div className=" bg-white p-2 rounded-lg shadow-lg">
+                                        <div className=" w-full" onClick={() => deletePost(post.Post.id)}>
+                                            Chuyển vào thùng rác
+                                        </div>
+                                    </div>
+                                )}
+                            </>
+                        )}
+                        <div
+                            onClick={() => setDropdown(!dropdown)}
+                            className=" flex justify-center items-center cursor-pointer w-9 h-9 active:bg-gray-300 hover:bg-gray-200 rounded-full"
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 height="1em"
@@ -104,19 +135,21 @@ export default function SinglePost({ post }) {
                                 <path d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z" />
                             </svg>
                         </div>
-                        <div className=" flex justify-center items-center cursor-pointer w-9 h-9 active:bg-gray-300 hover:bg-gray-200 rounded-full">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                height="1em"
-                                viewBox="0 0 384 512"
-                                className=" fill-gray-700"
-                            >
-                                <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
-                            </svg>
-                        </div>
+                        {user.username !== post.Post.User.username && (
+                            <div onClick={() => hidePost(post.Post.id)} className=" flex justify-center items-center cursor-pointer w-9 h-9 active:bg-gray-300 hover:bg-gray-200 rounded-full">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    height="1em"
+                                    viewBox="0 0 384 512"
+                                    className=" fill-gray-700"
+                                >
+                                    <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                                </svg>
+                            </div>
+                        )}
                     </div>
                 </div>
-                <h1 className=" text-base font-normal">{post.Post.postText}</h1>
+                <pre className=" text-base font-normal break-words font-noto">{post.Post.postText.replace(/@@newline@@/g, '\n')}</pre>
             </div>
             <div className=" flex justify-center items-center max-h-md bg-black">
                 {images.length + videos.length == 0 && (
@@ -294,7 +327,7 @@ export default function SinglePost({ post }) {
                     )}
                     <div className="flex items-center space-x-3">
                         <h1 className=" cursor-pointer hover:underline">
-                            {post.Post.likeNumber} {post.Post.likeNumber < 2 ? "comment" : "comments"}
+                            {post.Post.commentNumber} {post.Post.commentNumber < 2 ? "comment" : "comments"}
                         </h1>
                     </div>
                 </div>
