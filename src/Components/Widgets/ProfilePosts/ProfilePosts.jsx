@@ -6,8 +6,7 @@ import { useOutletContext } from 'react-router-dom'
 import { PostApi } from '../../../Network/Post'
 import '../../../Assets/SCSS/Profile.scss'
 import { Auth } from '../../../Network/Auth'
-import { useDispatch, useSelector } from 'react-redux'
-import { setUser } from '../../../Redux/UserSlice';
+import { useSelector } from 'react-redux'
 
 export default function ProfilePosts() {
 
@@ -17,9 +16,11 @@ export default function ProfilePosts() {
         page: 0,
         hasMore: true
     });
-    const [newStory, setNewStory] = useState(null);
 
-    const dispatch = useDispatch();
+    var story = owner.story;
+    const [changeStory, setChangeStory] = useState(false);
+    const [newStory, setNewStory] = useState("");
+
     const user = useSelector(state => state.authentication.user);
 
     const fetchMoreData = () => {
@@ -46,8 +47,7 @@ export default function ProfilePosts() {
 
     const updateStory = async () => {
         Auth.changeInfo({ story: newStory.replace(/\n/g, '@@newline@@') }).then(res => {
-            dispatch(setUser({ ...user, story: newStory }));
-            setNewStory(null);
+            setChangeStory(false)
         }).catch((error) => {
             console.log(error.data);
         });
@@ -76,25 +76,32 @@ export default function ProfilePosts() {
                 <div className=' w-full bg-white  my-4 p-3  rounded-lg shadow-sm'>
                     <h1 className=' text-xl font-bold'>Giới thiệu</h1>
                     <div className=' w-full flex flex-col items-center justify-center'>
-                        {newStory !== null ? (
+                        {changeStory ? (
                             <>
                                 <textarea
-                                    defaultValue={owner.story.replace(/@@newline@@/g, '\n')}
+                                    id='story'
                                     className=' w-full resize-none m-1 rounded-lg bg-gray-200 focus:out-blue-400 overflow-auto text-center'
                                     onChange={(e) => setNewStory(e.target.value)}
+                                    defaultValue={story.replace(/@@newline@@/g, '\n')}
                                     autoFocus
                                 />
                             </>
                         ) : (
                             <>
-                                <pre className=" text-base font-normal break-words font-noto text-center">{owner.story.replace(/@@newline@@/g, '\n')}</pre>
+                                <pre className=" text-base font-normal break-words font-noto text-center">{newStory.length === 0 ? story.replace(/@@newline@@/g, '\n') : newStory.replace(/@@newline@@/g, '\n')}</pre>
                             </>
                         )}
                         {(user.id === owner.id) && (
                             <>
-                                {(newStory !== null) ? (
+                                {changeStory ? (
                                     <div className=' w-full flex justify-end items-center space-x-1'>
-                                        <button className='p-1.5 bg-gray-200 hover:bg-gray-300 font-semibold rounded-md' onClick={() => setNewStory(null)}>Hủy</button>
+                                        <button
+                                            className='p-1.5 bg-gray-200 hover:bg-gray-300 font-semibold rounded-md'
+                                            onClick={() => {
+                                                setNewStory("");
+                                                setChangeStory(false)
+                                            }}
+                                        >Hủy</button>
                                         <button
                                             onClick={() => {
                                                 if (newStory !== null) {
@@ -106,7 +113,7 @@ export default function ProfilePosts() {
                                     </div>
                                 ) : (
                                     <>
-                                        <button className=' bg-gray-200 rounded-lg text-center hover:bg-gray-300 w-full p-2 font-semibold' onClick={() => setNewStory("")}>Chỉnh sửa tiểu sử</button>
+                                        <button className=' bg-gray-200 rounded-lg text-center hover:bg-gray-300 w-full p-2 font-semibold' onClick={() => setChangeStory(true)}>Chỉnh sửa tiểu sử</button>
                                     </>
                                 )}
                             </>

@@ -28,7 +28,7 @@ export default function LikeBox({ PostId, setOpenLike, user }) {
             className=' fixed top-0 left-0 z-40 w-screen h-screen flex justify-center items-center' style={{ backgroundColor: 'rgb(0,0,0,0.25)' }}
             id='bg'
         >
-            <div className='bg-white z-50 p-2 rounded-lg divide-y divide-gray-300 max-w-sm w-1/3'>
+            <div className='bg-white z-50 p-2 rounded-lg divide-y divide-gray-300 max-w-sm w-1/3 max-sm:w-11/12'>
                 <div className=' flex justify-between'>
                     <div></div>
                     <h1 className=' font-semibold'>Likes</h1>
