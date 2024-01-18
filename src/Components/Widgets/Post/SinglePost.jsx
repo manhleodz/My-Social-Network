@@ -48,7 +48,7 @@ export default function SinglePost({ post }) {
     }
 
     return (
-        <div className=" rounded-lg shadow-md bg-white my-5">
+        <div className=" rounded-lg shadow-md bg-white">
             <div className=" p-4 space-y-3 ">
                 <div className=" flex justify-between">
                     <div className=" flex space-x-2">

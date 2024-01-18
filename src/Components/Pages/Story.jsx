@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useTransition } from 'react';
 import { FastAverageColor } from 'fast-average-color';
 import { StoryApi } from '../../Network/Story';
-import './Story.scss';
+import '../../Assets/SCSS/Story.scss';
 import angryGif from '../../Assets/React Icons/angry.gif';
 import angrySvg from '../../Assets/React Icons/angry.svg';
 import careGif from '../../Assets/React Icons/care.gif';

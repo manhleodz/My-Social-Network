@@ -60,6 +60,7 @@ export default function Post() {
                     </div>
                 }
                 ref={scrollRef} onScroll={handleScroll}
+                className='space-y-4'
             >
                 {posts.posts.map((post, key) => (
                     <SinglePost key={key} post={post} />
