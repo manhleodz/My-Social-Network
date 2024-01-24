@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { LoadingPosts } from '../LoadingPost/LoadingPosts'
-import SinglePost from '../Post/SinglePost'
-import { useOutletContext, useParams } from 'react-router-dom'
+import SinglePost from './SinglePost'
+import { useOutletContext } from 'react-router-dom'
 import { PostApi } from '../../../Network/Post'
 import '../../../Assets/SCSS/Profile.scss'
 import { Auth } from '../../../Network/Auth'
 import { useSelector } from 'react-redux'
 
 export default function ProfilePosts() {
+    
+    const page = useRef(0);
+    const hasMore = useRef(true);
 
     const { owner } = useOutletContext();
-    const paramsUsername = useParams().username;
-    const [posts, setPost] = useState({
-        posts: [],
-        page: 0,
-        hasMore: true
-    });
+    const [posts, setPost] = useState();
 
     var story = owner.story;
     const [changeStory, setChangeStory] = useState(false);
@@ -26,19 +24,13 @@ export default function ProfilePosts() {
 
     const fetchMoreData = () => {
         setTimeout(async () => {
-            await PostApi.getPostByProfile(owner.id, posts.page).then(res => {
+            await PostApi.getPostByProfile(owner.id, page.current).then(res => {
                 if (res.status === 204) {
-                    setPost({
-                        posts: posts.posts,
-                        page: posts.page,
-                        hasMore: false
-                    })
+                    hasMore.current = false;
                 } else {
-                    setPost({
-                        posts: [...posts.posts, ...res.data.data],
-                        page: posts.page + 1,
-                        hasMore: true
-                    });
+                    setPost(prev => prev = [...prev, ...res.data.data]);
+                    page.current = page.current + 1;
+                    hasMore.current = true;
                 }
             }).catch((error) => {
                 console.log(error.message);
@@ -55,21 +47,17 @@ export default function ProfilePosts() {
     }
 
     useEffect(() => {
-        PostApi.getPostByProfile(owner.id, posts.page).then(res => {
-            if (res.status !== 204)
-                setPost({
-                    posts: [...posts.posts, ...res.data.data],
-                    page: posts.page + 1,
-                    hasMore: true
-                });
-            else
-                setPost({
-                    posts: [],
-                    page: posts.page,
-                    hasMore: false
-                });
+        PostApi.getPostByProfile(owner.id, page.current).then(res => {
+            if (res.status !== 204) {
+                setPost(res.data.data);
+                page.current = 1;
+            }
+            else {
+                setPost([]);
+                hasMore.current = false;
+            }
         });
-    }, [paramsUsername, owner]);
+    }, [owner.id]);
 
     return (
         <div className='main-container md:space-x-4 bg-gray-100 flex items-start justify-between'>
@@ -141,32 +129,38 @@ export default function ProfilePosts() {
                         <h1 className='font-semibold'>Bộ lọc</h1>
                     </div>
                 </div>
-                <InfiniteScroll
-                    className='space-y-4'
-                    dataLength={posts.posts.length}
-                    next={fetchMoreData}
-                    hasMore={posts.hasMore}
-                    loader={<LoadingPosts />}
-                    endMessage={
-                        <div className="w-full rounded-lg overflow-hidden shadow-lg my-5">
-                            <div className="w-full h-20 bg-white p-4 flex space-x-2">
-                                <div className=" w-10 h-10 bg-gray-300 animate-pulse rounded-full"></div>
-                                <div className=" space-y-2">
-                                    <div className="w-20 h-3 bg-gray-300 animate-pulse"></div>
-                                    <div className="w-20 h-3 bg-gray-300 animate-pulse"></div>
-                                </div>
-                            </div>
-                            <div className="w-full h-64 bg-gray-300 animate-pulse"></div>
-                            <div className="px-6 py-4 items-center">
-                                <div className="font-regular text-xl mb-2 w-20 h-4 bg-gray-300 animate-pulse"></div>
+                {!posts ? (
+                    <div className="w-full rounded-lg overflow-hidden shadow-lg my-5">
+                        <div className="w-full h-20 bg-white p-4 flex space-x-2">
+                            <div className=" w-10 h-10 bg-gray-300 animate-pulse rounded-full"></div>
+                            <div className=" space-y-2">
+                                <div className="w-20 h-3 bg-gray-300 animate-pulse"></div>
+                                <div className="w-20 h-3 bg-gray-300 animate-pulse"></div>
                             </div>
                         </div>
-                    }
-                >
-                    {posts.posts.map((post, key) => (
-                        <SinglePost key={key} post={post} />
-                    ))}
-                </InfiniteScroll>
+                        <div className="w-full h-64 bg-gray-300 animate-pulse"></div>
+                        <div className="px-6 py-4 items-center">
+                            <div className="font-regular text-xl mb-2 w-20 h-4 bg-gray-300 animate-pulse"></div>
+                        </div>
+                    </div>
+                ) : (
+                    <InfiniteScroll
+                        className='space-y-4'
+                        dataLength={posts.length}
+                        next={fetchMoreData}
+                        hasMore={hasMore.current}
+                        loader={<LoadingPosts />}
+                        endMessage={
+                            <div className="w-full rounded-lg overflow-hidden shadow-lg my-5">
+                                <h1 className='text-center font-semibold'>Không còn bài viết nào!</h1>
+                            </div>
+                        }
+                    >
+                        {posts.map((post, key) => (
+                            <SinglePost key={key} post={post} posts={posts} setPost={setPost} />
+                        ))}
+                    </InfiniteScroll>
+                )}
             </div>
         </div>
     )
