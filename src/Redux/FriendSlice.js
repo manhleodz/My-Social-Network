@@ -8,7 +8,7 @@ export const FriendSlice = createSlice({
     },
     reducers: {
         fetchFriend(state, action) {
-            state.friends = [...state.friends, ...action.payload];
+            state.friends =action.payload;
         },
         stopFetchFriend(state) {
             state.hasMore = false;

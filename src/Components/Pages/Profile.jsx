@@ -12,7 +12,7 @@ export default function Profile() {
   const user = useSelector(state => state.authentication.user);
   const frs = useSelector(state => state.friends.friends);
   const [profile, setProfile] = useState();
-
+  const [isFriend, setIsFriend] = useState();
   const [scrollPosition, setScrollPosition] = useState();
   const scrollRef = useRef();
 
@@ -22,18 +22,28 @@ export default function Profile() {
 
   const handleScroll = (event) => {
     setScrollPosition(event.target.scrollTop)
-  }
+  };
 
   const options = document.querySelectorAll('li');
   for (let i = 0; i < options.length; i++) {
     options[i].onclick = () => {
       document.activeElement.blur();
     };
-  }
+  };
+
+  const getListFriends = async () => {
+    await FriendApi.getListFriend().then((res) => {
+      dispatch(fetchFriend(res.data));
+    })
+  };
 
   const addFriend = (userId) => {
     FriendApi.addFriend({ user: userId }).then(() => {
-
+      if (isFriend === 0)
+        setIsFriend(1);
+      else if (isFriend === 2)
+        setIsFriend(3);
+      getListFriends();
     }).catch(err => {
       console.log(err.message);
     });
@@ -43,24 +53,23 @@ export default function Profile() {
     FriendApi.deleteFriend(id).then(() => {
       const update = frs.filter(friend => friend.id !== id);
       dispatch(fetchFriend(update));
-      isFriend = null;
+      setIsFriend(0);
     }).catch(err => {
       console.log(err.message);
     });
   };
 
   useEffect(() => {
-    document.title = username;
     Auth.getProfile(username).then(res => {
       setProfile(res.data.profile);
+      setIsFriend(res.data.isFriend);
+      document.title = res.data.profile.nickname;
     }).catch(err => {
       console.log(err.data.error);
     })
   }, [username])
 
   if (!profile) return null;
-
-  var isFriend = frs.filter(friend => friend.id === profile.id);
 
   return (
     <div className=' w-full flex flex-col space-y-5 p-3 bg-white' ref={scrollRef} onScroll={handleScroll} data-mode="light">
@@ -96,7 +105,7 @@ export default function Profile() {
                 </>
               ) : (
                 <>
-                  {isFriend.length > 0 ? (
+                  {isFriend === 3 && (
                     <>
                       <div tabIndex="0" className="group relative inline-block">
                         <button
@@ -140,7 +149,8 @@ export default function Profile() {
                         </ul>
                       </div>
                     </>
-                  ) : (
+                  )}
+                  {isFriend === 0 && (
                     <>
                       <button
                         onClick={() => addFriend(profile.id)}
@@ -151,6 +161,100 @@ export default function Profile() {
                         </svg>
                         <h1 className='p-1'>Kết bạn</h1>
                       </button>
+                    </>
+                  )}
+                  {isFriend === 1 && (
+                    <>
+                      <div tabIndex="0" className="group relative inline-block">
+                        <button
+                          onClick={() => {
+
+                          }}
+                          className=' w-40 p-2 bg-gray-300 rounded-lg text-base font-semibold text-black hover:bg-slate-300 flex items-center justify-center h-10'
+                        >
+                          <img className='w-6 h-6' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBI
+                            WXMAAAsTAAALEwEAmpwYAAAC1klEQVR4nO2aPWgUURSFvyUrBhHFwtVSjSj4A1oGVAS1NYUKxo2xUSSKdcQi
+                            RZJCRdAqqBgFtbGzEDGIjdkgLhELwUIQG//wF9xEUXRXHpyBYZhZZ3ffm1nDHHjszH3n3Xvu7p07kzeBDHML
+                            OaAfmAJmNErAQc0FuYdCuP0h3MRxFahFjPEA91odrvGTGvokogIcBpYBy4Ejspm5Aw1wi2klMiUBAyFzA5or
+                            NcFNHLMSsDRkrqC5mQC3EIObOBoR19aJlOqUyzHNTcYorSA3cRQDF/AiDf8F3NsA12sMqWC8Tku90kKrThw5
+                            tdaH+mYrOi5G3BD7VEJh3LXAJeAT8BW4AMznP8IW4DbwJ+SXOk+bYx6wF3jkE/0DuAisAbbJ9sGliN3ANPCzT
+                            s03Mj4Cw4HWvF1z710l0QNULYj/BZTVehf4/G8GbgG/xTvtKpGnCnAGWGjR7w5gIpDsOyCPA2xUgM+WuklB94
+                            5pn/hvwDl1rppiWsdZOR9rcJ13V683zLVwCliiNWOym5hW0QG8lvPuBtdGiZ9VkkeBzsCabnHeKLY17JTjF74
+                            b3WO1z7iJ/At+fznFMut2YRHX5XSoCYHN8oZ0bmJbwxc57bIgMC6vS+fmwreeyCoLAlNN5KacDlsQGJc3ovM
+                            bWIT37PNWz0mtCIzDy6tjmfOtWMYzOd7TgsC4vH06fu5iz+uEnN9vQWBc3gMdH8cBFmuDoKpHbVeJrFaMim
+                            I6wWUFu+cwkQl9mljOsFJ/htaaEBiXV1O7X4FjbADuRggshewYRvEmI3h3gHUkiDCBtm2JIEuE7Bdxg6y0yE
+                            rLDbLSIistN8hKizYrraoCextonT4x3pZqh8+WD7EFedUU8uCVgg9qQ3vUJ3BEtpM+22CILch7mUYi3gtO//
+                            D+x6QWY3wPsfWSEsxbpyfaxzXvOzbpHUfZZ+vRy6GyxJtNjP3Aem2TzsqHt6mRgbmAv4TW+V6Y44kmAAAAAE
+                            lFTkSuQmCC"
+                          />
+                          <h1 className='p-1'>Đã gửi lời mời</h1>
+                        </button>
+                        <ul className="hidden group-focus-within:block list-none rounded-lg absolute bg-gray-50 w-64 z-1 animate-slideIn" style={{ boxShadow: "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px" }}>
+                          <li className="py-3 px-4 cursor-pointer flex items-center justify-start hover:bg-gray-200 ">
+                            <svg className='w-7 h-7' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M21.2799 6.40005L11.7399 15.94C10.7899 16.89 7.96987 17.33 7.33987 16.7C6.70987 16.07 7.13987 13.25 8.08987 12.3L17.6399 2.75002C17.8754 2.49308 18.1605 2.28654 18.4781 2.14284C18.7956 1.99914 19.139 1.92124 19.4875 1.9139C19.8359 1.90657 20.1823 1.96991 20.5056 2.10012C20.8289 2.23033 21.1225 2.42473 21.3686 2.67153C21.6147 2.91833 21.8083 3.21243 21.9376 3.53609C22.0669 3.85976 22.1294 4.20626 22.1211 4.55471C22.1128 4.90316 22.0339 5.24635 21.8894 5.5635C21.7448 5.88065 21.5375 6.16524 21.2799 6.40005V6.40005Z" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M11 4H6C4.93913 4 3.92178 4.42142 3.17163 5.17157C2.42149 5.92172 2 6.93913 2 8V18C2 19.0609 2.42149 20.0783 3.17163 20.8284C3.92178 21.5786 4.93913 22 6 22H17C19.21 22 20 20.2 20 18V13" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
+                            <span style={{ fontSize: "15px" }}>Chỉnh sửa danh sách bạn bè</span>
+                          </li>
+                          <li onClick={() => deleteFriend(profile.id)} className="py-3 px-4 flex items-center justify-start cursor-pointer hover:bg-gray-200 ">
+                            <svg className='w-7 h-7' viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" strokeWidth="3" stroke="#000000" fill="none">
+                              <g id="SVGRepo_bgCarrier" strokeWidth="0">
+                              </g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round">
+                              </g><g id="SVGRepo_iconCarrier"><circle cx="29.22" cy="16.28" r="11.14"></circle>
+                                <path d="M41.32,35.69c-2.69-1.95-8.34-3.25-12.1-3.25h0A22.55,22.55,0,0,0,6.67,55h29.9"></path>
+                                <circle cx="45.38" cy="46.92" r="11.94"></circle><line x1="38.98" y1="46.8" x2="52.98" y2="46.8"></line></g>
+                            </svg>
+                            <span style={{ fontSize: "15px" }}>Hủy lời mời</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </>
+                  )}
+                  {isFriend === 2 && (
+                    <>
+                      <div tabIndex="0" className="group relative inline-block">
+                        <button
+                          onClick={() => {
+
+                          }}
+                          className=' w-56 p-2 bg-gray-300 rounded-lg text-base font-semibold text-black hover:bg-slate-300 flex items-center justify-center h-10'
+                        >
+                          <img className='w-6 h-6' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBI
+                            WXMAAAsTAAALEwEAmpwYAAAC1klEQVR4nO2aPWgUURSFvyUrBhHFwtVSjSj4A1oGVAS1NYUKxo2xUSSKdcQi
+                            RZJCRdAqqBgFtbGzEDGIjdkgLhELwUIQG//wF9xEUXRXHpyBYZhZZ3ffm1nDHHjszH3n3Xvu7p07kzeBDHML
+                            OaAfmAJmNErAQc0FuYdCuP0h3MRxFahFjPEA91odrvGTGvokogIcBpYBy4Ejspm5Aw1wi2klMiUBAyFzA5or
+                            NcFNHLMSsDRkrqC5mQC3EIObOBoR19aJlOqUyzHNTcYorSA3cRQDF/AiDf8F3NsA12sMqWC8Tku90kKrThw5
+                            tdaH+mYrOi5G3BD7VEJh3LXAJeAT8BW4AMznP8IW4DbwJ+SXOk+bYx6wF3jkE/0DuAisAbbJ9sGliN3ANPCzT
+                            s03Mj4Cw4HWvF1z710l0QNULYj/BZTVehf4/G8GbgG/xTvtKpGnCnAGWGjR7w5gIpDsOyCPA2xUgM+WuklB94
+                            5pn/hvwDl1rppiWsdZOR9rcJ13V683zLVwCliiNWOym5hW0QG8lvPuBtdGiZ9VkkeBzsCabnHeKLY17JTjF74
+                            b3WO1z7iJ/At+fznFMut2YRHX5XSoCYHN8oZ0bmJbwxc57bIgMC6vS+fmwreeyCoLAlNN5KacDlsQGJc3ovM
+                            bWIT37PNWz0mtCIzDy6tjmfOtWMYzOd7TgsC4vH06fu5iz+uEnN9vQWBc3gMdH8cBFmuDoKpHbVeJrFaMim
+                            I6wWUFu+cwkQl9mljOsFJ/htaaEBiXV1O7X4FjbADuRggshewYRvEmI3h3gHUkiDCBtm2JIEuE7Bdxg6y0yE
+                            rLDbLSIistN8hKizYrraoCextonT4x3pZqh8+WD7EFedUU8uCVgg9qQ3vUJ3BEtpM+22CILch7mUYi3gtO//
+                            D+x6QWY3wPsfWSEsxbpyfaxzXvOzbpHUfZZ+vRy6GyxJtNjP3Aem2TzsqHt6mRgbmAv4TW+V6Y44kmAAAAAE
+                            lFTkSuQmCC"
+                          />
+                          <h1 className='p-1'>Chưa xác nhận lời mời</h1>
+                        </button>
+                        <ul className="hidden group-focus-within:block list-none rounded-lg absolute bg-gray-50 w-64 z-1 animate-slideIn" style={{ boxShadow: "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px" }}>
+                          <li onClick={() => addFriend(profile.id)} className="py-3 px-4 cursor-pointer flex items-center justify-start hover:bg-gray-200 ">
+                            <svg className='w-7 h-7' version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve" width="64px" height="64px" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <polyline fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" points="28,8 16,20 11,15 "></polyline> <path d="M26.7,13.5c0.2,0.8,0.3,1.6,0.3,2.5c0,6.1-4.9,11-11,11S5,22.1,5,16S9.9,5,16,5c3,0,5.7,1.2,7.6,3.1l1.4-1.4 C22.7,4.4,19.5,3,16,3C8.8,3,3,8.8,3,16s5.8,13,13,13s13-5.8,13-13c0-1.4-0.2-2.8-0.7-4.1L26.7,13.5z"></path> </g></svg>
+                            <span>Chấp nhận</span>
+                          </li>
+                          <li className="py-3 px-4 cursor-pointer flex items-center justify-start hover:bg-gray-200 ">
+                            <svg className='w-7 h-7' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M21.2799 6.40005L11.7399 15.94C10.7899 16.89 7.96987 17.33 7.33987 16.7C6.70987 16.07 7.13987 13.25 8.08987 12.3L17.6399 2.75002C17.8754 2.49308 18.1605 2.28654 18.4781 2.14284C18.7956 1.99914 19.139 1.92124 19.4875 1.9139C19.8359 1.90657 20.1823 1.96991 20.5056 2.10012C20.8289 2.23033 21.1225 2.42473 21.3686 2.67153C21.6147 2.91833 21.8083 3.21243 21.9376 3.53609C22.0669 3.85976 22.1294 4.20626 22.1211 4.55471C22.1128 4.90316 22.0339 5.24635 21.8894 5.5635C21.7448 5.88065 21.5375 6.16524 21.2799 6.40005V6.40005Z" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M11 4H6C4.93913 4 3.92178 4.42142 3.17163 5.17157C2.42149 5.92172 2 6.93913 2 8V18C2 19.0609 2.42149 20.0783 3.17163 20.8284C3.92178 21.5786 4.93913 22 6 22H17C19.21 22 20 20.2 20 18V13" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
+                            <span style={{ fontSize: "15px" }}>Chỉnh sửa danh sách bạn bè</span>
+                          </li>
+                          <li onClick={() => deleteFriend(profile.id)} className="py-3 px-4 flex items-center justify-start cursor-pointer hover:bg-gray-200 ">
+                            <svg className='w-7 h-7' viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" strokeWidth="3" stroke="#000000" fill="none">
+                              <g id="SVGRepo_bgCarrier" strokeWidth="0">
+                              </g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round">
+                              </g><g id="SVGRepo_iconCarrier"><circle cx="29.22" cy="16.28" r="11.14"></circle>
+                                <path d="M41.32,35.69c-2.69-1.95-8.34-3.25-12.1-3.25h0A22.55,22.55,0,0,0,6.67,55h29.9"></path>
+                                <circle cx="45.38" cy="46.92" r="11.94"></circle><line x1="38.98" y1="46.8" x2="52.98" y2="46.8"></line></g>
+                            </svg>
+                            <span style={{ fontSize: "15px" }}>Hủy lời mời</span>
+                          </li>
+                        </ul>
+                      </div>
                     </>
                   )}
                   <button className=' w-28 p-2 bg-blue-600 rounded-lg text-base font-semibold text-white hover:bg-blue-700 flex items-center justify-center h-10'>
