@@ -1,12 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Auth } from '../../../Network/Auth';
+import React, { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 export default function Search() {
 
     const [input, setInput] = useState("");
     const [result, setResult] = useState([]);
-    const [data, setData] = useState();
+    const [data, setData] = useState([]);
     const searchRef = useRef();
     const navigate = useNavigate();
 
@@ -54,12 +53,6 @@ export default function Search() {
         setInput("");
         setResult([]);
     };
-
-    useEffect(() => {
-        Auth.getAllUsers().then(res => {
-            setData(res.data);
-        })
-    }, []);
 
     return (
         <>

@@ -9,7 +9,7 @@ import { FriendApi } from '../../Network/Friend';
 import { fetchData } from '../../Redux/PostSlice';
 import { fetchStory } from '../../Redux/StorySlice';
 import { fetchFriend } from '../../Redux/FriendSlice';
-import bgImg from '../../Assets/CS-Sep22-Features-1-750x375.jpg';
+import '../../Assets/SCSS/Login.scss';
 
 const Login = () => {
 
@@ -22,6 +22,22 @@ const Login = () => {
   const posts = useSelector(state => state.posts);
   const dispatch = useDispatch();
 
+  const unAuthorized = (e) => {
+    dispatch(setUser(e));
+  }
+
+  const success = (e) => {
+    dispatch(setUser(e));
+    getPosts();
+    getListFriends();
+    getStories();
+    navigate('/')
+    clearTimeout(timeOut);
+  }
+
+  const failure = (error) => {
+    setAlert(error);
+  }
   const onSubmit = (e) => {
     e.preventDefault();
     if (information.length >= 6 && password.length >= 3) {
@@ -32,16 +48,16 @@ const Login = () => {
         },
         (user) => {
           const timeOut = setTimeout(() => {
-            dispatch(setUser(user));
-            getPosts();
-            getListFriends();
-            getStories();
-            navigate('/')
-            clearTimeout(timeOut);
+            success(user);
+          }, 100);
+        },
+        (user) => {
+          const timeOut = setTimeout(() => {
+            unAuthorized(user);
           }, 100);
         },
         (error) => {
-          setAlert(error);
+          failure(error);
         }
       )
     } else {
@@ -51,7 +67,6 @@ const Login = () => {
 
   useEffect(() => {
     document.title = "ML-Log in";
-    document.querySelector("body").onclick;
   }, [])
 
   const getListFriends = async () => {
@@ -156,14 +171,24 @@ const Login = () => {
                         )}
                       </div>
                       <div className="relative">
-                        <button
-                          type="submit"
-                          onDoubleClick={(e) => e.preventDefault()}
-                          onClick={onSubmit}
-                          className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 active:ring-blue-400 ring-3 text-white rounded-md px-2 py-1"
-                        >
-                          Đăng nhập
-                        </button>
+                        <div className=' w-full flex justify-between items-center'>
+                          <button
+                            type="submit"
+                            onDoubleClick={(e) => e.preventDefault()}
+                            onClick={onSubmit}
+                            className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 active:ring-blue-400 ring-3 text-white rounded-md px-2 py-1"
+                          >
+                            Đăng nhập
+                          </button>
+                          <label htmlFor="myCheckbox01" className="checkbox">
+                            <input className="checkbox__input" type="checkbox" id="myCheckbox01" />
+                            <svg className="checkbox__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22">
+                              <rect width="21" height="21" x=".5" y=".5" fill="#FFF" stroke="#006F94" rx="3" />
+                              <path className="tick" stroke="#6EA340" fill="none" strokeLinecap="round" strokeWidth="4" d="M4 10l5 5 9-9" />
+                            </svg>
+                            <span className="checkbox__label">Lưu thông tin</span>
+                          </label>
+                        </div>
                         <div className="flex m-1">
                           <p className="text-m">Bạn chưa có tài khoản seo?</p>
                           <a href="/signup" className="text-sky-600 underline underline-offset-8 font-bold">Đăng ký</a>

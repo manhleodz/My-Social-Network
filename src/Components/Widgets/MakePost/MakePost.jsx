@@ -29,11 +29,9 @@ export default function MakePost() {
     const [processing, setProcessing] = useState(false);
 
     if (open) {
-        document.querySelector('body').style.overflow = 'hidden';
-        document.querySelector('body').style.paddingRight = "12px"
+        document.querySelector('body').style.overflowY = 'hidden';
     } else {
-        document.querySelector('body').style.overflow = 'auto';
-        document.querySelector('body').style.paddingRight = "0px"
+        document.querySelector('body').style.overflowY = 'auto';
     }
 
     const onDrop = useCallback((acceptedFiles) => {

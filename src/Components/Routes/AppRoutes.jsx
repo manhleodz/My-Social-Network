@@ -4,7 +4,6 @@ import HomeRoutes from './HomeRoutes';
 import Login from '../Pages/Login';
 import SignUp from '../Pages/SignUp';
 import ForgotPassword from '../Pages/ForgotPassword';
-import NotFound from '../Pages/NotFound';
 import ConfirmAccount from '../Pages/ConfirmAccount';
 import { useDispatch, useSelector } from 'react-redux';
 import { Auth } from '../../Network/Auth';
@@ -16,11 +15,10 @@ import { fetchData } from '../../Redux/PostSlice';
 import { fetchStory } from '../../Redux/StorySlice';
 import { fetchFriend } from '../../Redux/FriendSlice';
 
+
 export default function AppRoutes() {
 
     const user = useSelector(state => state.authentication.user);
-    const stories = useSelector(state => state.stories);
-    const posts = useSelector(state => state.posts);
 
     const dispatch = useDispatch();
 
@@ -31,6 +29,14 @@ export default function AppRoutes() {
         getListFriends();
     }
 
+    const unAuthorized = (e) => {
+        dispatch(setUser(e));
+    }
+
+    const failure = () => {
+        dispatch(signOut());
+    }
+
     const getListFriends = async () => {
         await FriendApi.getListFriend().then((res) => {
             dispatch(fetchFriend(res.data));
@@ -39,7 +45,7 @@ export default function AppRoutes() {
 
     const getPosts = async () => {
         try {
-            await PostApi.getPost(posts.page).then(res => {
+            await PostApi.getPost(0).then(res => {
                 if (res.status === 200)
                     dispatch(fetchData(res.data.data))
             })
@@ -60,11 +66,6 @@ export default function AppRoutes() {
 
     }
 
-    const failure = () => {
-        dispatch(setUser(null));
-        dispatch(signOut());
-    }
-
     useEffect(() => {
 
         // On page load or when changing themes, best to add inline in `head` to avoid FOUC
@@ -73,7 +74,7 @@ export default function AppRoutes() {
         } else {
             document.documentElement.classList.remove('dark')
         }
-        Auth.refreshStateUser(success, failure);
+        Auth.refreshStateUser(success, unAuthorized, failure);
 
     }, []);
 
@@ -90,7 +91,7 @@ export default function AppRoutes() {
             </>
         )
     } else {
-        if (user.confirm === null) {
+        if (user.confirm === 0) {
             return (
                 <>
                     <Routes>

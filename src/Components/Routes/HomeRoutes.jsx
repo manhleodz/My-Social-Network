@@ -5,6 +5,7 @@ import ForgotPassword from '../Pages/ForgotPassword';
 import Home from "../Pages/Home";
 
 const About = lazy(() => import('../Widgets/About/About'));
+const Search = lazy(() => import('../Pages/Search'));
 const ProfileVideos = lazy(() => import('../Widgets/ProfileVideos/ProfileVideos'));
 const ProfileImages = lazy(() => import('../Widgets/ProfileImages/ProfileImages'));
 const ProfileReels = lazy(() => import('../Widgets/ProfileReels/ProfileReels'));
@@ -48,6 +49,7 @@ export default function HomeRoutes() {
                         <Route path="post" element={<Post />} />
                         <Route path="admin" element={<Admin />} />
                         <Route path="forgotpassword" element={<ForgotPassword />} />
+                        <Route path="search" element={<Search />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </Layout>

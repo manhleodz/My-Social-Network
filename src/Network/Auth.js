@@ -3,12 +3,15 @@ import axios from 'axios';
 
 export const Auth = {
 
-    async login(data, success, failure) {
+    async login(data, success, unAuthorized, failure) {
         return await axios.post(`${ApiUrl}/auth/login`, data).then((response) => {
-            if (response) {
+            if (response.data.message === "Successfull") {
                 localStorage.setItem("accessToken", response.data.token);
                 const user = response.data;
                 success(user);
+            } else if (response.data.message === "authentication has not been completed") {
+                sessionStorage.setItem("accessToken", response.data.token);
+                unAuthorized(response.data);
             }
         }).catch((err) => failure(err.response.data));
     },
@@ -20,7 +23,7 @@ export const Auth = {
     async completeConfirm(data, success, failure) {
         return await axios.put(`${ApiUrl}/auth`, data, {
             headers: {
-                accessToken: localStorage.getItem("accessToken"),
+                accessToken: sessionStorage.getItem("accessToken"),
             }
         }).then((e) => success(e))
             .catch((err) => failure(err));
@@ -73,17 +76,22 @@ export const Auth = {
         })
     },
 
-    async refreshStateUser(success, failure) {
+    async refreshStateUser(success, unAuthorized, failure) {
 
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
 
         if (accessToken !== null) {
             return await axios.get(`${ApiUrl}/auth/user/profile`, {
                 headers: {
                     accessToken: accessToken,
                 }
-            }).then(e => success(e.data)
-            ).catch(e => failure());
+            }).then(e => {
+                if (e.data.confirm === 1) {
+                    success(e.data)
+                } else {
+                    unAuthorized(e.data);
+                }
+            }).catch(() => failure());
         } else {
             failure();
         }

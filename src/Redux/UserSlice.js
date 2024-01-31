@@ -10,10 +10,8 @@ export const userSlice = createSlice({
         setUser(state, action) {
             state.user = action.payload;
         },
-        signOut(state) {
-            Auth.signOut(() => {
-                state.user = null;
-            })
+        signOut(state, action) {
+            state.user = null;
         }
     }
 })

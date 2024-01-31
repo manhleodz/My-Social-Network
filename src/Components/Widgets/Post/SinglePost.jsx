@@ -25,16 +25,19 @@ export default function SinglePost({ post }) {
 
     const likeAPost = () => {
         setIsClicked(!isClicked);
+        if (isClicked)
+            setLikeNum((likeNum) => (likeNum = likeNum - 1));
+        else
+            setLikeNum((likeNum) => (likeNum = likeNum + 1));
+
         PostApi.like({
             PostId: post.Post.id,
             UserId: user.id,
         }).then((response) => {
-            if (response.data === false) {
+            PostApi.updateLikeNum(post.Post.id).catch(() => {
+                setIsClicked(!isClicked);
                 setLikeNum((likeNum) => (likeNum = likeNum - 1));
-            } else {
-                setLikeNum((likeNum) => (likeNum = likeNum + 1));
-            }
-            PostApi.updateLikeNum(post.Post.id);
+            });
         });
     };
 

@@ -1,0 +1,38 @@
+.checkbox {
+  $block: &;
+
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  &__input {
+    position: absolute;
+    width: 1.375em;
+    height: 1.375em;
+    opacity: 0;
+    cursor: pointer;
+
+    &:checked + #{$block}__icon .tick {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  &__icon {
+    width: 1.375em;
+    height: 1.375em;
+    flex-shrink: 0;
+    overflow: visible;
+
+    .tick {
+      stroke-dasharray: 20px;
+      stroke-dashoffset: 20px;
+      transition: stroke-dashoffset 0.2s ease-out;
+    }
+  }
+
+  &__label {
+    margin-left: 0.5em;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
