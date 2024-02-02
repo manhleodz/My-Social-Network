@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { LoadingPosts } from '../LoadingPost/LoadingPosts';
 import { PostApi } from '../../../Network/Post';
 import SinglePost from './SinglePost';
