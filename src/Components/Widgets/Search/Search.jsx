@@ -32,23 +32,21 @@ export default function Search() {
             setInput(searchWord);
             const checker = pushOrNot(searchWord);
             if (checker.push) {
-                setTimeout(async () => {
-                    await SearchAPI.topSearch(searchWord).then((res) => {
-                        if (res.status === 200) {
-                            setResult(res.data.data);
-                            const myObj = {
-                                [searchWord]: res.data.data
-                            }
-                            setCache([...cache, myObj]);
+                await SearchAPI.topSearch(searchWord).then((res) => {
+                    if (res.status === 200) {
+                        setResult(res.data.data);
+                        const myObj = {
+                            [searchWord]: res.data.data
                         }
-                        else {
-                            setResult([]);
-                        }
-                        setLoading(false);
-                    }).catch((error) => {
-                        console.log(error);
-                    })
-                }, 300);
+                        setCache([...cache, myObj]);
+                    }
+                    else {
+                        setResult([]);
+                    }
+                    setLoading(false);
+                }).catch((error) => {
+                    console.log(error);
+                })
             } else {
                 setResult(cache[checker.index][searchWord]);
                 setLoading(false);
