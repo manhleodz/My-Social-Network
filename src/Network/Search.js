@@ -2,6 +2,15 @@ import { ApiUrl } from '../Utils/Config/Url';
 import axios from 'axios';
 
 export const SearchAPI = {
+    async topSearch(search) {
+        return axios.get(`${ApiUrl}/search/top`, {
+            params: { search: search },
+            headers: {
+                accessToken: localStorage.getItem('accessToken')
+            }
+        })
+    },
+
     async search(search, page) {
         return axios.get(`${ApiUrl}/search`, {
             params: { search: search, page: page },
@@ -12,8 +21,7 @@ export const SearchAPI = {
     },
 
     async updateHistory(search) {
-        return axios.post(`${ApiUrl}/search`, {
-            params: { search: search },
+        return axios.post(`${ApiUrl}/search`, { search: search }, {
             headers: {
                 accessToken: localStorage.getItem('accessToken')
             }
