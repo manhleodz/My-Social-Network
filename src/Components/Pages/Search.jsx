@@ -36,8 +36,8 @@ export default function Search() {
     return (
         <div className=' w-full p-3 bg-gray-100 h-full' data-mode="light">
             <div className='w-full relative top-10 flex items-start justify-start bg-gray-100 h-full'>
-                <div className='filter p-4 divide-y divide-gray-300 h-screen shadow-md text-black '>
-                    <div className=' fixed top-0 left-0'>
+                <div className='filter left-0 divide-y divide-gray-300 h-screen shadow-md text-black '>
+                    <div className='filter-content fixed top-0 left-0 bg-white h-screen p-4'>
                         <h1 className=' mt-14 text-2xl font-bold'>Kết quả tìm kiếm</h1>
                         <div>
                             <h1>Bộ lọc</h1>
