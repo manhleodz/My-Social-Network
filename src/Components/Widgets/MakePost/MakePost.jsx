@@ -1,12 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { useSelector } from 'react-redux';
-import { storage } from '../../../Firebase/Firebase';
-import { v4 } from "uuid";
-import {
-    ref,
-    uploadBytes,
-    getDownloadURL,
-} from "firebase/storage";
+import { useDispatch, useSelector } from 'react-redux';
 import ReactPlayer from "react-player";
 import { UploadApi } from '../../../Network/Upload';
 import video from '../../../Assets/SVG icons/video-marketing-movie-camera-svgrepo-com.svg';
@@ -15,17 +8,20 @@ import { useDropzone } from 'react-dropzone';
 import addSvg from '../../../Assets/SVG icons/add.svg';
 import './MakePost.scss';
 import { PostApi } from '../../../Network/Post';
+import { addPost } from '../../../Redux/PostSlice';
 
 export default function MakePost() {
 
     const user = useSelector(state => state.authentication.user);
+    const posts = useSelector(state => state.posts);
+
+    const dispatch = useDispatch();
+
     const [open, setOpen] = useState(false);
     const [isPublic, setPublic] = useState(true);
     const [showPicker, setShowPicker] = useState(false);
     const [postText, setPostText] = useState("");
     const [fileUploads, setFileUploads] = useState(null);
-    const [imageUrls, setImageUrls] = useState([]);
-    const [videosUrls, setVideoUrls] = useState([]);
     const [processing, setProcessing] = useState(false);
 
     if (open) {
@@ -40,25 +36,6 @@ export default function MakePost() {
                 preview: URL.createObjectURL(file)
             })
             setFileUploads(prev => prev = [...prev, file]);
-            if (file.type.includes("image")) {
-                const fileRef = ref(storage, `images/${file.name + v4()}`);
-                uploadBytes(fileRef, file).then((snapshot) => {
-                    getDownloadURL(snapshot.ref).then((url) => {
-                        if (url !== undefined) {
-                            setImageUrls(prev => prev = [...prev, url])
-                        }
-                    });
-                });
-            } else if (file.type.includes("mp4")) {
-                const fileRef = ref(storage, `videos/${file.name + v4()}`);
-                uploadBytes(fileRef, file).then((snapshot) => {
-                    getDownloadURL(snapshot.ref).then((url) => {
-                        if (url !== undefined) {
-                            setVideoUrls(prev => prev = [...prev, url])
-                        }
-                    });
-                });
-            }
         })
     }, [])
 
@@ -76,28 +53,31 @@ export default function MakePost() {
     };
 
     const newPost = async () => {
+
+        const fd = new FormData();
+        if (fileUploads && fileUploads.length > 0)
+            await fileUploads.map((file) => {
+                fd.append('files', file);
+            })
+
+        fd.append('postText', postText);
+        fd.append('public', isPublic);
         setProcessing(true);
-        PostApi.create({ postText: postText.replace(/\n/g, '@@newline@@'), public: isPublic }).then((res) => {
-            if (imageUrls.length > 0 && videosUrls.length > 0) {
-                UploadApi.uploadImages({ link: imageUrls, PostId: res.data.newPost.id }).then(() => {
-                    UploadApi.uploadVideos({ link: videosUrls, PostId: res.data.id }).then(() => {
-                        setProcessing(false);
-                    });
-                });
-            } else if (imageUrls.length > 0) {
-                UploadApi.uploadImages({ link: imageUrls, PostId: res.data.newPost.id }).then(() => {
-                    setProcessing(false);
-                });
-            } else if (videosUrls.length > 0) {
-                UploadApi.uploadVideos({ link: videosUrls, PostId: res.data.newPost.id }).then(() => {
-                    setProcessing(false);
-                });
-            } else {
-                setProcessing(false);
-            }
-        }).catch(() => {
+        await PostApi.create(fd).then(async (res) => {
+
             setProcessing(false);
-            alert("Error uploading");
+            await PostApi.getPostById(res.data.newPost.id).then((post) => {
+                dispatch(addPost({
+                    Post: post.data.data
+                }));
+                setPostText("");
+                setFileUploads(null);
+                setShowPicker(false);
+                setOpen(false);
+            }).catch(() => {
+                alert("Reload please wait...");
+            });
+
         })
     };
 

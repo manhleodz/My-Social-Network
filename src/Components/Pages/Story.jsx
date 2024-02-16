@@ -128,7 +128,7 @@ export default function Story() {
                     }
                 }}
             >
-                <div className=' text-white space-y-3 relative h-full max-lg:hidden px-3' style={{ backgroundColor: "#242526", width: "350px" }}>
+                <div className=' text-white space-y-3 relative h-full max-lg:hidden px-3 overflow-x-auto' style={{ backgroundColor: "#242526", width: "350px" }}>
                     <h1 className=' text-3xl font-semibold mt-20'>Tin</h1>
                     <div className=' flex items-center text-blue-500 space-x-3'>
                         <h1 className=' cursor-pointer'>Kho lưu trữ</h1>

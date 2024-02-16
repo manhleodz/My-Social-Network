@@ -20,8 +20,7 @@ export default function SinglePost({ post }) {
 
     const posts = useSelector(state => state.posts.posts);
     const dispatch = useDispatch();
-    const videos = post.Post.Videos;
-    const images = post.Post.Images;
+    const media = post.Post.Media;
 
     const likeAPost = () => {
         setIsClicked(!isClicked);
@@ -152,22 +151,22 @@ export default function SinglePost({ post }) {
                         )}
                     </div>
                 </div>
-                <pre className=" text-base font-normal break-words font-noto">{post.Post.postText.replace(/@@newline@@/g, '\n')}</pre>
+                <pre className=" text-base font-normal break-words font-noto">{post.Post.postText && (post.Post.postText.replace(/@@newline@@/g, '\n'))}</pre>
             </div>
             <div className=" flex justify-center items-center max-h-md bg-black">
-                {images.length + videos.length == 0 && (
+                {media.length == 0 && (
                     <>
 
                     </>
                 )}
 
-                {images.length + videos.length == 1 && (
+                {media.length == 1 && (
                     <>
-                        {images.length == 1 ? (
+                        {media[0].type === 1 ? (
                             <>
                                 <img
                                     alt="image"
-                                    src={`${images[0].link}`}
+                                    src={`${media[0].link}`}
                                     className=" object-contain max-h-sm cursor-pointer"
                                 />
                             </>
@@ -176,7 +175,7 @@ export default function SinglePost({ post }) {
                                 <ReactPlayer
                                     className="react-player cursor-pointer"
                                     playing={false}
-                                    url={videos[0].link}
+                                    url={media[0].link}
                                     width="100%"
                                     controls={true}
                                     style={{ minHeight: '480px' }}
@@ -186,72 +185,39 @@ export default function SinglePost({ post }) {
                     </>
                 )}
 
-                {images.length + videos.length == 2 && (
+                {media.length == 2 && (
                     <>
-                        {images.length == 2 && (
-                            <div className=" flex items-center w-full bg-gray-100 max-h-sm relative">
-                                <div className="w-1/2 h-full">
-                                    <img
-                                        alt="image"
-                                        src={`${images[0].link}`}
-                                        className=" object-cover h-full w-full cursor-pointer p-0.5"
-                                        style={{ minHeight: '480px' }}
-                                    />
-                                </div>
-                                <div className="w-1/2 h-full">
-                                    <img
-                                        alt="image"
-                                        src={`${images[1].link}`}
-                                        className="object-cover h-full w-full cursor-pointer p-0.5"
-                                        style={{ minHeight: '480px' }}
-                                    />
-                                </div>
-                            </div>
-                        )}
+                        <div className=" flex items-center w-full bg-gray-100 max-h-sm relative">
+                            {media.map((value, index) => (
+                                <>
+                                    {value.type === 1 ? (
+                                        <>
+                                            <div className="w-1/2 h-full" key={index}>
+                                                <img
+                                                    alt="image"
+                                                    src={`${value.link}`}
+                                                    className="object-cover h-full w-full cursor-pointer p-0.5"
+                                                    style={{ minHeight: '480px' }}
+                                                />
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <ReactPlayer
+                                                className="react-player cursor-pointer"
+                                                url={value.link}
+                                                playing={false}
+                                                controls={true}
+                                                width="100%"
+                                                style={{ minHeight: '480px' }}
+                                                key={index}
+                                            />
+                                        </>
+                                    )}
+                                </>
+                            ))}
+                        </div>
 
-                        {videos.length == 2 && (
-                            <div className=" flex items-center w-full bg-gray-100 max-h-sm relative">
-                                <ReactPlayer
-                                    className="react-player cursor-pointer"
-                                    url={videos[0].link}
-                                    playing={false}
-                                    controls={true}
-                                    width="100%"
-                                    style={{ minHeight: '480px' }}
-                                />
-                                <ReactPlayer
-                                    className="react-player cursor-pointer"
-                                    url={videos[1].link}
-                                    playing={false}
-                                    controls={true}
-                                    width="100%"
-                                    style={{ minHeight: '480px' }}
-                                />
-                            </div>
-                        )}
-
-                        {videos.length == 1 && (
-                            <div className=" flex items-center w-full bg-gray-100 max-h-sm relative" style={{ height: '480px' }}>
-                                <div className="w-1/2 h-full max-h-sm flex justify-center items-center" style={{ minHeight: '480px' }}>
-                                    <img
-                                        alt="image"
-                                        src={`${images[0].link}`}
-                                        className=" object-cover h-full w-full cursor-pointer p-0.5"
-                                        style={{ minHeight: '480px' }}
-                                    />
-                                </div>
-                                <div className="w-1/2 h-full max-h-sm flex justify-center items-center" style={{ height: '480px' }}>
-                                    <ReactPlayer
-                                        className="react-player cursor-pointer"
-                                        playing={false}
-                                        controls={true}
-                                        url={videos[0].link}
-                                        width="100%"
-                                        height="100%"
-                                    />
-                                </div>
-                            </div>
-                        )}
                     </>
                 )}
             </div>

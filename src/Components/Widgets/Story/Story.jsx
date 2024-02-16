@@ -50,7 +50,7 @@ export default function Story() {
         </button>
       )}
       <div className=' flex items-center overflow-x-hidden overflow-y-hidden transform relative w-full scroll-smooth' id='container'>
-        <div className=' flex flex-row items-center justify-start space-x-1 w-full scroll-smooth' key={234} style={{ width: `${stories.length === 0 ? `${430}px` : `${(stories.length + 0.5) * 185}px`}` }}>
+        <div className=' flex flex-row items-center justify-start space-x-1 w-full scroll-smooth' key={234} style={{ width: `${stories.length === 0 ? `${440}px` : `${(stories.length + 1) * 185}px`}` }}>
           <div
             onMouseEnter={() => {
               document.getElementById('new').style.display = 'block';
@@ -64,7 +64,6 @@ export default function Story() {
               backgroundRepeat: 'no-repeat',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              width: '160px',
             }}
           >
             <div className=' absolute bottom-0 h-12 flex flex-col justify-end items-center bg-white w-full rounded-b-lg'>
@@ -75,7 +74,7 @@ export default function Story() {
               </div>
               <h1 className=' text-sm font-semibold'>Tạo tin</h1>
             </div>
-            <div id='new' className='absolute w-40 h-64 rounded-lg hidden' style={{ backgroundColor: 'rgb(0,0,0,0.1)' }}></div>
+            <div id='new' className='absolute w-40 h-full z-50 rounded-lg hidden' style={{ backgroundColor: 'rgb(0,0,0,0.1)' }}></div>
           </div>
           {stories.length === 0 ? (
             <LoadingStory />
@@ -95,7 +94,7 @@ export default function Story() {
                       document.getElementById(`reel-${story.id}`).style.display = 'none';
                       document.getElementById(`content_${key}`).style.transform = 'scale(1.01)'
                     }}
-                    style={{ backgroundColor: "gray" }}
+                    style={{ backgroundColor: "#A9A9A9" }}
                     className=' w-40 h-64 p-1 flex justify-center items-center relative rounded-lg shadow-lg border-none cursor-pointer overflow-hidden' key={key}
                   >
                     {story.link.includes("mp4") ? (

@@ -9,8 +9,15 @@ export const PostApi = {
             headers: {
                 accessToken: localStorage.getItem("accessToken")
             }
-        }
-        )
+        })
+    },
+
+    async getPostById(id) {
+        return await axios.get(`${ApiUrl}/posts/${id}`, {
+            headers: {
+                accessToken: localStorage.getItem("accessToken")
+            }
+        })
     },
 
     async getPostByProfile(id, page) {
@@ -67,17 +74,10 @@ export const PostApi = {
     async create(data) {
         return await axios.post(`${ApiUrl}/posts`, data, {
             headers: {
-                accessToken: localStorage.getItem("accessToken")
+                accessToken: localStorage.getItem("accessToken"),
+                'content-type': 'multipart/form-data',
             },
         });
-    },
-
-    async uploadImages(data) {
-
-    },
-
-    async uploadVideos(data) {
-
     },
 
     async getOwnerLike(id, authId) {

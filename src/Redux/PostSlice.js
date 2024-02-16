@@ -19,7 +19,7 @@ export const postSlice = createSlice({
             state.hasMore = false;
         },
         addPost(state, action) {
-            state.posts = [...state.posts, action.payload];
+            state.posts = [action.payload, ...state.posts];
         },
         deletePost(state, action) {
             if (state.posts.length > 0)
