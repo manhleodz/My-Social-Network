@@ -28,7 +28,7 @@ export default function NavigateBar() {
                 <div className=' w-screen shadow-md flex flex-row justify-between items-center bg-white p-1 pr-7'>
                     <div className=' flex items-center w-1/3 space-x-3 max-md:hidden'>
                         <div className="flex items-center w-11 h-11 rounded-full mb-4 sm:mb-0 cursor-pointer" onClick={() => navigate('/')}>
-                            <img src="https://firebasestorage.googleapis.com/v0/b/my-social-network-815dc.appspot.com/o/images%2F_397315c9-1d32-40ea-bc7c-5740be455efe.jpega5fcf780-8f0b-4ac2-a9d1-dba4a0706984?alt=media&token=d72fe004-6919-499c-9192-98b5fa242cfd" alt="logo" className="w-12 h-12 rounded-full" />
+                            <img src="https://firebasestorage.googleapis.com/v0/b/my-social-network-815dc.appspot.com/o/posts%2F7ac0233d-c2ab-424a-80ac-0526ee7cba10.png_2024-2-16%2013%3A57%3A53_6189e03f-f66b-484c-a067-145db73a4015?alt=media&token=0dfd44ba-5cc9-4c91-b33e-c8778022463c" alt="logo" className="w-11 h-11 rounded-full" />
                         </div>
                         <Search />
                     </div>
