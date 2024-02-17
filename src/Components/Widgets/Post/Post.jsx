@@ -63,7 +63,7 @@ export default function Post() {
                 className='space-y-4'
             >
                 {posts.posts.map((post, key) => (
-                    <SinglePost key={key} post={post} />
+                    <SinglePost key={post.Post.id} post={post} />
                 ))}
             </InfiniteScroll>
         </>

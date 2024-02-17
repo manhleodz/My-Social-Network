@@ -19,6 +19,7 @@ const Post = lazy(() => import('../Pages/Post'));
 const Profile = lazy(() => import('../Pages/Profile'));
 const Admin = lazy(() => import('../Pages/Admin'));
 const NotFound = lazy(() => import('../Pages/NotFound'));
+const MakeStory = lazy(() => import('../Widgets/MakeStory/MakeStory'));
 
 const Loading = () => (
     <>
@@ -44,6 +45,7 @@ export default function HomeRoutes() {
                             <Route path="friends" element={<ProfileFriends />} />
                         </Route>
                         <Route path="story/:id" element={<Story />} />
+                        <Route path="story/create" element={<MakeStory />} />
                         <Route path="messenger" element={<Messenger />} />
                         <Route path="community" element={<Community />} />
                         <Route path="post" element={<Post />} />

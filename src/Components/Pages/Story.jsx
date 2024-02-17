@@ -22,7 +22,7 @@ import ReactPlayer from 'react-player';
 export default function Story() {
 
     const user = useSelector(state => state.authentication.user);
-    const id = useParams().id;
+    const id = useParams().id || 1;
     const [isPending, startTransition] = useTransition();
     const [seen, setSeen] = useState(id);
     const stories = useSelector(state => state.stories.stories);

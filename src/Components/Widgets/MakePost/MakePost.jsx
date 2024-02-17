@@ -9,7 +9,7 @@ import addSvg from '../../../Assets/SVG icons/add.svg';
 import './MakePost.scss';
 import { PostApi } from '../../../Network/Post';
 import { addPost } from '../../../Redux/PostSlice';
- 
+
 export default function MakePost() {
 
     const user = useSelector(state => state.authentication.user);
@@ -72,10 +72,10 @@ export default function MakePost() {
                 dispatch(addPost({
                     Post: post.data.data
                 }));
+                setOpen(false);
                 setPostText("");
                 setFileUploads(null);
                 setShowPicker(false);
-                setOpen(false);
             }).catch(() => {
                 alert("Reload please wait...");
             });

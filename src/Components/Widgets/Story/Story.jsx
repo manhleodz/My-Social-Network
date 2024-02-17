@@ -67,14 +67,14 @@ export default function Story() {
             }}
           >
             <div className=' absolute bottom-0 h-12 flex flex-col justify-end items-center bg-white w-full rounded-b-lg'>
-              <div className=' p-1 rounded-full bg-white absolute bottom-6'>
+              <div className=' p-1 rounded-full bg-white absolute bottom-6' >
                 <svg xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 0 512 512" className=' fill-blue-600'>
                   <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM232 344V280H168c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H280v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
                 </svg>
               </div>
               <h1 className=' text-sm font-semibold'>Tạo tin</h1>
             </div>
-            <div id='new' className='absolute w-40 h-full z-50 rounded-lg hidden' style={{ backgroundColor: 'rgb(0,0,0,0.1)' }}></div>
+            <div id='new' className='absolute w-40 h-full z-50 rounded-lg hidden' style={{ backgroundColor: 'rgb(0,0,0,0.1)' }} onClick={() => { navigate("story/create") }}></div>
           </div>
           {stories.length === 0 ? (
             <LoadingStory />
