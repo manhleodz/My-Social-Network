@@ -1,4 +1,6 @@
 # Trang web vẫn đang trong giai đoạn đầu nên rất nhiều tính năng chưa được hoàn thiện. 
+#Bạn có thể truy cập bằng tài khoản này cho nhanh: manhleo -pass:12345678 
+
 Ý tưởng thực hiện là từ FB :)))))) và my tình yêu to lớn với âm nhạc
 
 # Giao diện đăng ký tài khoản
