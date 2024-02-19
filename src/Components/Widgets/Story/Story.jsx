@@ -3,7 +3,6 @@ import './Story.scss'
 import ReactPlayer from 'react-player'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
-import { FastAverageColor } from 'fast-average-color';
 import LoadingStory from './LoadingStory';
 
 export default function Story() {
@@ -13,18 +12,6 @@ export default function Story() {
   const stories = useSelector(state => state.stories.stories);
 
   const navigate = useNavigate();
-
-  const fac = new FastAverageColor();
-
-  const getBackgroundColor = async (link) => {
-    fac.getColorAsync(link)
-      .then(color => {
-        return color.rgb;
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  }
 
   if (!user) return null;
 
@@ -50,7 +37,7 @@ export default function Story() {
         </button>
       )}
       <div className=' flex items-center overflow-x-hidden overflow-y-hidden transform relative w-full scroll-smooth' id='container'>
-        <div className=' flex flex-row items-center justify-start space-x-1 w-full scroll-smooth' key={234} style={{ width: `${stories.length === 0 ? `${440}px` : `${(stories.length + 1) * 185}px`}` }}>
+        <div className=' flex flex-row items-center justify-start space-x-2 w-full scroll-smooth' key={234} style={{ width: `${stories.length === 0 ? `${440}px` : `${(stories.length + 1) * 185}px`}` }}>
           <div
             onMouseEnter={() => {
               document.getElementById('new').style.display = 'block';
@@ -94,8 +81,8 @@ export default function Story() {
                       document.getElementById(`reel-${story.id}`).style.display = 'none';
                       document.getElementById(`content_${key}`).style.transform = 'scale(1.01)'
                     }}
-                    style={{ backgroundColor: "#A9A9A9" }}
-                    className=' w-40 h-64 p-1 flex justify-center items-center relative rounded-lg shadow-lg border-none cursor-pointer overflow-hidden' key={key}
+                    style={{ backgroundColor: `rgba(138, 146, 147, 255)` || 'gray' }}
+                    className=' w-40 h-64 flex justify-center items-center relative rounded-lg shadow-lg border-none cursor-pointer overflow-hidden' key={key}
                   >
                     {story.link.includes("mp4") ? (
                       <>

@@ -80,6 +80,9 @@ export default function MakePost() {
                 alert("Reload please wait...");
             });
 
+        }).catch(err => {
+            setProcessing(false);
+            console.log(err.data);
         })
     };
 

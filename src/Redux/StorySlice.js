@@ -16,7 +16,7 @@ export const storySlice = createSlice({
             state.hasMore = false;
         },
         addStory(state, action) {
-            state.stories = [...state.stories, action.payload];
+            state.stories = [action.payload,...state.stories];
         },
         deleteStory(state, action) {
             if (state.stories.length > 0)
