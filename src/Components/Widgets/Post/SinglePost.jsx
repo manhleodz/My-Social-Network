@@ -161,7 +161,7 @@ export default function SinglePost({ post }) {
                 )}
 
                 {media.length == 1 && (
-                    <>
+                    <div className=" flex items-center justify-center w-full h-full" style={{backgroundColor: `${media[0].backgroundColor} || gray`}}>
                         {media[0].type === 1 ? (
                             <>
                                 <img
@@ -182,7 +182,7 @@ export default function SinglePost({ post }) {
                                 />
                             </>
                         )}
-                    </>
+                    </div>
                 )}
 
                 {media.length == 2 && (

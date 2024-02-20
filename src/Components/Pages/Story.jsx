@@ -243,7 +243,7 @@ export default function Story() {
                             {playing.link && (
                                 <>
                                     {playing.link.includes("mp4") ? (
-                                        <div className=' w-full h-full flex justify-center items-center rounded-lg' style={{ backgroundColor: "gray" }}>
+                                        <div className=' w-full h-full flex justify-center items-center rounded-lg' style={{ backgroundColor: `${playing.backgroundColor}` }}>
                                             <ReactPlayer
                                                 fallback={<>Hello</>}
                                                 url={playing.link}
@@ -256,7 +256,7 @@ export default function Story() {
                                             />
                                         </div>
                                     ) : (
-                                        <div className='story w-full h-full flex justify-center items-center rounded-lg' style={{ backgroundColor: "gray" }}>
+                                        <div className='story w-full h-full flex justify-center items-center rounded-lg'  style={{ backgroundColor: `${playing.backgroundColor}` }}>
                                             <img
                                                 alt='playing'
                                                 src={playing.link}

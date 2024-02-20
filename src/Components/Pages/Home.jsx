@@ -29,7 +29,6 @@ export default function Home() {
 
   const handleScroll = (event) => {
     setScrollPosition(event.target.scrollTop)
-    console.log(event);
   }
 
   useEffect(() => {

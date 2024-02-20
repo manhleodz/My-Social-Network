@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Cropper from 'react-easy-crop'
-import getCroppedImg from './CropImage';
+import getCroppedImg from '../../../Helper/CropImage';
 import { StoryApi } from '../../../Network/Story';
 import { addStory } from '../../../Redux/StorySlice';
+import ReactPlayer from 'react-player';
 
 export default function MakeStory() {
 
@@ -18,27 +19,45 @@ export default function MakeStory() {
     };
 
     const upload = async () => {
-        const { file, url } = await getCroppedImg(
-            selectedFile,
-            croppedAreaPixels,
-            rotation
-        );
+        if (selectedFile.type.includes('image')) {
+            const { file, url } = await getCroppedImg(
+                selectedFile,
+                croppedAreaPixels,
+                rotation
+            ).catch((err) => console.log(err));
 
-        const formData = new FormData();
-        formData.append('files', file, selectedFile.name);
-        formData.append('public', true);
+            const formData = new FormData();
+            formData.append('files', file, selectedFile.name);
+            formData.append('public', true);
 
-        StoryApi.post(formData).then((res) => {
-            if (res.data) {
-                StoryApi.getById(res.data.data.id).then((res) => {
-                    dispatch(addStory(res.data.data));
-                }).catch((err) => {
-                    console.log(err.data);
-                });
-            }
-        }).catch(err => {
-            console.log(err);
-        });
+            StoryApi.post(formData).then((res) => {
+                if (res.data) {
+                    StoryApi.getById(res.data.data.id).then((res) => {
+                        dispatch(addStory(res.data.data));
+                    }).catch((err) => {
+                        console.log(err.data);
+                    });
+                }
+            }).catch(err => {
+                console.log(err);
+            });
+        } else {
+            const formData = new FormData();
+            formData.append('files', selectedFile, selectedFile.name);
+            formData.append('public', true);
+
+            StoryApi.post(formData).then((res) => {
+                if (res.data) {
+                    StoryApi.getById(res.data.data.id).then((res) => {
+                        dispatch(addStory(res.data.data));
+                    }).catch((err) => {
+                        console.log(err.data);
+                    });
+                }
+            }).catch(err => {
+                console.log(err);
+            });
+        }
     }
 
     //Xử lý hình ảnh
@@ -59,7 +78,7 @@ export default function MakeStory() {
 
                 }}
             >
-                <div className=' text-black space-y-3 flex flex-col justify-between relative h-full w-full max-lg:hidden px-3 overflow-x-auto' style={{ backgroundColor: "white", width: "400px" }}>
+                <div className=' text-black space-y-3 flex flex-col justify-between max-lg:hidden relative h-full px-3 overflow-x-auto bg-white w-[400px]'>
                     <div>
                         <h1 className=' text-3xl font-semibold mt-20'>Tin của bạn</h1>
                         <div className=' flex items-center text-blue-500 space-x-3'>
@@ -99,7 +118,7 @@ export default function MakeStory() {
                             return (
                                 <div className=' p-5 rounded-xl bg-white shadow-2xl'>
                                     <h1 className='font-semibold pb-3'>Xem trước</h1>
-                                    <div className=' bg-gray-900 rounded-xl flex items-center justify-center p-4 relative' style={{ width: '800px', height: '800px' }}>
+                                    <div className=' bg-gray-900 rounded-xl flex items-center justify-center p-4 relative w-[800px] h-[800px]'>
                                         {selectedFile.type.includes('image') ? (
                                             <>
                                                 <Cropper
@@ -108,6 +127,7 @@ export default function MakeStory() {
                                                     zoom={zoom}
                                                     rotation={rotation}
                                                     aspect={9 / 16}
+                                                    showGrid={false}
                                                     onCropChange={setCrop}
                                                     onCropComplete={handleCropComplete}
                                                     onZoomChange={setZoom}
@@ -119,37 +139,31 @@ export default function MakeStory() {
                                             </>
                                         ) : (
                                             <>
-                                                <Cropper
-                                                    video={selectedFile.preview}
-                                                    crop={crop}
-                                                    zoom={zoom}
-                                                    rotation={rotation}
-                                                    aspect={9 / 16}
-                                                    onCropChange={setCrop}
-                                                    onCropComplete={handleCropComplete}
-                                                    onZoomChange={setZoom}
+                                                <ReactPlayer
+                                                    url={selectedFile.preview}
+                                                    playing={true}
+                                                    width="100%"
                                                     style={{ borderRadius: '0.75rem', margin: '1.25rem', backgroundColor: 'black', justifyContent: 'center' }}
-                                                    zoomWithScroll={true}
-                                                    minZoom={0.1}
-                                                    maxZoom={1.5}
                                                 />
                                             </>
                                         )}
-                                        <div className=' absolute z-50 bottom-2 flex items-center bg-black'>
-                                            <button className=' p-2 bg-white rounded-lg' onClick={() => {
-                                                setRotation(0);
-                                                setZoom(1);
-                                                setCrop({ x: 0, y: 0 });
-                                            }}>Ban đầu</button>
-                                            <h1 className='font-bold text-white'>+</h1>
-                                            <input type='range' className=' w-96' value={zoom * 100 / 1.5} onChange={(e) => {
-                                                if (e.target.value >= 15) {
-                                                    setZoom(e.target.value * 1.5 / 100);
-                                                }
-                                            }} />
-                                            <h1 className='font-bold text-white'>-</h1>
-                                            <button className=' p-2 bg-white rounded-lg' onClick={() => setRotation(prev => prev + 90)}>Xoay</button>
-                                        </div>
+                                        {selectedFile.type.includes('image') && (
+                                            <div className=' absolute z-50 bottom-2 flex items-center bg-black'>
+                                                <button className=' p-2 bg-white rounded-lg' onClick={() => {
+                                                    setRotation(0);
+                                                    setZoom(1);
+                                                    setCrop({ x: 0, y: 0 });
+                                                }}>Ban đầu</button>
+                                                <h1 className='font-bold text-white'>+</h1>
+                                                <input type='range' className=' w-96' value={zoom * 100 / 1.5} onChange={(e) => {
+                                                    if (e.target.value >= 15) {
+                                                        setZoom(e.target.value * 1.5 / 100);
+                                                    }
+                                                }} />
+                                                <h1 className='font-bold text-white'>-</h1>
+                                                <button className=' p-2 bg-white rounded-lg' onClick={() => setRotation(prev => prev + 90)}>Xoay</button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             )
@@ -163,7 +177,7 @@ export default function MakeStory() {
                             return (
                                 <>
                                     <label
-                                        className=' cursor-pointer flex justify-center items-center rounded-xl bg-violet-600 hover:bg-violet-500 mx-3 w-52 h-72'
+                                        className=' cursor-pointer flex justify-center items-center rounded-xl bg-violet-600 hover:bg-violet-500 mx-3 max-md:mx-1 w-52 h-72'
                                         htmlFor="select-file"
                                     >
 
@@ -188,7 +202,7 @@ export default function MakeStory() {
                                         onClick={() => {
                                             setOption(2);
                                         }}
-                                        className=' cursor-pointer flex justify-center items-center rounded-xl bg-blue-600 hover:bg-blue-500 mx-3 w-52 h-72'
+                                        className=' cursor-pointer flex justify-center items-center rounded-xl bg-blue-600 hover:bg-blue-500 mx-3 max-md:mx-1 w-52 h-72'
                                     >
                                         <div className=' p-3 rounded-full bg-white shadow-lg '>
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill='black' className='w-7 h-7'>

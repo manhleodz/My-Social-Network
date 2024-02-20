@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import './Story.scss'
 import ReactPlayer from 'react-player'
 import { useSelector } from 'react-redux'
@@ -10,16 +10,19 @@ export default function Story() {
   const user = useSelector(state => state.authentication.user);
   const [page, setPage] = useState(1);
   const stories = useSelector(state => state.stories.stories);
+  const scrollStory = useRef(0);
 
   const navigate = useNavigate();
 
   if (!user) return null;
 
-  var length = Math.floor((stories.length + 1) / 5);
+  var length = Math.floor((stories.length + 1) / 2);
 
   if ((stories.length + 1) / 3 > length) {
     length = length + 1;
   }
+
+  console.log(scrollStory);
 
   return (
     <div className=' relative flex justify-between items-center w-9/12 max-md:w-full'>
@@ -27,7 +30,8 @@ export default function Story() {
         <button
           onClick={() => {
             setPage(page => page = page - 1);
-            document.getElementById('container').scrollLeft -= 820;
+            scrollStory.current -= 370;
+            document.getElementById('container').scrollLeft -= 370;
           }}
           className=' absolute left-0 z-10 p-2 w-14 h-14 flex justify-center items-center active:scale-105 rounded-full bg-white ml-5'
         >
@@ -117,7 +121,8 @@ export default function Story() {
       {page !== length && (<button
         onClick={() => {
           setPage(page => page = page + 1);
-          document.getElementById('container').scrollLeft += 820;
+          scrollStory.current += 370;
+          document.getElementById('container').scrollLeft += 370;
         }}
         className=' absolute right-5 z-10 p-2 w-14 h-14 flex justify-center items-center active:scale-105 rounded-full bg-white'
       >
