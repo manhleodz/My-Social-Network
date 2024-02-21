@@ -60,7 +60,8 @@ export default function SinglePost({ post }) {
 
     if (openComment || openLike) {
         document.querySelector('body').style.overflow = 'hidden';
-        document.querySelector('body').style.paddingRight = "12px"
+        if (document.querySelector('body').clientWidth > 500)
+            document.querySelector('body').style.paddingRight = "9px"
     } else {
         document.querySelector('body').style.overflow = 'auto';
         document.querySelector('body').style.paddingRight = "0px"

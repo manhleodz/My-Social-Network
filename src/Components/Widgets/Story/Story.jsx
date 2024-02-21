@@ -27,20 +27,22 @@ export default function Story() {
   return (
     <div className=' relative flex justify-between items-center w-9/12 max-md:w-full'>
       {page !== 1 && (
-        <button
-          onClick={() => {
-            setPage(page => page = page - 1);
-            scrollStory.current -= 370;
-            document.getElementById('container').scrollLeft -= 370;
-          }}
-          className=' absolute left-0 z-10 p-2 w-14 h-14 flex justify-center items-center active:scale-105 rounded-full bg-white ml-5'
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 320 512">
-            <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
-          </svg>
-        </button>
+        <>
+          <button
+            onClick={() => {
+              setPage(page => page = page - 1);
+              scrollStory.current -= 370;
+              document.getElementById('container').scrollLeft -= 370;
+            }}
+            className=' absolute left-0 z-10 p-2 w-14 h-14 flex justify-center items-center active:scale-105 rounded-full bg-white ml-5 max-sm:hidden'
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 320 512">
+              <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
+            </svg>
+          </button>
+        </>
       )}
-      <div className=' flex items-center overflow-x-hidden overflow-y-hidden transform relative w-full scroll-smooth' id='container'>
+      <div className=' flex items-center overflow-x-hidden max-sm:overflow-x-auto overflow-y-hidden transform relative w-full scroll-smooth' id='container'>
         <div className=' flex flex-row items-center justify-start space-x-2 w-full scroll-smooth' key={234} style={{ width: `${stories.length === 0 ? `${440}px` : `${(stories.length + 1) * 185}px`}` }}>
           <div
             onMouseEnter={() => {
@@ -118,18 +120,22 @@ export default function Story() {
         </div>
       </div>
       <div></div>
-      {page !== length && (<button
-        onClick={() => {
-          setPage(page => page = page + 1);
-          scrollStory.current += 370;
-          document.getElementById('container').scrollLeft += 370;
-        }}
-        className=' absolute right-5 z-10 p-2 w-14 h-14 flex justify-center items-center active:scale-105 rounded-full bg-white'
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 320 512">
-          <path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z" />
-        </svg>
-      </button>)}
+      {page !== length && (
+        <>
+          <button
+            onClick={() => {
+              setPage(page => page = page + 1);
+              scrollStory.current += 370;
+              document.getElementById('container').scrollLeft += 370;
+            }}
+            className=' absolute right-5 z-10 p-2 w-14 h-14 flex justify-center items-center active:scale-105 rounded-full bg-white max-sm:hidden'
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" height="1.3em" viewBox="0 0 320 512">
+              <path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z" />
+            </svg>
+          </button>
+        </>
+      )}
     </div>
   )
 }

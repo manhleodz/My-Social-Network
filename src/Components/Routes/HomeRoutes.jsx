@@ -19,7 +19,7 @@ const Post = lazy(() => import('../Pages/Post'));
 const Profile = lazy(() => import('../Pages/Profile'));
 const Admin = lazy(() => import('../Pages/Admin'));
 const NotFound = lazy(() => import('../Pages/NotFound'));
-const MakeStory = lazy(() => import('../Widgets/MakeStory/MakeStory'));
+const MakeStory = lazy(() => import('../Pages/MakeStory'));
 
 const Loading = () => (
     <>

@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Cropper from 'react-easy-crop'
-import getCroppedImg from '../../../Helper/CropImage';
-import { StoryApi } from '../../../Network/Story';
-import { addStory } from '../../../Redux/StorySlice';
+import getCroppedImg from '../../Helper/CropImage';
+import { StoryApi } from '../../Network/Story';
+import { addStory } from '../../Redux/StorySlice';
 import ReactPlayer from 'react-player';
 
 export default function MakeStory() {
@@ -73,20 +73,20 @@ export default function MakeStory() {
     return (
         <>
             <div
-                className='z-20 w-screen h-full top-0 left-0 flex justify-end items-center max-lg:justify-center overflow-hidden'
+                className='z-20 w-screen h-full top-0 left-0 flex justify-end items-center max-sm:flex-col max-sm:justify-center overflow-y-hidden'
                 onClick={(e) => {
 
                 }}
             >
-                <div className=' text-black space-y-3 flex flex-col justify-between max-lg:hidden relative h-full px-3 overflow-x-auto bg-white w-[400px]'>
+                <div className=' text-black space-y-3 flex flex-col justify-between relative h-full max-sm:w-full max-sm:justify-start max-sm:h-1/2 px-3 overflow-x-auto bg-white w-[400px]'>
                     <div>
-                        <h1 className=' text-3xl font-semibold mt-20'>Tin của bạn</h1>
+                        <h1 className=' text-3xl max-sm:text-xl font-semibold mt-20 max-sm:mt-16'>Tin của bạn</h1>
                         <div className=' flex items-center text-blue-500 space-x-3'>
                             <h1 className=' cursor-pointer'>Kho lưu trữ</h1>
                             <h1 className=' cursor-pointer'>Cài đặt</h1>
                         </div>
                         <div className='flex items-center space-x-4'>
-                            <img alt='main-user' src={`${user.avatar}`} className=' w-16 h-16 rounded-full object-cover' />
+                            <img alt='main-user' src={`${user.avatar}`} className=' w-16 h-16 max-sm:w-13 max-sm:h-13 rounded-full object-cover' />
                             <h1 className=' text-lg font-semibold'>{user.nickname}</h1>
                         </div>
                     </div>
@@ -96,6 +96,9 @@ export default function MakeStory() {
                                 onClick={() => {
                                     setOption(null);
                                     setSelectedFile(null);
+                                    setCrop({ x: 0, y: 0, width: 0, height: 0 });
+                                    setRotation(0);
+                                    setZoom(1);
                                 }}
                                 className=' p-2 rounded-lg w-1/3 bg-gray-200 text-black font-medium hover:bg-gray-300'
                             >
@@ -112,13 +115,13 @@ export default function MakeStory() {
                         </div>
                     )}
                 </div>
-                <div className=' w-full h-screen flex justify-center items-center mt-20'>
+                <div className=' w-full h-full bg-gray-100 flex justify-center items-center max-sm:items-start mt-20'>
                     {(() => {
                         if (selectedFile) {
                             return (
-                                <div className=' p-5 rounded-xl bg-white shadow-2xl'>
+                                <div className=' p-5 rounded-xl bg-white shadow-2xl max-sm:h-96'>
                                     <h1 className='font-semibold pb-3'>Xem trước</h1>
-                                    <div className=' bg-gray-900 rounded-xl flex items-center justify-center p-4 relative w-[800px] h-[800px]'>
+                                    <div className=' bg-gray-900 rounded-xl flex items-center justify-center p-4 relative w-[800px] h-[800px] max-md:w-[400px] max-md:h-[400px] max-lg:w-[500px] max-lg:h-[500px] max-[450px]:w-[300px] max-[450px]:h-[300px]'>
                                         {selectedFile.type.includes('image') ? (
                                             <>
                                                 <Cropper
@@ -148,14 +151,14 @@ export default function MakeStory() {
                                             </>
                                         )}
                                         {selectedFile.type.includes('image') && (
-                                            <div className=' absolute z-50 bottom-2 flex items-center bg-black'>
+                                            <div className=' absolute z-50 bottom-2 w-1/2 flex items-center bg-black'>
                                                 <button className=' p-2 bg-white rounded-lg' onClick={() => {
                                                     setRotation(0);
                                                     setZoom(1);
                                                     setCrop({ x: 0, y: 0 });
                                                 }}>Ban đầu</button>
                                                 <h1 className='font-bold text-white'>+</h1>
-                                                <input type='range' className=' w-96' value={zoom * 100 / 1.5} onChange={(e) => {
+                                                <input type='range' className=' w-full' value={zoom * 100 / 1.5} onChange={(e) => {
                                                     if (e.target.value >= 15) {
                                                         setZoom(e.target.value * 1.5 / 100);
                                                     }
