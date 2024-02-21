@@ -7,16 +7,16 @@ export const ChatApi = {
 
         return axios.get(`${getApiUrl}/inbox/${id}`, {
             headers: {
-                accessToken: localStorage.getItem("accessToken"),
-            }
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            },
         });
     },
 
     async sendMessage(id, data) {
         return axios.post(`${getApiUrl}/inbox/${id}`, data, {
             headers: {
-                accessToken: localStorage.getItem("accessToken"),
-            }
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            },
         });
     }
 }

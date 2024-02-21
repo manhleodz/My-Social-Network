@@ -10,7 +10,7 @@ export const CommentApi = {
     async newComment(data) {
         return axios.post(`${ApiUrl}/comments`, data, {
             headers: {
-                accessToken: localStorage.getItem("accessToken"),
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
         })
     },
@@ -18,7 +18,7 @@ export const CommentApi = {
     async deleteComment(id) {
         return axios.delete(`${ApiUrl}/comments/${id}`, {
             headers: {
-                accessToken: localStorage.getItem("accessToken"),
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
         })
     },
@@ -26,7 +26,7 @@ export const CommentApi = {
     async updateComment(data) {
         return axios.put(`${ApiUrl}/comments/${data.id}`, data, {
             headers: {
-                accessToken: localStorage.getItem("accessToken"),
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
         });
     },
@@ -34,7 +34,7 @@ export const CommentApi = {
     async likeComment(id, data) {
         return axios.post(`${ApiUrl}/comments/like/${id}`, data, {
             headers: {
-                accessToken: localStorage.getItem("accessToken"),
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
         })
     },

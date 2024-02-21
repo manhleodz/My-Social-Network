@@ -7,7 +7,7 @@ export const PostApi = {
         return await axios.get(`${ApiUrl}/posts`, {
             params: { page: page },
             headers: {
-                accessToken: localStorage.getItem("accessToken")
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
         })
     },
@@ -15,7 +15,7 @@ export const PostApi = {
     async getPostById(id) {
         return await axios.get(`${ApiUrl}/posts/${id}`, {
             headers: {
-                accessToken: localStorage.getItem("accessToken")
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
         })
     },
@@ -24,7 +24,7 @@ export const PostApi = {
         return await axios.get(`${ApiUrl}/posts/profile/user`, {
             params: { id: id, page: page },
             headers: {
-                accessToken: localStorage.getItem("accessToken")
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
         })
     },
@@ -34,7 +34,7 @@ export const PostApi = {
         return await axios.post(
             `${ApiUrl}/likes`, data, {
             headers: {
-                accessToken: localStorage.getItem("accessToken")
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
         });
     },
@@ -46,7 +46,7 @@ export const PostApi = {
     async updateLikeNum(id) {
         return await axios.post(`${ApiUrl}/posts/like/${id}`, {
             headers: {
-                accessToken: localStorage.getItem("accessToken")
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
         })
     },
@@ -55,8 +55,8 @@ export const PostApi = {
         return await axios.get(`${ApiUrl}/likes/${id}/${authId}`,
             {
                 headers: {
-                    accessToken: localStorage.getItem("accessToken")
-                }
+                    accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+                },
             }
         );
     },
@@ -65,7 +65,7 @@ export const PostApi = {
         return await axios.delete(`${ApiUrl}/posts/${id}`,
             {
                 headers: {
-                    accessToken: localStorage.getItem("accessToken")
+                    accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
                 },
             }
         )
@@ -74,8 +74,7 @@ export const PostApi = {
     async create(data) {
         return await axios.post(`${ApiUrl}/posts`, data, {
             headers: {
-                accessToken: localStorage.getItem("accessToken"),
-                'content-type': 'multipart/form-data',
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             },
         });
     },
@@ -83,7 +82,7 @@ export const PostApi = {
     async getOwnerLike(id, authId) {
         return await axios.get(`${ApiUrl}/likes/${id}/${authId}`, {
             headers: {
-                accessToken: localStorage.getItem("accessToken")
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             },
         });
     },
@@ -91,8 +90,8 @@ export const PostApi = {
     async like(data) {
         return await axios.post(`${ApiUrl}/likes`, data, {
             headers: {
-                accessToken: localStorage.getItem('accessToken')
-            }
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            },
         })
     }
 }

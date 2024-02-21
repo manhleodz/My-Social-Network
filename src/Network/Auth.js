@@ -23,7 +23,7 @@ export const Auth = {
     async completeConfirm(data, success, failure) {
         return await axios.put(`${ApiUrl}/auth`, data, {
             headers: {
-                accessToken: sessionStorage.getItem("accessToken"),
+                accessToken: sessionStorage.getItem("accessToken")
             }
         }).then((e) => success(e))
             .catch((err) => failure(err));
@@ -71,8 +71,8 @@ export const Auth = {
 
         return await axios.put(`${ApiUrl}/auth/changeinfo`, data, {
             headers: {
-                accessToken: localStorage.getItem("accessToken"),
-            }
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            },
         })
     },
 
@@ -81,7 +81,7 @@ export const Auth = {
         const accessToken = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
 
         if (accessToken !== null) {
-            return await axios.get(`${ApiUrl}/auth/user/profile`, {
+            return await axios.get(`${ApiUrl}/auth/user/refresh`, {
                 headers: {
                     accessToken: accessToken,
                 }
@@ -104,8 +104,8 @@ export const Auth = {
     async getProfile(info) {
         return await axios.get(`${ApiUrl}/auth/${info}`, {
             headers: {
-                accessToken: localStorage.getItem("accessToken"),
-            }
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            },
         })
     },
 

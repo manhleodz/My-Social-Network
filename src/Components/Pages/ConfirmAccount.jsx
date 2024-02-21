@@ -11,24 +11,24 @@ export default function ConfirmAccount() {
     const [page, setPage] = useState(1);
     const [username, setUsername] = useState("");
     const [nickname, setNickname] = useState("");
-    const [avatar, setAvatar] = useState("https://firebasestorage.googleapis.com/v0/b/my-social-network-815dc.appspot.com/o/images%2F326222515_693328639007006_6530226929641588503_n.jpg389d537c-04cc-4eb5-a050-a35a8520d3d6?alt=media&token=67b29c9d-4f8a-4909-8e52-3c302a719ee9");
+    const [avatar, setAvatar] = useState("https://bsnl.ch/wp-content/uploads/2019/03/avatar-default-circle.png");
     const [address, setAddress] = useState("");
     const [workAt, setWorkAt] = useState("");
     const [studyAt, setStudyAt] = useState("");
     const [favorites, setFavorites] = useState("");
     const [birthday, setBirthday] = useState("");
-    const [gender, setGender] = useState("male");
+    const [gender, setGender] = useState("Nam");
 
     const dispatch = useDispatch();
 
     const success = (e) => {
         localStorage.setItem("accessToken", e.data.token);
         sessionStorage.removeItem("accessToken");
-        window.location.href("/");
+        window.location.reload();
     }
 
     const failure = (e) => {
-        alert("Error: " + e.message);
+        alert("Error: " + e.response.data.error);
         setPage(1);
     }
 
@@ -153,7 +153,7 @@ export default function ConfirmAccount() {
                                                     className=' rounded-full' type='checkbox' checked={gender === "Nam"}
                                                     onChange={(e) => {
                                                         setGender("Nam");
-                                                        setAvatar("https://firebasestorage.googleapis.com/v0/b/my-social-network-815dc.appspot.com/o/images%2F326222515_693328639007006_6530226929641588503_n.jpg389d537c-04cc-4eb5-a050-a35a8520d3d6?alt=media&token=67b29c9d-4f8a-4909-8e52-3c302a719ee9");
+                                                        setAvatar("https://bsnl.ch/wp-content/uploads/2019/03/avatar-default-circle.png");
                                                     }}
                                                 />
                                             </div>
@@ -163,7 +163,7 @@ export default function ConfirmAccount() {
                                                     className=' rounded-full' type='checkbox' checked={gender === "Nữ"}
                                                     onChange={(e) => {
                                                         setGender("Nữ");
-                                                        setAvatar("https://firebasestorage.googleapis.com/v0/b/my-social-network-815dc.appspot.com/o/images%2F319355609_727881652003063_1832447285833706047_n.jpg76f6f779-322b-49eb-b9d4-61366ff7441e?alt=media&token=e8b89a09-3706-4539-9163-2dd90c52c7c3")
+                                                        setAvatar("https://healingcenterseattle.org/thcroot/wp-content/uploads/2020/08/Female-Avatar.png")
                                                     }}
                                                 />
                                             </div>
@@ -185,10 +185,10 @@ export default function ConfirmAccount() {
                     )}
                     {page === 2 && (
                         <>
-                            <h1 className=' text-center text-2xl m-5 font-semibold'>Bắt đầu hành trình mới</h1>
+                            <h1 className=' text-center text-2xl m-5 font-semibold max-lg:m-3 max-sm:m-1'>Bắt đầu hành trình mới</h1>
                             <div className='w-full flex justify-center items-center'>
-                                <div className='w-10/12 flex max-md:flex-col-reverse max-md:items-center justify-center items-start space-x-10'>
-                                    <img alt='bomay' className=' w-4/12 max-md:w-10/12' src='https://firebasestorage.googleapis.com/v0/b/my-social-network-815dc.appspot.com/o/images%2Fhello.jpg?alt=media&token=52869f71-7077-4052-a06b-9b21372148d8' />
+                                <div className='w-10/12 max-sm:w-full flex max-md:flex-col-reverse max-md:items-center justify-center items-start space-x-10'>
+                                    <img alt='bomay' className=' w-4/12 max-md:w-10/12 h-96 object-cover max-sm:hidden' src='https://firebasestorage.googleapis.com/v0/b/my-social-network-815dc.appspot.com/o/stories%2Fhello.jpg_2024-2-19%2022%3A47%3A51_0cf006fe-873e-4c7b-a9e7-3def53cae307?alt=media&token=b49f9b4b-9cc5-4468-9b61-b32d7b8abb1c' />
                                     <div className='w-5/12 max-md:w-10/12'>
                                         <h1 className=' text-2xl font-semibold mb-5'>Điều khoản bắt buộc</h1>
                                         <ul className=' list-disc space-y-2'>
@@ -196,7 +196,7 @@ export default function ConfirmAccount() {
                                             <li>Cấm buôn bán ma tóe online</li>
                                             <li>Cùng nhau xây dựng thế giới tốt đẹp hơn</li>
                                             <li>Chung tay cho tương lai con em chúng ta</li>
-                                            <li>Địt con mẹ thằng nào dùng được trang này</li>
+                                            <li>Đ** thằng nào dùng được trang này</li>
                                             <li>Vi phạm là bắn bỏ mẹ</li>
                                         </ul>
                                     </div>

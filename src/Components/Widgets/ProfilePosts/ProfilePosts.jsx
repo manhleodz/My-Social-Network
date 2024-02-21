@@ -16,7 +16,7 @@ export default function ProfilePosts() {
     const { owner } = useOutletContext();
     const [posts, setPost] = useState();
 
-    var story = owner.story;
+    var story = owner.story || "";
     const [changeStory, setChangeStory] = useState(false);
     const [newStory, setNewStory] = useState("");
 

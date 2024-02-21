@@ -6,7 +6,7 @@ export const UploadApi = {
     async uploadImages(data) {
         return axios.post(`${ApiUrl}/images`, data, {
             headers: {
-                accessToken: localStorage.getItem('accessToken')
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
         })
     },
@@ -14,7 +14,7 @@ export const UploadApi = {
     async uploadVideos(data) {
         return axios.post(`${ApiUrl}/videos`, data, {
             headers: {
-                accessToken: localStorage.getItem('accessToken')
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
         })
     },

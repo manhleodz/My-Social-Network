@@ -6,7 +6,7 @@ export const FriendApi = {
     async getListFriend() {
         return axios.get(`${ApiUrl}/relationship`, {
             headers: {
-                accessToken: localStorage.getItem("accessToken"),
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
         });
     },
@@ -14,7 +14,7 @@ export const FriendApi = {
     async addFriend(data) {
         return await axios.post(`${ApiUrl}/relationship/addFriend`, data, {
             headers: {
-                accessToken: localStorage.getItem("accessToken"),
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
         })
     },
@@ -23,7 +23,7 @@ export const FriendApi = {
         return await axios.delete(`${ApiUrl}/relationship/unfriend`, {
             params: {id: id},
             headers: {
-                accessToken: localStorage.getItem("accessToken"),
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
         })
     },

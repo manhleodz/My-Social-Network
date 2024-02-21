@@ -6,7 +6,7 @@ export const SearchAPI = {
         return axios.get(`${ApiUrl}/search/top`, {
             params: { search: search },
             headers: {
-                accessToken: localStorage.getItem('accessToken')
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
         })
     },
@@ -15,7 +15,7 @@ export const SearchAPI = {
         return axios.get(`${ApiUrl}/search`, {
             params: { search: search, page: page },
             headers: {
-                accessToken: localStorage.getItem('accessToken')
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
         })
     },
@@ -23,7 +23,7 @@ export const SearchAPI = {
     async updateHistory(search) {
         return axios.post(`${ApiUrl}/search`, { search: search }, {
             headers: {
-                accessToken: localStorage.getItem('accessToken')
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
         })
     },
@@ -32,7 +32,7 @@ export const SearchAPI = {
         return axios.delete(`${ApiUrl}/search`, {
             params: { id: id },
             headers: {
-                accessToken: localStorage.getItem('accessToken')
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
         })
     }
