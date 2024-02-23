@@ -1,8 +1,6 @@
 # Trang web vẫn đang trong giai đoạn đầu nên rất nhiều tính năng chưa được hoàn thiện. 
 # Bạn có thể truy cập bằng tài khoản này cho nhanh: manhleo -pass:12345678 
 
-Do chưa quen dùng AWS nên tôi deploy tạm lên render. Khá nhanh chỉ có một hạn chế là lần đầu tiên truy cập sẽ mất tầm 30s nó ko chạy nên chỉ cần nhấn f5 vài lần là sẽ được á :<
-
 Ý tưởng thực hiện là từ FB :)))))) và my tình yêu to lớn với âm nhạc
 
 # Giao diện đăng ký tài khoản
