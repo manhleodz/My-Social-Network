@@ -1,7 +1,7 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { SearchAPI } from '../../../Network/Search';
-import './Search.scss';
+import './Search.module.scss';
 
 export default function Search() {
 

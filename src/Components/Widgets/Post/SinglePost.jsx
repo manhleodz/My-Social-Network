@@ -193,7 +193,7 @@ export default function SinglePost({ post }) {
                                 <>
                                     {value.type === 1 ? (
                                         <>
-                                            <div className="w-1/2 h-full" key={index}>
+                                            <div className="w-1/2 h-full" key={value.id}>
                                                 <img
                                                     alt="image"
                                                     src={`${value.link}`}
@@ -211,7 +211,7 @@ export default function SinglePost({ post }) {
                                                 controls={true}
                                                 width="100%"
                                                 style={{ minHeight: '480px' }}
-                                                key={index}
+                                                key={value.id}
                                             />
                                         </>
                                     )}

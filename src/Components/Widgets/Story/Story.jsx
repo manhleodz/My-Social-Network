@@ -22,8 +22,6 @@ export default function Story() {
     length = length + 1;
   }
 
-  console.log(scrollStory);
-
   return (
     <div className=' relative flex justify-between items-center w-9/12 max-md:w-full'>
       {page !== 1 && (

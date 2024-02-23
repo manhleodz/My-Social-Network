@@ -1,12 +1,11 @@
 import React, { useState, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import ReactPlayer from "react-player";
-import { UploadApi } from '../../../Network/Upload';
 import video from '../../../Assets/SVG icons/video-marketing-movie-camera-svgrepo-com.svg';
 import Picker from 'emoji-picker-react';
 import { useDropzone } from 'react-dropzone';
 import addSvg from '../../../Assets/SVG icons/add.svg';
-import './MakePost.scss';
+import './MakePost.module.scss';
 import { PostApi } from '../../../Network/Post';
 import { addPost } from '../../../Redux/PostSlice';
 
@@ -26,9 +25,10 @@ export default function MakePost() {
 
     if (open) {
         document.querySelector('body').style.overflow = 'hidden';
-        document.querySelector('body').style.paddingRight = "12px"
+        if (document.querySelector('body').clientWidth > 500)
+            document.querySelector('body').style.paddingRight = "9px"
     } else {
-        document.querySelector('body').style.overflowY = 'auto';
+        document.querySelector('body').style.overflow = 'auto';
         document.querySelector('body').style.paddingRight = "0px"
     }
 
@@ -295,7 +295,7 @@ export default function MakePost() {
                                                         <h1 className=' text-gray-500 font-medium' style={{ fontSize: "15px" }}>Bất kỳ ai ở trong thế giới của chúng ta</h1>
                                                     </div>
                                                 </div>
-                                                <input type='checkbox' className=' rounded-full p-2.5' checked={isPublic} />
+                                                <input type='checkbox' className=' rounded-full p-2.5' checked={isPublic} onChange={() => {}}/>
                                             </div>
                                             <div className="flex items-center justify-between w-full rounded-lg hover:bg-gray-100 p-2 cursor-pointer" onClick={() => setPublic(false)}>
                                                 <div className='flex items-center'>
@@ -308,7 +308,7 @@ export default function MakePost() {
                                                         <h1 className='font-semibold text-lg'>Chỉ mình tôi</h1>
                                                     </div>
                                                 </div>
-                                                <input type='checkbox' className=' rounded-full p-2.5' checked={!isPublic} />
+                                                <input type='checkbox' className=' rounded-full p-2.5' checked={!isPublic} onChange={() => {}}/>
                                             </div>
                                             <div className="flex items-center justify-between"></div>
                                         </div>

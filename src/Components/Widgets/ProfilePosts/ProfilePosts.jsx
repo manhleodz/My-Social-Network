@@ -1,12 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
-import InfiniteScroll from 'react-infinite-scroll-component'
-import { LoadingPosts } from '../LoadingPost/LoadingPosts'
-import SinglePost from './SinglePost'
-import { useOutletContext } from 'react-router-dom'
-import { PostApi } from '../../../Network/Post'
-import '../../../Assets/SCSS/Profile.scss'
-import { Auth } from '../../../Network/Auth'
-import { useSelector } from 'react-redux'
+import React, { useEffect, useRef, useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
+import { PostApi } from '../../../Network/Post';
+import Styles from '../../../Assets/SCSS/Profile.module.scss';
+import { Auth } from '../../../Network/Auth';
+import { useSelector } from 'react-redux';
+import Post from './Post';
 
 export default function ProfilePosts() {
     
@@ -60,8 +58,8 @@ export default function ProfilePosts() {
     }, [owner.id]);
 
     return (
-        <div className='main-container md:space-x-4 bg-gray-100 flex items-start justify-between'>
-            <div className='left-main  shrink flex-none'>
+        <div className={`${Styles.container} md:space-x-4 bg-gray-100 flex items-start justify-between`}>
+            <div className={`${Styles.container_left} shrink flex-none`}>
                 <div className=' w-full bg-white  my-4 p-3  rounded-lg shadow-sm'>
                     <h1 className=' text-xl font-bold'>Giới thiệu</h1>
                     <div className=' w-full flex flex-col items-center justify-center'>
@@ -116,7 +114,7 @@ export default function ProfilePosts() {
                     <h1 className=' text-xl font-bold'>Bạn bè</h1>
                 </div>
             </div>
-            <div className='right-main shrink flex-none'>
+            <div className={`${Styles.container_right} shrink flex-none`}>
                 <div className='my-4  w-full flex justify-between items-center bg-white p-3 rounded-lg shadow-sm'>
                     <h1 className=' text-xl font-bold'>Bài viết</h1>
                     <div className='flex items-center justify-center p-1 cursor-pointer hover:bg-gray-300 bg-gray-200 rounded-md w-20'>
@@ -144,22 +142,9 @@ export default function ProfilePosts() {
                         </div>
                     </div>
                 ) : (
-                    <InfiniteScroll
-                        className='space-y-4'
-                        dataLength={posts.length}
-                        next={fetchMoreData}
-                        hasMore={hasMore.current}
-                        loader={<LoadingPosts />}
-                        endMessage={
-                            <div className="w-full rounded-lg overflow-hidden shadow-lg my-5">
-                                <h1 className='text-center font-semibold'>Không còn bài viết nào!</h1>
-                            </div>
-                        }
-                    >
-                        {posts.map((post, key) => (
-                            <SinglePost key={key} post={post} posts={posts} setPost={setPost} />
-                        ))}
-                    </InfiniteScroll>
+                    <>
+                        <Post posts={posts} setPost={setPost} page={page} hasMore={hasMore} owner={owner} fetchMoreData={fetchMoreData}/>
+                    </>
                 )}
             </div>
         </div>

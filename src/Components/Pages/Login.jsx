@@ -9,7 +9,7 @@ import { FriendApi } from '../../Network/Friend';
 import { fetchData } from '../../Redux/PostSlice';
 import { fetchStory } from '../../Redux/StorySlice';
 import { fetchFriend } from '../../Redux/FriendSlice';
-import '../../Assets/SCSS/Login.scss';
+import LoginStyle from '../../Assets/SCSS/Login.module.scss';
 
 const Login = () => {
 
@@ -180,13 +180,13 @@ const Login = () => {
                           >
                             Đăng nhập
                           </button>
-                          <label htmlFor="myCheckbox01" className="checkbox">
-                            <input className="checkbox__input" type="checkbox" id="myCheckbox01" />
-                            <svg className="checkbox__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22">
+                          <label htmlFor="myCheckbox01" className={LoginStyle.checkbox}>
+                            <input className={LoginStyle.checkbox__input} type="checkbox" id="myCheckbox01" />
+                            <svg className={LoginStyle.checkbox__icon} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22">
                               <rect width="21" height="21" x=".5" y=".5" fill="#FFF" stroke="#006F94" rx="3" />
-                              <path className="tick" stroke="#6EA340" fill="none" strokeLinecap="round" strokeWidth="4" d="M4 10l5 5 9-9" />
+                              <path className={LoginStyle.tick} stroke="#6EA340" fill="none" strokeLinecap="round" strokeWidth="4" d="M4 10l5 5 9-9" />
                             </svg>
-                            <span className="checkbox__label">Lưu thông tin</span>
+                            <span className={LoginStyle.checkbox__label}>Lưu thông tin</span>
                           </label>
                         </div>
                         <div className="flex m-1">

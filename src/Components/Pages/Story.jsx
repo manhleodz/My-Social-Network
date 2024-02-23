@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState, useTransition } from 'react';
-import { FastAverageColor } from 'fast-average-color';
 import { StoryApi } from '../../Network/Story';
-import '../../Assets/SCSS/Story.scss';
+import Styles from '../../Assets/SCSS/StoryPage.module.scss';
 import angryGif from '../../Assets/React Icons/angry.gif';
 import angrySvg from '../../Assets/React Icons/angry.svg';
 import careGif from '../../Assets/React Icons/care.gif';
@@ -46,17 +45,6 @@ export default function Story() {
     const dispatch = useDispatch();
     const location = useLocation();
     const navigate = useNavigate();
-    const fac = new FastAverageColor();
-
-    const getBackgroundColor = async (link) => {
-        fac.getColorAsync(link)
-            .then(color => {
-                return color.rgb;
-            })
-            .catch(e => {
-                console.log(e);
-            });
-    }
 
     useEffect(() => {
         if (stories.length !== 0) {
@@ -193,7 +181,7 @@ export default function Story() {
                         <div className=' w-16 h-16 max-sm:hidden'></div>
                     )}
                     <div className='flex flex-col justify-start items-center h-screen pt-20 w-72' style={{ width: "520px" }} >
-                        <div className=' !relative mb-5 h-full flex items-center justify-center rounded-lg'  id='main-content'>
+                        <div className={`${Styles.content} !relative mb-5 h-full flex items-center justify-center rounded-lg`}>
                             <div className=' absolute w-full p-3 top-0 z-50'>
                                 <div className=' w-full bg-gray-50 h-1 rounded-xl mb-2' style={{ backgroundColor: "#A7A3A4" }}>
                                     <div
@@ -256,11 +244,11 @@ export default function Story() {
                                             />
                                         </div>
                                     ) : (
-                                        <div className='story w-full h-full flex justify-center items-center rounded-lg'  style={{ backgroundColor: `${playing.backgroundColor}` }}>
+                                        <div className='story w-full h-full flex justify-center items-center rounded-lg' style={{ backgroundColor: `${playing.backgroundColor}` }}>
                                             <img
                                                 alt='playing'
                                                 src={playing.link}
-                                                className='image-playing object-contain'
+                                                className={`${Styles.content_playing} object-contain`}
                                             />
                                         </div>
                                     )}

@@ -24,6 +24,8 @@ export default function Home() {
   const [scrollPosition, setScrollPosition] = useState();
   const scrollRef = useRef();
 
+  const posts = useSelector(state => state.posts);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -43,7 +45,7 @@ export default function Home() {
 
   }, []);
 
-  if (!user) return null;
+  if (!user || !posts) return null;
 
   return (
     <div className=' w-full p-3 bg-gray-100' ref={scrollRef} onScroll={handleScroll} data-mode="light">
@@ -135,7 +137,7 @@ export default function Home() {
           <Story />
           <MakePost />
           <div className=' space-y-5 w-9/12 max-md:w-full' >
-            <Post />
+            <Post posts={posts}/>
           </div>
         </div>
         <div className=' w-1/5 max-md:hidden flex justify-end'>

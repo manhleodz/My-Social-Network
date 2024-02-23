@@ -56,7 +56,7 @@ export default function AppRoutes() {
 
     const getStories = async () => {
         try {
-            await StoryApi.getAll().then(res => {
+            await StoryApi.getAll(0).then(res => {
                 if (res.status === 200)
                     dispatch(fetchStory(res.data))
             })

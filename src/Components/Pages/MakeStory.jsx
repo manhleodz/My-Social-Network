@@ -151,20 +151,30 @@ export default function MakeStory() {
                                             </>
                                         )}
                                         {selectedFile.type.includes('image') && (
-                                            <div className=' absolute z-50 bottom-2 w-1/2 flex items-center bg-black'>
-                                                <button className=' p-2 bg-white rounded-lg' onClick={() => {
+                                            <div className=' absolute z-50 bottom-2 w-1/2 flex items-center justify-center bg-black rounded-xl p-1'>
+                                                <button className=' p-1 w-16 font-medium bg-white rounded-lg text-sm' onClick={() => {
                                                     setRotation(0);
                                                     setZoom(1);
                                                     setCrop({ x: 0, y: 0 });
-                                                }}>Ban đầu</button>
-                                                <h1 className='font-bold text-white'>+</h1>
-                                                <input type='range' className=' w-full' value={zoom * 100 / 1.5} onChange={(e) => {
-                                                    if (e.target.value >= 15) {
+                                                }}>Back</button>
+                                                <button className='font-bold text-white text-xl p-1 text-center'
+                                                    onClick={() => {
+                                                        if (zoom > 0.1)
+                                                            setZoom(prev => prev - 0.1)
+                                                    }}
+                                                >-</button>
+                                                <input type='range' className=' w-8/12' value={zoom * 100 / 1.5} onChange={(e) => {
+                                                    if (e.target.value > 15) {
                                                         setZoom(e.target.value * 1.5 / 100);
                                                     }
                                                 }} />
-                                                <h1 className='font-bold text-white'>-</h1>
-                                                <button className=' p-2 bg-white rounded-lg' onClick={() => setRotation(prev => prev + 90)}>Xoay</button>
+                                                <button className='font-bold text-white text-xl p-1 text-center'
+                                                    onClick={() => {
+                                                        if (zoom < 1.5)
+                                                            setZoom(prev => prev + 0.1)
+                                                    }}
+                                                >+</button>
+                                                <button className=' p-1 w-16 font-medium bg-white rounded-lg text-sm' onClick={() => setRotation(prev => prev + 90)}>Rotate</button>
                                             </div>
                                         )}
                                     </div>

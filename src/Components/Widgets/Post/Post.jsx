@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { memo, useRef, useState } from 'react';
 import { LoadingPosts } from '../LoadingPost/LoadingPosts';
 import { PostApi } from '../../../Network/Post';
 import SinglePost from './SinglePost';
@@ -7,12 +7,11 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useLocation } from 'react-router-dom';
 import { fetchData, stopFetchData } from '../../../Redux/PostSlice';
 
-export default function Post() {
+function Post({ posts }) {
 
-    const posts = useSelector(state => state.posts);
-    const user = useSelector(state => state.authentication.user);
     const [scrollPosition, setScrollPosition] = useState();
     const scrollRef = useRef();
+    const user = useSelector(state => state.authentication.user);
 
     const dispatch = useDispatch();
     const location = useLocation();
@@ -69,3 +68,5 @@ export default function Post() {
         </>
     )
 }
+
+export default memo(Post);

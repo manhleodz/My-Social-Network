@@ -3,8 +3,9 @@ import axios from 'axios';
 
 export const StoryApi = {
 
-    async getAll() {
+    async getAll(page) {
         return axios.get(`${ApiUrl}/story`, {
+            params: {page: page},
             headers: {
                 accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }

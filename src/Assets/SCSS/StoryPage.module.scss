@@ -1,0 +1,40 @@
+.content {
+  width: 400px;
+}
+
+@media (max-width: 400px) {
+  .content {
+    width: 370px;
+    &_playing {
+      width: 370px;
+    }
+  }
+}
+
+@media (max-width: 350px) {
+  .content {
+    width: 330px;
+    &_playing {
+      width: 330px;
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .content {
+    width: 300px;
+    &_playing {
+      width: 300px;
+    }
+  }
+}
+
+@media (max-height: 400px) {
+  .content {
+    width: 370px;
+    &_playing {
+      width: 370px;
+      height: 200px;
+    }
+  }
+}
