@@ -27,4 +27,4 @@ function Post({ posts, setPost, hasMore, fetchMoreData }) {
     )
 }
 
-export default memo(Post);
+export default memo(Post); 

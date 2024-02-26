@@ -5,7 +5,7 @@ import video from '../../../Assets/SVG icons/video-marketing-movie-camera-svgrep
 import Picker from 'emoji-picker-react';
 import { useDropzone } from 'react-dropzone';
 import addSvg from '../../../Assets/SVG icons/add.svg';
-import './MakePost.module.scss';
+import './MakePost.scss';
 import { PostApi } from '../../../Network/Post';
 import { addPost } from '../../../Redux/PostSlice';
 
@@ -295,7 +295,7 @@ export default function MakePost() {
                                                         <h1 className=' text-gray-500 font-medium' style={{ fontSize: "15px" }}>Bất kỳ ai ở trong thế giới của chúng ta</h1>
                                                     </div>
                                                 </div>
-                                                <input type='checkbox' className=' rounded-full p-2.5' checked={isPublic} onChange={() => {}}/>
+                                                <input type='checkbox' className=' rounded-full p-2.5' checked={isPublic} onChange={() => { }} />
                                             </div>
                                             <div className="flex items-center justify-between w-full rounded-lg hover:bg-gray-100 p-2 cursor-pointer" onClick={() => setPublic(false)}>
                                                 <div className='flex items-center'>
@@ -308,7 +308,7 @@ export default function MakePost() {
                                                         <h1 className='font-semibold text-lg'>Chỉ mình tôi</h1>
                                                     </div>
                                                 </div>
-                                                <input type='checkbox' className=' rounded-full p-2.5' checked={!isPublic} onChange={() => {}}/>
+                                                <input type='checkbox' className=' rounded-full p-2.5' checked={!isPublic} onChange={() => { }} />
                                             </div>
                                             <div className="flex items-center justify-between"></div>
                                         </div>

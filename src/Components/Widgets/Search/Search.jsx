@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { SearchAPI } from '../../../Network/Search';
-import './Search.module.scss';
+import Styles from './Search.module.scss';
 
 export default function Search() {
 
@@ -79,11 +79,8 @@ export default function Search() {
                             onKeyDownCapture={(e) => {
                                 if (e.key === 'Enter' && input.length !== 0) {
                                     setInput("");
-                                    navigate(`search?q=${input}`, {
-                                        state: {
-                                            topResult: result
-                                        }
-                                    });
+                                    SearchAPI.updateHistory(input);
+                                    navigate(`search?q=${input}`);
                                 }
                             }}
                         />
@@ -93,7 +90,7 @@ export default function Search() {
                             {loading ? (
                                 <>
                                     <div className=' flex justify-center items-center'>
-                                        <span className='loader1'></span>
+                                        <span className={`${Styles.loader}`}></span>
                                     </div>
                                 </>
                             ) : (

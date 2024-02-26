@@ -20,6 +20,12 @@ const Profile = lazy(() => import('../Pages/Profile'));
 const Admin = lazy(() => import('../Pages/Admin'));
 const NotFound = lazy(() => import('../Pages/NotFound'));
 const MakeStory = lazy(() => import('../Pages/MakeStory'));
+const SearchAll = lazy(() => import('../Widgets/SearchPage/SearchAll'));
+const SearchPost = lazy(() => import('../Widgets/SearchPage/SearchPost'));
+const SearchImage = lazy(() => import('../Widgets/SearchPage/SearchImage'));
+const SearchVideo = lazy(() => import('../Widgets/SearchPage/SearchVideo'));
+const SearchUser = lazy(() => import('../Widgets/SearchPage/SearchUser'));
+const SearchGroup = lazy(() => import('../Widgets/SearchPage/SearchGroup'));
 
 const Loading = () => (
     <>
@@ -51,7 +57,14 @@ export default function HomeRoutes() {
                         <Route path="post" element={<Post />} />
                         <Route path="admin" element={<Admin />} />
                         <Route path="forgotpassword" element={<ForgotPassword />} />
-                        <Route path="search" element={<Search />} />
+                        <Route path="search" element={<Search />}>
+                            <Route path="" element={<SearchAll />} />
+                            <Route path="posts" element={<SearchPost />} />
+                            <Route path="users" element={<SearchUser />} />
+                            <Route path="groups" element={<SearchGroup />} />
+                            <Route path="images" element={<SearchImage />} />
+                            <Route path="videos" element={<SearchVideo />} />
+                        </Route>
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </Layout>
