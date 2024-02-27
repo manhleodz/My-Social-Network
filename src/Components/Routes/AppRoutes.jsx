@@ -59,6 +59,8 @@ export default function AppRoutes() {
             await StoryApi.getAll(0).then(res => {
                 if (res.status === 200)
                     dispatch(fetchStory(res.data))
+                else 
+                    dispatch(fetchData([]));
             })
         } catch (err) {
             console.log(err);

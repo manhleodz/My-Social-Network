@@ -45,6 +45,7 @@ export default function ProfilePosts() {
     }
 
     useEffect(() => {
+
         PostApi.getPostByProfile(owner.id, page.current).then(res => {
             if (res.status !== 204) {
                 setPost(res.data.data);
@@ -55,6 +56,11 @@ export default function ProfilePosts() {
                 hasMore.current = false;
             }
         });
+
+        return () => {
+            page.current = 0;
+            hasMore.current = true;
+        }
     }, [owner.id]);
 
     return (
@@ -143,7 +149,7 @@ export default function ProfilePosts() {
                     </div>
                 ) : (
                     <>
-                        <Post posts={posts} setPost={setPost} page={page} hasMore={hasMore} owner={owner} fetchMoreData={fetchMoreData}/>
+                        <Post posts={posts} setPost={setPost} page={page.current} hasMore={hasMore.current} owner={owner} fetchMoreData={fetchMoreData}/>
                     </>
                 )}
             </div>

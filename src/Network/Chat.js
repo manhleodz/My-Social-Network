@@ -1,19 +1,27 @@
-import { getApiUrl } from '../Utils/Config/getApiUrl';
+import { ApiUrl } from '../Utils/Config/Url';
 import axios from 'axios';
 
 export const ChatApi = {
 
     async getMessage(id) {
 
-        return axios.get(`${getApiUrl}/inbox/${id}`, {
+        return axios.get(`${ApiUrl}/inbox/${id}`, {
             headers: {
                 accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             },
         });
     },
 
-    async sendMessage(id, data) {
-        return axios.post(`${getApiUrl}/inbox/${id}`, data, {
+    async sendMessage(data) {
+        return axios.post(`${ApiUrl}/inbox`, data, {
+            headers: {
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            },
+        });
+    },
+
+    async deleteMessage(id) {
+        return axios.delete(`${ApiUrl}/inbox/${id}`, {
             headers: {
                 accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             },

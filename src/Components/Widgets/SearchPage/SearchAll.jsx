@@ -20,16 +20,15 @@ function Loading() {
 
 export default function SearchAll() {
 
-    const page = useRef(0);
-    const hasMore = useRef(true);
-
     const navigate = useNavigate();
     const { searchParams } = useOutletContext();
 
     const friends = useSelector(state => state.friends.friends);
     const user = useSelector(state => state.authentication.user);
 
-    const [posts, setPost] = useState();
+    const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const [posts, setPost] = useState(null);
     const [users, setUsers] = useState(null);
 
     const isFriend = (id) => {
@@ -42,13 +41,12 @@ export default function SearchAll() {
 
     const fetchMoreData = () => {
         setTimeout(async () => {
-            await SearchAPI.search(searchParams, page.current).then(res => {
+            await SearchAPI.search(searchParams, page).then(res => {
                 if (res.status === 204) {
-                    hasMore.current = false;
+                    setHasMore(false);
                 } else {
                     setPost(prev => prev = [...prev, ...res.data.data]);
-                    page.current = page.current + 1;
-                    hasMore.current = true;
+                    setPage(prev => prev + 1);
                 }
             }).catch((error) => {
                 console.log(error.message);
@@ -66,14 +64,14 @@ export default function SearchAll() {
                 } else
                     setUsers(res.data.data);
             }).catch((err) => console.log(err.data))
-            await SearchAPI.search(searchParams, page.current).then((res) => {
+            await SearchAPI.search(searchParams, page).then((res) => {
                 if (res.status !== 204) {
                     setPost(res.data.data);
-                    page.current = 1;
+                    setPage(1);
                 }
                 else {
                     setPost([]);
-                    hasMore.current = false;
+                    setHasMore(false);
                 }
             }).catch(err => {
                 console.log(err);
@@ -81,6 +79,13 @@ export default function SearchAll() {
         }
 
         fetchData();
+
+        return () => {
+            setPage(0);
+            setHasMore(true);
+            setPost();
+            setUsers(null);
+        }
 
     }, [searchParams]);
 

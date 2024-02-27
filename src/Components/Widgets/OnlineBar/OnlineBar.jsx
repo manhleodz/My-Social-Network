@@ -1,11 +1,11 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addBoxChat, openOneBox } from '../../../Redux/MessagerSlice';
 
 export default function OnlineBar({ userId }) {
 
     const frs = useSelector(state => state.friends.friends);
-    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     return (
         <div className=' w-1/5 max-xl:w-3/12 fixed space-y-3 divide-y divide-gray-300'>
@@ -23,7 +23,14 @@ export default function OnlineBar({ userId }) {
                     </div>
                 </div>
                 {frs.map(((fr, index) => (
-                    <div key={index} className='flex items-center cursor-pointer hover:bg-gray-200 p-1.5 rounded-lg' onClick={() => navigate(`/${fr.username}`)}>
+                    <div
+                        key={index} className='flex items-center cursor-pointer hover:bg-gray-200 p-1.5 rounded-lg'
+                        onClick={() => {
+                            sessionStorage.setItem('openBox', JSON.stringify(fr));
+                            dispatch(addBoxChat(fr));
+                            dispatch(openOneBox(fr));
+                        }}
+                    >
                         <div className='rounded-full relative'>
                             <img alt={fr.username} src={fr.avatar} className='w-12 h-12 object-center rounded-full object-cover' />
                             <div className={`w-3 h-3 rounded-full absolute right-0 bottom-0 border-2 border-white ${fr.online === true ? 'bg-green-600 ' : 'bg-gray-400'}`}></div>

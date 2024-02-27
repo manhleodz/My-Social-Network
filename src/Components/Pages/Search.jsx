@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link, Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import SearchStyle from '../../Assets/SCSS/Search.module.scss';
 
@@ -7,6 +7,10 @@ export default function Search() {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const searchParams = queryParams.get('q');
+
+    useEffect(() => {
+        document.title = `${searchParams} - Kết quả tìm kiếm | ML`;
+    }, [searchParams]);
 
     return (
         <div className=' w-full bg-gray-100 h-full'>

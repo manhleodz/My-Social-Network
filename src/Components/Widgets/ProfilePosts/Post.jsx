@@ -11,7 +11,7 @@ function Post({ posts, setPost, hasMore, fetchMoreData }) {
                 className='space-y-4'
                 dataLength={posts.length}
                 next={fetchMoreData}
-                hasMore={hasMore.current}
+                hasMore={hasMore}
                 loader={<LoadingPosts />}
                 endMessage={
                     <div className="w-full rounded-lg overflow-hidden shadow-lg my-5">

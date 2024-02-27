@@ -5,7 +5,7 @@ export const StoryApi = {
 
     async getAll(page) {
         return axios.get(`${ApiUrl}/story`, {
-            params: {page: page},
+            params: { page: page },
             headers: {
                 accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
