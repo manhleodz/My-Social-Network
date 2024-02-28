@@ -93,7 +93,7 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
                 setOpenComment(false);
             }
         }}
-            className=' fixed top-0 left-0 z-50 w-screen h-screen flex justify-center items-center p-10 max-[500px]:p-4' style={{ backgroundColor: 'rgb(0,0,0,0.1)' }}
+            className=' fixed top-0 left-0 z-50 w-screen h-screen flex justify-center items-center p-10 max-[500px]:p-4 max-[500px]:py-14' style={{ backgroundColor: 'rgb(0,0,0,0.1)' }}
             id='bg'
         >
             <div className=' bg-white z-30 rounded-lg divide-gray-300 divide-y relative h-full shadow-lg w-[700px]' id='main'>

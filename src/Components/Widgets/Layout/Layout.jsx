@@ -4,6 +4,8 @@ import NavigateBar from '../NavigateBar/NavigateBar';
 import BoxChat from '../BoxChat/BoxChat';
 import { useDispatch, useSelector } from 'react-redux';
 import { openOneBox } from '../../../Redux/MessagerSlice';
+import { BrowserView, MobileView } from 'react-device-detect';
+
 
 const socket = io.connect(import.meta.env.VITE_CHAT_URL);
 
@@ -26,10 +28,10 @@ export default function Layout({ children }) {
         {boxChat.length > 0 && (
           <>
             {boxChat.map((chat, index) => (
-                <div className='rounded-full relative' key={index} onClick={() => dispatch(openOneBox(chat))}>
-                  <img alt={chat.username} src={chat.avatar} className='w-14 h-14 object-center rounded-full object-cover' />
-                  <div className={`w-3 h-3 rounded-full absolute right-1 bottom-0 border-2 border-white ${chat.online === true ? 'bg-green-600 ' : 'bg-gray-400'}`}></div>
-                </div>
+              <div className='rounded-full relative' key={index} onClick={() => dispatch(openOneBox(chat))}>
+                <img alt={chat.username} src={chat.avatar} className='w-14 h-14 object-center rounded-full object-cover' />
+                <div className={`w-3 h-3 rounded-full absolute right-1 bottom-0 border-2 border-white ${chat.online === true ? 'bg-green-600 ' : 'bg-gray-400'}`}></div>
+              </div>
             ))}
           </>
         )}
@@ -42,13 +44,18 @@ export default function Layout({ children }) {
       </div>
       {openChat.length > 0 && (
         <>
-          <div className='fixed flex items-center space-x-2 z-50 bottom-5 right-20 rounded-2xl shadow-2xl' id='box-chat'>
-            {openChat.map((chat, index) => (
-              <>
-                <BoxChat chat={chat} key={index} socket={socket}/>
-              </>
-            ))}
-          </div>
+          <MobileView>
+
+          </MobileView>
+          <BrowserView>
+            <div className='fixed flex items-center space-x-2 z-50 bottom-5 right-20 rounded-2xl shadow-2xl' id='box-chat'>
+              {openChat.map((chat, index) => (
+                <>
+                  <BoxChat chat={chat} key={index} socket={socket} />
+                </>
+              ))}
+            </div>
+          </BrowserView>
         </>
       )}
     </div>

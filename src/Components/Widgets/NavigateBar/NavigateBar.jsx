@@ -25,8 +25,8 @@ export default function NavigateBar() {
                 className={`fixed top-0 z-10 left-0`}
                 aria-label="Sidebar"
             >
-                <div className=' w-screen shadow-md flex flex-row justify-between items-center bg-white p-1 pr-7'>
-                    <div className=' flex items-center w-1/3 space-x-3 max-md:hidden'>
+                <div className=' w-screen shadow-md flex justify-between items-center bg-white p-1 pr-7'>
+                    <div className=' flex items-center w-[350px] space-x-3 max-sm:hidden'>
                         <div className="flex items-center w-11 h-11 rounded-full mb-4 sm:mb-0 cursor-pointer" onClick={() => navigate('/')}>
                             <img src="https://firebasestorage.googleapis.com/v0/b/my-social-network-815dc.appspot.com/o/posts%2F7ac0233d-c2ab-424a-80ac-0526ee7cba10.png_2024-2-16%2013%3A57%3A53_6189e03f-f66b-484c-a067-145db73a4015?alt=media&token=0dfd44ba-5cc9-4c91-b33e-c8778022463c" alt="logo" className="w-11 h-11 rounded-full" />
                         </div>
@@ -102,7 +102,7 @@ export default function NavigateBar() {
                             </svg>
                         </button>
                     </div>
-                    <div className='flex items-center justify-end space-x-4 w-1/3 max-sm:hidden'>
+                    <div className='flex items-center justify-end space-x-4  w-[350px] max-sm:hidden'>
                         <div className=' w-10 h-10 flex justify-center items-center bg-gray-300 rounded-full hover:bg-gray-400 active:ring-gray-300 active:ring cursor-pointer'>
                             <svg xmlns="http://www.w3.org/2000/svg" height="1.4em" viewBox="0 0 512 512" className=' fill-gray-700'>
                                 <path d="M256 448c141.4 0 256-93.1 256-208S397.4 32 256 32S0 125.1 0 240c0 45.1 17.7 86.8 47.7 120.9c-1.9 24.5-11.4 46.3-21.4 62.9c-5.5 9.2-11.1 16.6-15.2 21.6c-2.1 2.5-3.7 4.4-4.9 5.7c-.6 .6-1 1.1-1.3 1.4l-.3 .3 0 0 0 0 0 0 0 0c-4.6 4.6-5.9 11.4-3.4 17.4c2.5 6 8.3 9.9 14.8 9.9c28.7 0 57.6-8.9 81.6-19.3c22.9-10 42.4-21.9 54.3-30.6c31.8 11.5 67 17.9 104.1 17.9zM128 208a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm128 0a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm96 32a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />

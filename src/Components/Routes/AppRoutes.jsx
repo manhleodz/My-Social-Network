@@ -14,6 +14,7 @@ import { StoryApi } from '../../Network/Story';
 import { fetchData } from '../../Redux/PostSlice';
 import { fetchStory } from '../../Redux/StorySlice';
 import { fetchFriend } from '../../Redux/FriendSlice';
+import LoadingPage from '../Widgets/Loading/LoadingPage';
 
 
 export default function AppRoutes() {
@@ -59,7 +60,7 @@ export default function AppRoutes() {
             await StoryApi.getAll(0).then(res => {
                 if (res.status === 200)
                     dispatch(fetchStory(res.data))
-                else 
+                else
                     dispatch(fetchData([]));
             })
         } catch (err) {
@@ -80,9 +81,15 @@ export default function AppRoutes() {
 
     }, []);
 
-    if (user === "") return null;
-
-    if (user === null) {
+    if (user === "") {
+        return (
+            <>
+                <Routes>
+                    <Route path='/*' element={<LoadingPage />} />
+                </Routes>
+            </>
+        )
+    } else if (user === null) {
         return (
             <>
                 <Routes>
