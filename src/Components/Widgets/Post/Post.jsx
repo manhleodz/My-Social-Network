@@ -61,7 +61,7 @@ function Post({ posts }) {
                 ref={scrollRef} onScroll={handleScroll}
                 className='space-y-4'
             >
-                {posts.posts.map((post, key) => (
+                {posts.posts.map((post) => (
                     <SinglePost key={post.Post.id} post={post} />
                 ))}
             </InfiniteScroll>

@@ -51,6 +51,14 @@ export const PostApi = {
         })
     },
 
+    async updateCommentNum(id) {
+        return await axios.post(`${ApiUrl}/posts/comment/${id}`, {
+            headers: {
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            }
+        })
+    },
+
     async getLike(id, authId) {
         return await axios.get(`${ApiUrl}/likes/${id}/${authId}`,
             {

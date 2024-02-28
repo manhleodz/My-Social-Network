@@ -1,29 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ChatApi } from '../../../Network/Chat';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ScrollToBottom from 'react-scroll-to-bottom';
-import { io } from 'socket.io-client';
+import { closeOneBox, smallOneBox } from '../../../Redux/MessagerSlice';
+import Styles from './BoxChat.module.scss';
 
-const socket = io.connect(import.meta.env.VITE_CHAT_URL);
-
-export default function BoxChat() {
+export default function BoxChat({ chat, socket }) {
 
     const user = useSelector(state => state.authentication.user);
-    const messengerRedux = useSelector(state => state.messenger);
-
-    const selectedChat = messengerRedux.openChat;
+    const dispatch = useDispatch();
 
     const [listMessage, setListMessage] = useState([]);
     const [newMessenger, setNewMessenger] = useState("");
-    const bottomRef = useRef(null);
 
     const sendMessage = async () => {
         if (newMessenger !== "") {
             const messageData = {
                 sender: user.id,
-                receiver: selectedChat[0].id,
+                receiver: chat.id,
                 message: newMessenger,
-                room: selectedChat[0].relationshipId,
+                room: chat.relationshipId,
             };
 
             await ChatApi.sendMessage(messageData).then(async (res) => {
@@ -32,7 +28,7 @@ export default function BoxChat() {
 
                 await socket.emit("send_message", {
                     id: newMess.id,
-                    room: selectedChat[0].relationshipId,
+                    room: chat.relationshipId,
                     createdAt: newMess.createdAt,
                     sender: user.id,
                     message: newMess.message,
@@ -40,7 +36,7 @@ export default function BoxChat() {
 
                 setListMessage(prev => [...prev, {
                     id: newMess.id,
-                    room: selectedChat[0].relationshipId,
+                    room: chat.relationshipId,
                     createdAt: newMess.createdAt,
                     sender: user.id,
                     message: newMess.message,
@@ -55,37 +51,34 @@ export default function BoxChat() {
 
     useEffect(() => {
         socket.on("receive_message", (data) => {
-            setListMessage(prev => [...prev, data]);
+            if (data.room === chat.relationshipId)
+                setListMessage(prev => [...prev, data]);
         });
 
-    }, [socket]);
+    }, [socket, chat]);
 
     useEffect(() => {
-        socket.emit("join_room", selectedChat[0].relationshipId);
+        socket.emit("join_room", chat.relationshipId);
 
-        if (selectedChat.length > 0) {
-            ChatApi.getMessage(selectedChat[0].id).then((res) => {
-                if (res.status === 200) {
-                    setListMessage(prev => prev = [...prev, ...res.data.data]);
-                } else
-                    setListMessage([]);
-            })
-        }
+        ChatApi.getMessage(chat.id).then((res) => {
+            if (res.status === 200) {
+                setListMessage(prev => prev = [...prev, ...res.data.data]);
+            } else
+                setListMessage([]);
+        })
 
-        console.log("render ");
-    }, []);
+    }, [chat]);
 
-    if (!user || selectedChat.length === 0) return null;
+    if (!user || !chat) return null;
 
-    console.log(selectedChat);
     return (
-        <div className=' w-80 rounded-lg shadow-xl h-[430px] bg-white flex flex-col items-start relative'>
+        <div className={`${Styles.boxchat} w-80 rounded-lg shadow-xl h-[430px] bg-white flex flex-col items-start relative`}>
             <div className='h-[60px] flex items-center justify-between p-0.5 w-80' style={{ boxShadow: '0px 10px 10px -15px #111' }}>
                 <div className='flex items-center w-7/12 hover:bg-gray-100 p-0.5 rounded-lg cursor-pointer'>
-                    <img alt='avatar' src={selectedChat[0].avatar} className=' rounded-full object-cover w-12 h-12 p-1' />
+                    <img alt='avatar' src={chat.avatar} className=' rounded-full object-cover w-12 h-12 p-1' />
                     <div className=' w-8/12 '>
-                        <h1 className=' break-words font-semibold text-[16px] text-ellipsis whitespace-nowrap overflow-hidden w-full' title={selectedChat[0].nickname}>{selectedChat[0].nickname}</h1>
-                        {selectedChat[0].online ? (
+                        <h1 className=' break-words font-semibold text-[16px] text-ellipsis whitespace-nowrap overflow-hidden w-full' title={chat.nickname}>{chat.nickname}</h1>
+                        {chat.online ? (
                             <>
                                 <div className=' text-[12px] w-full text-gray-500 flex items-center'>
                                     <div className='w-3 h-3 rounded-full bg-green-400 mr-1'></div>
@@ -106,36 +99,43 @@ export default function BoxChat() {
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" className=' w-7 h-7 p-1 hover:bg-gray-200 cursor-pointer fill-gray-500 rounded-full '>
                         <path d="M0 128C0 92.7 28.7 64 64 64H320c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128zM559.1 99.8c10.4 5.6 16.9 16.4 16.9 28.2V384c0 11.8-6.5 22.6-16.9 28.2s-23 5-32.9-1.6l-96-64L416 337.1V320 192 174.9l14.2-9.5 96-64c9.8-6.5 22.4-7.2 32.9-1.6z" />
                     </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className=' w-8 h-8 p-1 hover:bg-gray-200 cursor-pointer fill-gray-500 rounded-full '>
+                    <svg
+                        onClick={() => {
+                            dispatch(smallOneBox(chat.id))
+                        }}
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className=' w-8 h-8 p-1 hover:bg-gray-200 cursor-pointer fill-gray-500 rounded-full '>
                         <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
                     </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" className=' w-8 h-8 p-1 hover:bg-gray-200 cursor-pointer fill-gray-500 rounded-full '>
+                    <svg
+                        onClick={() => {
+                            dispatch(closeOneBox(chat.id))
+                        }}
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" className=' w-8 h-8 p-1 hover:bg-gray-200 cursor-pointer fill-gray-500 rounded-full '>
                         <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
                     </svg>
                 </div>
             </div>
             {listMessage && (
-                <div className=' space-y-2'>
-                    <ScrollToBottom className=' h-[300px] overflow-y-auto w-80 p-2'>
-                        {listMessage.map(message => (
-                            <>
+                <div className={` space-y-2`} >
+                    <ScrollToBottom className={`${Styles.boxchat_listmess} h-[300px] overflow-y-auto w-80 p-2 duration-500`}>
+                        {listMessage.map((message, index) => (
+                            <div key={index}>
                                 {message.sender === user.id ? (
                                     <>
                                         <div className=' flex items-center justify-end w-full mb-1' key={message.id}>
-                                            <h1 className={` p-2 rounded-2xl text-white bg-blue-500 text-[15px]`} >{message.message}</h1>
+                                            <h1 className={` p-2 rounded-2xl text-white bg-blue-500 text-[14.5px]`} >{message.message}</h1>
                                         </div>
                                     </>
                                 ) : (
                                     <>
                                         <div className=' flex items-center space-x-2 justify-start w-full mb-1' key={message.id}>
-                                            <img src={selectedChat[0].avatar} className=' w-8 h-8 rounded-full object-cover' />
-                                            <h1 className={` p-2 rounded-2xl text-black bg-gray-300 text-[15px]`} >{message.message}</h1>
+                                            <img src={chat.avatar} className=' w-8 h-8 rounded-full object-cover' />
+                                            <h1 className={` p-2 rounded-2xl text-black bg-gray-300 text-[14.5px]`} >{message.message}</h1>
                                         </div>
                                     </>
                                 )}
-                            </>
+                            </div>
                         ))}
-                        <div ref={bottomRef} />
                     </ScrollToBottom>
                 </div>
             )}

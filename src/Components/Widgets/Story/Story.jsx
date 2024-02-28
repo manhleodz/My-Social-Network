@@ -41,7 +41,7 @@ export default function Story() {
         </>
       )}
       <div className=' flex items-center overflow-x-hidden max-sm:overflow-x-auto overflow-y-hidden transform relative w-full scroll-smooth' id='container'>
-        <div className=' flex flex-row items-center justify-start space-x-2 w-full scroll-smooth' key={234} style={{ width: `${stories.length === 0 ? `${440}px` : `${(stories.length + 1) * 185}px`}` }}>
+        <div className=' flex flex-row items-center justify-start space-x-2 w-full scroll-smooth' style={{ width: `${stories.length === 0 ? `${440}px` : `${(stories.length + 1) * 185}px`}` }}>
           <div
             onMouseEnter={() => {
               document.getElementById('new').style.display = 'block';
@@ -56,6 +56,7 @@ export default function Story() {
               backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
+            id='create-story'
           >
             <div className=' absolute bottom-0 h-12 flex flex-col justify-end items-center bg-white w-full rounded-b-lg'>
               <div className=' p-1 rounded-full bg-white absolute bottom-6' >
@@ -70,12 +71,11 @@ export default function Story() {
           {stories.length === 0 ? (
             <LoadingStory />
           ) : (
-            <>
+            <div className=' flex flex-row items-center justify-start space-x-2 scroll-smooth' key='list-story'>
               {stories.map((story, key) => (
                 <>
                   <div
                     id={`story_${key}`}
-
                     onClick={(e) => navigate(`story/${story.id}`, { state: { stories: stories } })}
                     onMouseEnter={() => {
                       document.getElementById(`reel-${story.id}`).style.display = 'block';
@@ -113,7 +113,7 @@ export default function Story() {
                   </div>
                 </>
               ))}
-            </>
+            </div>
           )}
         </div>
       </div>

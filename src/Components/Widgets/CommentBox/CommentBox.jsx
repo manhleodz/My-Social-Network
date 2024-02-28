@@ -3,8 +3,9 @@ import Comment from './Comment';
 import Picker from 'emoji-picker-react';
 import { useSelector } from 'react-redux';
 import { CommentApi } from '../../../Network/Comment';
+import { PostApi } from '../../../Network/Post';
 
-export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, isClicked, save, isSaved }) {
+export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, isClicked, save, isSaved, commentNumber, setCommentNumber }) {
 
     const [newComment, setNewComment] = useState("");
     const [comments, setComment] = useState();
@@ -25,10 +26,21 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
                     PostId: post.id,
                     UserId: user.id,
                     commentBody: newComment,
-                }).then(() => {
-                    CommentApi.getCommentsByPostId(post.id).then(res => {
-                        setComment(res.data);
-                    })
+                }).then((res) => {
+
+                    PostApi.updateCommentNum(post.id);
+
+                    let resComment = res.data.newComment;
+                    setComment(prev => [...prev, {
+                        ...resComment,
+                        User: {
+                            id: user.id,
+                            nickname: user.nickname,
+                            username: user.username,
+                            avatar: user.avatar
+                        }
+                    }]);
+                    setCommentNumber(prev => prev + 1);
                     setNewComment("");
                 })
             } else if (newReply.length !== 0) {
@@ -43,10 +55,21 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
                 PostId: post.id,
                 UserId: user.id,
                 commentBody: newComment,
-            }).then(() => {
-                CommentApi.getCommentsByPostId(post.id).then(res => {
-                    setComment(res.data);
-                })
+            }).then((res) => {
+
+                PostApi.updateCommentNum(post.id);
+
+                let resComment = res.data.newComment;
+                setComment(prev => [...prev, {
+                    ...resComment,
+                    User: {
+                        id: user.id,
+                        nickname: user.nickname,
+                        username: user.username,
+                        avatar: user.avatar
+                    }
+                }]);
+                setCommentNumber(prev => prev + 1);
                 setNewComment("");
             })
         } else if (newReply.length !== 0) {
@@ -70,10 +93,10 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
                 setOpenComment(false);
             }
         }}
-            className=' fixed top-0 left-0 z-50 w-screen h-screen flex justify-center items-center p-10' style={{ backgroundColor: 'rgb(0,0,0,0.1)' }}
+            className=' fixed top-0 left-0 z-50 w-screen h-screen flex justify-center items-center p-10 max-[500px]:p-4' style={{ backgroundColor: 'rgb(0,0,0,0.1)' }}
             id='bg'
         >
-            <div className=' bg-white z-30 rounded-lg divide-gray-300 divide-y relative h-full shadow-lg ' id='main'>
+            <div className=' bg-white z-30 rounded-lg divide-gray-300 divide-y relative h-full shadow-lg w-[700px]' id='main'>
                 <div className='w-full shadow-sm p-2 flex justify-between items-center relative'>
                     <div></div>
                     <h1 className='text-xl font-bold'>Bài viết của {post.User.nickname}</h1>
@@ -83,7 +106,7 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
                         </svg>
                     </div>
                 </div>
-                <div className='w-full relative divide-y divide-gray-300'>
+                <div className='w-full divide-y divide-gray-300 z-0 overflow-y-auto h-[85%] '>
                     <div className='p-3 w-full z-50'>
                         <div className=' flex items-center justify-between space-x-2'>
                             <div className='flex items-center'>
@@ -118,20 +141,20 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
                         </div>
                         <h1 className='p-2'>{post.postText}</h1>
                     </div>
-                    <div className=' relative flex flex-col justify-center items-center bg-white px-4 z-0 overflow-y-auto overflow-x-hidden'>
-                        {post.Images.length === 0 ? (
+                    <div className=' flex flex-col justify-center items-center bg-white px-4 z-0 overflow-x-hiddenmin-h-[500px]'>
+                        {post.Media.length === 0 ? (
                             <>
                             </>
                         ) : (
-                            <div className='flex items-center justify-center'  id='content-container'>
-                                <img alt='image' src={`${post.Images[0].link}`} className='content object-contain' />
+                            <div className='flex items-center justify-center w-full h-full' id='content-container'>
+                                <img alt='image' src={`${post.Media[0].link}`} className='content w-full h-full object-contain' />
                             </div>
                         )}
                         {comments.length > 0 && (
                             <div className=' divide-y divide-gray-300 p-2 w-full pb-20'>
                                 <div className=' space-y-7 py-5'>
                                     {comments.map((comment, id) => (
-                                        <Comment comment={comment} setComment={setComment} comments={comments} key={id} newReply={newReply} setNewReply={setNewReply} />
+                                        <Comment comment={comment} setComment={setComment} comments={comments} key={id} newReply={newReply} setNewReply={setNewReply} setCommentNumber={setCommentNumber} />
                                     ))}
                                 </div>
                             </div>
@@ -139,7 +162,7 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
                     </div>
                 </div>
                 <div
-                    className='picker-container absolute bottom-0 z-50 p-3 w-full bg-white rounded-b-lg'
+                    className='picker-container absolute bottom-0 z-0 p-3 w-full bg-white rounded-b-lg'
                     onKeyDown={onSubmit}
                 >
                     <div className=' bottom-0 divide-y divide-gray-300 w-full'>
@@ -209,12 +232,12 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
                                 }
                             }}
                         />
+                        {newComment.length > 0 && (
+                            <button className=' text-blue-600 font-semibold' onClick={postBtn}>
+                                Post
+                            </button>
+                        )}
                     </div>
-                    {newComment.length > 0 && (
-                        <button className=' text-blue-600 font-semibold' onClick={postBtn}>
-                            Post
-                        </button>
-                    )}
                 </div>
             </div>
         </div>

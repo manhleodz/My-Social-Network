@@ -13,6 +13,7 @@ export default function SinglePost({ post }) {
     const user = useSelector(state => state.authentication.user);
     const [isClicked, setIsClicked] = useState(post.isLiked);
     const [likeNum, setLikeNum] = useState(post.Post.likeNumber);
+    const [commentNumber, setCommentNumber] = useState(post.Post.commentNumber);
     const [isSaved, setIsSaved] = useState(false);
     const [dropdown, setDropdown] = useState(false);
     const [openLike, setOpenLike] = useState(false);
@@ -162,7 +163,7 @@ export default function SinglePost({ post }) {
                 )}
 
                 {media.length == 1 && (
-                    <div className=" flex items-center justify-center w-full h-full" style={{backgroundColor: `${media[0].backgroundColor} || gray`}}>
+                    <div className=" flex items-center justify-center w-full h-full" style={{ backgroundColor: `${media[0].backgroundColor} || gray` }}>
                         {media[0].type === 1 ? (
                             <>
                                 <img
@@ -187,39 +188,34 @@ export default function SinglePost({ post }) {
                 )}
 
                 {media.length == 2 && (
-                    <>
-                        <div className=" flex items-center w-full bg-gray-100 max-h-sm relative">
-                            {media.map((value, index) => (
-                                <>
-                                    {value.type === 1 ? (
-                                        <>
-                                            <div className="w-1/2 h-full" key={value.id}>
-                                                <img
-                                                    alt="image"
-                                                    src={`${value.link}`}
-                                                    className="object-cover h-full w-full cursor-pointer p-0.5"
-                                                    style={{ minHeight: '480px' }}
-                                                />
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <ReactPlayer
-                                                className="react-player cursor-pointer"
-                                                url={value.link}
-                                                playing={false}
-                                                controls={true}
-                                                width="100%"
-                                                style={{ minHeight: '480px' }}
-                                                key={value.id}
-                                            />
-                                        </>
-                                    )}
-                                </>
-                            ))}
-                        </div>
-
-                    </>
+                    <div className=" flex items-center w-full bg-gray-100 max-h-sm relative" key={post.Post.id}>
+                        {media.map((value, index) => (
+                            <>
+                                {value.type === 1 ? (
+                                    <div className="w-1/2 h-full" key={value.id}>
+                                        <img
+                                            alt="image"
+                                            src={`${value.link}`}
+                                            className="object-cover h-full w-full cursor-pointer p-0.5"
+                                            style={{ minHeight: '480px' }}
+                                        />
+                                    </div>
+                                ) : (
+                                    <>
+                                        <ReactPlayer
+                                            className="react-player cursor-pointer"
+                                            url={value.link}
+                                            playing={false}
+                                            controls={true}
+                                            width="100%"
+                                            style={{ minHeight: '480px' }}
+                                            key={value.id}
+                                        />
+                                    </>
+                                )}
+                            </>
+                        ))}
+                    </div>
                 )}
             </div>
             <div className=" flex justify-between p-3">
@@ -297,7 +293,7 @@ export default function SinglePost({ post }) {
                     )}
                     <div className="flex items-center space-x-3">
                         <h1 className=" cursor-pointer hover:underline">
-                            {post.Post.commentNumber} {post.Post.commentNumber < 2 ? "comment" : "comments"}
+                            {commentNumber} {post.Post.commentNumber < 2 ? "comment" : "comments"}
                         </h1>
                     </div>
                 </div>
@@ -308,6 +304,8 @@ export default function SinglePost({ post }) {
             {openComment && (
                 <CommentBox
                     post={post.Post}
+                    commentNumber={commentNumber}
+                    setCommentNumber={setCommentNumber}
                     setOpenComment={setOpenComment}
                     likeAPost={likeAPost}
                     likeNum={likeNum}
