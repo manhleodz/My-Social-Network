@@ -54,7 +54,8 @@ export default function SinglePost({ post, posts, setPost }) {
 
     if (openComment || openLike) {
         document.querySelector('body').style.overflow = 'hidden';
-        document.querySelector('body').style.paddingRight = "12px"
+        if (document.querySelector('body').clientWidth > 500)
+            document.querySelector('body').style.paddingRight = "9px"
     } else {
         document.querySelector('body').style.overflow = 'auto';
         document.querySelector('body').style.paddingRight = "0px"
@@ -300,7 +301,7 @@ export default function SinglePost({ post, posts, setPost }) {
             )}
             {openComment && (
                 <CommentBox
-                    post={post.Post.Post}
+                    post={post.Post}
                     setOpenComment={setOpenComment}
                     likeAPost={likeAPost}
                     likeNum={likeNum}

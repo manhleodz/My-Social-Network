@@ -12,7 +12,7 @@ import video from '../../Assets/SVG icons/video.svg'
 import music from '../../Assets/SVG icons/music.svg'
 import save from '../../Assets/SVG icons/save.svg'
 
-import { BrowserView, MobileView } from 'react-device-detect';
+import { BrowserView, MobileView, isMobile } from 'react-device-detect';
 
 const Loading = () => (
   <div className="post loading">
@@ -50,21 +50,19 @@ export default function Home() {
   if (!user || !posts) return null;
 
   return (
-    <div className=' w-full p-3 bg-gray-100' ref={scrollRef} onScroll={handleScroll} data-mode="light">
+    <div className={` w-full bg-gray-100 ${isMobile ? 'p-0' : 'p-3'}`} ref={scrollRef} onScroll={handleScroll} data-mode="light">
       <MobileView>
         <div className=' relative top-16 flex justify-between'>
-          <div className="h-full w-1/5 max-xl:w-1/6 px-3 overflow-y-hidden dark:bg-gray-800 max-lg:hidden">
-          </div>
-          <div className='w-3/5 px-24 max-2xl:px-5 max-xl:px-0 max-md:w-full max-xl:w-8/12 max-lg:w-4/5 flex flex-col justify-center items-center space-y-5'>
-            <Story />
-            <div className=' w-9/12 max-md:w-full p-4 rounded-lg flex flex-col justify-center space-y-1 bg-white divide-y divide-gray-300 shadow-md'>
+          <div className='w-full flex flex-col justify-center items-center space-y-5'>
+            <div className=' w-full'>
+              <Story />
+            </div>
+            <div className=' w-full p-4 rounded-lg flex flex-col justify-center space-y-1 bg-white divide-y divide-gray-300 shadow-md'>
               <MakePost />
             </div>
-            <div className=' space-y-5 w-9/12 max-md:w-full' >
+            <div className=' space-y-5 w-full' >
               <Post posts={posts} />
             </div>
-          </div>
-          <div className=' w-1/5 h-screen max-md:hidden flex justify-end'>
           </div>
         </div>
       </MobileView>

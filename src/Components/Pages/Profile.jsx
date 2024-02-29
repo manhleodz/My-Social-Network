@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ProfileStyle from '../../Assets/SCSS/Profile.module.scss';
 import { FriendApi } from '../../Network/Friend';
 import { fetchFriend } from '../../Redux/FriendSlice';
+import { isMobile } from 'react-device-detect';
 
 export default function Profile() {
 
@@ -296,7 +297,7 @@ export default function Profile() {
             </Link>
           </div>
         </div>
-        <div className=' w-full bg-gray-100 flex flex-col p-3 justify-center items-center'>
+        <div className={` w-full bg-gray-100 flex flex-col ${isMobile ? 'p-0' : 'p-3'} justify-center items-center`}>
           <Outlet context={{ owner: profile, params: username }} />
         </div>
       </div>

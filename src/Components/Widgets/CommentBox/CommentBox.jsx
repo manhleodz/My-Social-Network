@@ -4,6 +4,8 @@ import Picker from 'emoji-picker-react';
 import { useSelector } from 'react-redux';
 import { CommentApi } from '../../../Network/Comment';
 import { PostApi } from '../../../Network/Post';
+import { isBrowser } from 'react-device-detect';
+
 
 export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, isClicked, save, isSaved, commentNumber, setCommentNumber }) {
 
@@ -79,7 +81,9 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
 
     useEffect(() => {
         document.querySelector('body').style.overflow = 'hidden';
-        document.querySelector('body').style.paddingRight = "12px"
+        if (isBrowser)
+            document.querySelector('body').style.paddingRight = "12px"
+
         CommentApi.getCommentsByPostId(post.id).then(res => {
             setComment(res.data);
         });

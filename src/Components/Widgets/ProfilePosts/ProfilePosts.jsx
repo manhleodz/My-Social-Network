@@ -77,7 +77,7 @@ export default function ProfilePosts() {
     return (
         <div className={`${Styles.container} md:space-x-4 bg-gray-100 flex items-start justify-between`}>
             <div className={`${Styles.container_left} shrink flex-none`}>
-                <div className=' w-full bg-white  my-4 p-3  rounded-lg shadow-sm'>
+                <div className={` w-full bg-white  my-4 p-3  rounded-lg shadow-sm`}>
                     <h1 className=' text-xl font-bold'>Giới thiệu</h1>
                     <div className=' w-full flex flex-col items-center justify-center'>
                         {changeStory ? (
