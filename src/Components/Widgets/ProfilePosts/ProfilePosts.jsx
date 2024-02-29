@@ -1,18 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { PostApi } from '../../../Network/Post';
 import Styles from '../../../Assets/SCSS/Profile.module.scss';
 import { Auth } from '../../../Network/Auth';
 import { useSelector } from 'react-redux';
 import Post from './Post';
+import { FriendApi } from '../../../Network/Friend';
+import { BrowserView, MobileView } from 'react-device-detect';
+import MakePost from '../MakePost/MakePost';
+
 
 export default function ProfilePosts() {
-    
+
     const page = useRef(0);
     const hasMore = useRef(true);
 
+    const navigate = useNavigate();
+
     const { owner } = useOutletContext();
     const [posts, setPost] = useState();
+    const [friends, setFriend] = useState(null);
 
     var story = owner.story || "";
     const [changeStory, setChangeStory] = useState(false);
@@ -45,6 +52,10 @@ export default function ProfilePosts() {
     }
 
     useEffect(() => {
+
+        FriendApi.getFriendOfProfile(owner.id).then((res) => {
+            setFriend(res.data.data);
+        })
 
         PostApi.getPostByProfile(owner.id, page.current).then(res => {
             if (res.status !== 204) {
@@ -113,15 +124,49 @@ export default function ProfilePosts() {
                         )}
                     </div>
                 </div>
-                <div className=' w-full bg-white my-4 p-3  rounded-lg shadow-sm'>
-                    <h1 className=' text-xl font-bold'>Ảnh</h1>
-                </div>
-                <div className=' w-full bg-white my-4 p-3  rounded-lg shadow-sm'>
-                    <h1 className=' text-xl font-bold'>Bạn bè</h1>
+                <div className=' w-full h-fit bg-white my-4 p-3  rounded-lg shadow-sm'>
+                    <div className=' w-full flex items-center justify-between'>
+                        <h1 className=' text-xl font-bold'>Bạn bè</h1>
+                        <h1 className=' text-base text-blue-500 cursor-pointer' onClick={() => navigate("friends")}>Xem tất cả bạn bè</h1>
+                    </div>
+                    {!friends ? (
+                        <div className=' flex items-center justify-between'>
+                            <div className="w-[120px] h-[120px] max-[1100px]:w-[100px] max-[1100px]:h-[100px] max-[770px]:w-[200px] max-[770px]:h-[200px] max-[600px]:w-[170px] max-[600px]:h-[170px] max-[500px]:w-[100px] max-[500px]:h-[100px] max-[400px]:w-[80px] max-[400px]:h-[80px] bg-gray-200 animate-pulse rounded-xl m-1"></div>
+                            <div className="w-[120px] h-[120px] max-[1100px]:w-[100px] max-[1100px]:h-[100px] max-[770px]:w-[200px] max-[770px]:h-[200px] max-[600px]:w-[170px] max-[600px]:h-[170px] max-[500px]:w-[100px] max-[500px]:h-[100px] max-[400px]:w-[80px] max-[400px]:h-[80px] bg-gray-200 animate-pulse rounded-xl m-1"></div>
+                            <div className="w-[120px] h-[120px] max-[1100px]:w-[100px] max-[1100px]:h-[100px] max-[770px]:w-[200px] max-[770px]:h-[200px] max-[600px]:w-[170px] max-[600px]:h-[170px] max-[500px]:w-[100px] max-[500px]:h-[100px] max-[400px]:w-[80px] max-[400px]:h-[80px] bg-gray-200 animate-pulse rounded-xl m-1"></div>
+                        </div>
+                    ) : (
+                        <>
+                            <BrowserView>
+                                <div className=' grid grid-cols-3 gap-3 h-fit w-full'>
+                                    {friends.map(friend => (
+                                        <div key={friend.id} title={friend.nickname} className=' cursor-pointer max-h-40 flex flex-col justify-center items-center' onClick={() => navigate(`/${friend.username}`)}>
+                                            <img alt='anh thoi' src={friend.avatar} className=' w-[120px] h-[120px] max-[1100px]:w-[100px] max-[1100px]:h-[100px] max-[770px]:w-[200px] max-[770px]:h-[200px] max-[600px]:w-[170px] max-[600px]:h-[170px] max-[500px]:w-[100px] max-[500px]:h-[100px] max-[400px]:w-[80px] max-[400px]:h-[80px] object-cover rounded-xl m-1' />
+                                            <h1 style={{ wordBreak: "break-all", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: 'hidden' }} className='text-[15px] break-all font-semibold w-[120px] h-[120px] max-[1100px]:w-[100px] max-[1100px]:h-[100px] max-[770px]:w-[200px] max-[770px]:h-[200px] max-[600px]:w-[170px] max-[600px]:h-[170px] max-[500px]:w-[100px] max-[500px]:h-[100px] max-[400px]:w-[80px] max-[400px]:h-[80px] '>{friend.nickname}</h1>
+                                        </div>
+                                    ))}
+                                </div>
+                            </BrowserView>
+
+                            <MobileView>
+                                <div className=' grid grid-cols-3 gap-3 h-fit w-full'>
+                                    {friends.slice(0, 3).map(friend => (
+                                        <div key={friend.id} title={friend.nickname} className=' cursor-pointer max-h-40 flex flex-col justify-center items-center' onClick={() => navigate(`/${friend.username}`)}>
+                                            <img alt='anh thoi' src={friend.avatar} className=' w-[120px] h-[120px] max-[1100px]:w-[100px] max-[1100px]:h-[100px] max-[770px]:w-[200px] max-[770px]:h-[200px] max-[600px]:w-[170px] max-[600px]:h-[170px] max-[500px]:w-[100px] max-[500px]:h-[100px] max-[400px]:w-[80px] max-[400px]:h-[80px] object-cover rounded-xl m-1' />
+                                            <h1 style={{ wordBreak: "break-all", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: 'hidden' }} className='text-[15px] break-all font-semibold w-[120px] h-[120px] max-[1100px]:w-[100px] max-[1100px]:h-[100px] max-[770px]:w-[200px] max-[770px]:h-[200px] max-[600px]:w-[170px] max-[600px]:h-[170px] max-[500px]:w-[100px] max-[500px]:h-[100px] max-[400px]:w-[80px] max-[400px]:h-[80px] '>{friend.nickname}</h1>
+                                        </div>
+                                    ))}
+                                </div>
+                            </MobileView>
+                        </>
+                    )}
                 </div>
             </div>
-            <div className={`${Styles.container_right} shrink flex-none`}>
-                <div className='my-4  w-full flex justify-between items-center bg-white p-3 rounded-lg shadow-sm'>
+            <div className={`${Styles.container_right} w-full shrink flex-none`}>
+                <div className='w-full p-4 my-4 rounded-lg flex flex-col justify-center space-y-1 bg-white divide-y divide-gray-300 shadow-md'>
+                    <MakePost />
+                </div>
+                <div className='my-4  w-full flex justify-between items-center bg-white p-3 rounded-lg shadow-md'>
                     <h1 className=' text-xl font-bold'>Bài viết</h1>
                     <div className='flex items-center justify-center p-1 cursor-pointer hover:bg-gray-300 bg-gray-200 rounded-md w-20'>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" className='w-5 h-5'>
@@ -149,7 +194,7 @@ export default function ProfilePosts() {
                     </div>
                 ) : (
                     <>
-                        <Post posts={posts} setPost={setPost} page={page.current} hasMore={hasMore.current} owner={owner} fetchMoreData={fetchMoreData}/>
+                        <Post posts={posts} setPost={setPost} page={page.current} hasMore={hasMore.current} owner={owner} fetchMoreData={fetchMoreData} />
                     </>
                 )}
             </div>

@@ -57,7 +57,9 @@ export default function Home() {
           </div>
           <div className='w-3/5 px-24 max-2xl:px-5 max-xl:px-0 max-md:w-full max-xl:w-8/12 max-lg:w-4/5 flex flex-col justify-center items-center space-y-5'>
             <Story />
-            <MakePost />
+            <div className=' w-9/12 max-md:w-full p-4 rounded-lg flex flex-col justify-center space-y-1 bg-white divide-y divide-gray-300 shadow-md'>
+              <MakePost />
+            </div>
             <div className=' space-y-5 w-9/12 max-md:w-full' >
               <Post posts={posts} />
             </div>
@@ -152,14 +154,16 @@ export default function Home() {
               </li>
             </ul>
           </div>
-          <div className='w-3/5 px-24 max-2xl:px-5 max-xl:px-0 max-md:w-full max-xl:w-8/12 max-lg:w-4/5 flex flex-col justify-center items-center space-y-5'>
+          <div className='w-3/5 px-24 max-2xl:px-5 max-xl:px-0 max-md:w-full max-xl:w-8/12 max-lg:w-9/12 flex flex-col justify-center items-center space-y-5'>
             <Story />
-            <MakePost />
+            <div className=' w-9/12 max-md:w-full p-4 rounded-lg flex flex-col justify-center space-y-1 bg-white divide-y divide-gray-300 shadow-md'>
+              <MakePost />
+            </div>
             <div className=' space-y-5 w-9/12 max-md:w-full' >
               <Post posts={posts} />
             </div>
           </div>
-          <div className=' w-1/5 h-screen max-md:hidden flex justify-end'>
+          <div className=' w-1/5 h-screen max-lg:w-3/12 max-md:hidden flex justify-end'>
             <OnlineBar userId={user.id} />
           </div>
         </div>

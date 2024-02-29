@@ -30,7 +30,10 @@ export default function Layout({ children }) {
         <div className='fixed flex flex-col items-end space-y-3 bottom-5 right-2'>
 
           {open && (
-            <div className='flex items-center justify-center w-[300px] h-[400px] overflow-hidden z-40 scroll-smooth' id='list-contact'>
+            <div
+              className='flex items-center justify-center w-[300px] h-[400px] rounded-xl overflow-hidden z-40 scroll-smooth' id='list-contact'
+              style={{ boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px" }}
+            >
               <div className='flex items-center justify-end w-[900px] h-[400px] z-30 duration-1000 scroll-smooth'>
                 <div className=' w-[300px] h-[400px] bg-white shadow-2xl rounded-xl relative' >
                 </div>
@@ -51,6 +54,18 @@ export default function Layout({ children }) {
                             <img className=' w-12 h-12 rounded-full object-cover' src={fr.avatar} />
                             <div className=' h-full w-[200px] text-[16px] font-medium py-2' style={{ wordBreak: "break-all", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: 'hidden' }}>
                               <h1>{fr.nickname}</h1>
+                              {fr.online ? (
+                                <>
+                                  <div className=' text-[12px] w-full text-gray-500 flex items-center'>
+                                    <div className='w-[8px] h-[8px] rounded-full bg-green-400 mr-1'></div>
+                                    Đang hoạt động
+                                  </div>
+                                </>
+                              ) : (
+                                <>
+                                  <h1 className=' text-[12px] w-full text-gray-500'>Không hoạt động</h1>
+                                </>
+                              )}
                             </div>
                           </div>
                         ))}

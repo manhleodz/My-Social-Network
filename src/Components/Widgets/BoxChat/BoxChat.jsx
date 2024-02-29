@@ -107,14 +107,6 @@ export default function BoxChat({ chat, socket }) {
                                     dispatch(closeOneBox(chat.id));
                                     document.getElementById("list-contact").scrollLeft -= 300;
                                 }}
-                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className=' w-8 h-8 p-1 hover:bg-gray-200 cursor-pointer fill-gray-500 rounded-full '>
-                                <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
-                            </svg>
-                            <svg
-                                onClick={() => {
-                                    dispatch(closeOneBox(chat.id));
-                                    document.getElementById("list-contact").scrollLeft -= 300;
-                                }}
                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" className=' w-8 h-8 p-1 hover:bg-gray-200 cursor-pointer fill-gray-500 rounded-full '>
                                 <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
                             </svg>
@@ -141,20 +133,20 @@ export default function BoxChat({ chat, socket }) {
             </div>
             {listMessage && (
                 <div className={` space-y-2`} >
-                    <ScrollToBottom className={`${Styles.boxchat_listmess} overflow-y-visible ${isMobile ? 'w-[300px] h-[290px]' : 'w-80 h-[300px]'} p-2 duration-500`}>
+                    <ScrollToBottom className={`${Styles.boxchat_listmess} overflow-y-visible overflow-x-hidden ${isMobile ? 'w-[300px] h-[290px]' : 'w-80 h-[300px]'} p-2 duration-500`}>
                         {listMessage.map((message, index) => (
                             <div key={index}>
                                 {message.sender === user.id ? (
                                     <>
                                         <div className=' flex items-center justify-end w-full mb-1' key={message.id}>
-                                            <h1 className={` p-2 rounded-2xl text-white bg-blue-500 text-[14.5px] break-words`} style={{ maxWidth: "250px" }}>{message.message}</h1>
+                                            <h1 className={` p-2 rounded-2xl text-white bg-blue-500 text-[14.5px] break-words`} style={{ maxWidth: "230px" }}>{message.message}</h1>
                                         </div>
                                     </>
                                 ) : (
                                     <>
                                         <div className=' flex items-center space-x-2 justify-start w-full mb-1' key={message.id}>
                                             <img src={chat.avatar} className=' w-8 h-8 rounded-full object-cover' />
-                                            <h1 className={` p-2 rounded-2xl text-black bg-gray-300 text-[14.5px] break-words`} style={{ maxWidth: "250px" }}>{message.message}</h1>
+                                            <h1 className={` p-2 rounded-2xl text-black bg-gray-300 text-[14.5px] break-words`} style={{ maxWidth: "230px" }}>{message.message}</h1>
                                         </div>
                                     </>
                                 )}

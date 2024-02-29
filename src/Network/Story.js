@@ -12,6 +12,14 @@ export const StoryApi = {
         })
     },
 
+    async deleteStory(id) {
+        return axios.delete(`${ApiUrl}/story/${id}`, {
+            headers: {
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            }
+        })
+    },
+
     async getById(id) {
         return axios.get(`${ApiUrl}/story/${id}`, {
             headers: {

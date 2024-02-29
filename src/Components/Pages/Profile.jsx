@@ -84,9 +84,9 @@ export default function Profile() {
                   <div className={` absolute bottom-4 right-2 max-lg:bottom-3 max-lg:right-3 w-6 h-6 max-lg:w-4 border-2 border-white max-lg:h-4 rounded-full ${profile.online ? 'bg-green-500' : 'hidden'} `}></div>
                 </div>
               </div>
-              <div className={`${ProfileStyle.avatar_container} w-2/3 h-full flex flex-col justify-end items-start max-lg:items-center`}>
-                <h1 className=' text-3xl max-lg:text-xl font-semibold text-start'>{profile.nickname}</h1>
-                <h1 className=' text-base max-lg:text-sm text-gray-500 font-mono'>8 bạn chung</h1>
+              <div className={`${ProfileStyle.avatar_container} w-2/3 h-full flex flex-col justify-end items-start max-[1100px]:items-center`}>
+                <h1 className=' text-3xl max-lg:text-xl font-semibold text-start my-2'>{profile.nickname}</h1>
+                {/* <h1 className=' text-base max-lg:text-sm text-gray-500 font-mono'>8 bạn chung</h1> */}
               </div>
               <div className='h-full grid sm:grid-flow-col max-sm:grid-flow-dense max-sm:grid-rows-2 max-sm:content-center items-end justify-end space-x-3 max-sm:space-x-0 max-sm:space-y-2'>
                 {profile.id === user.id ? (
@@ -95,7 +95,7 @@ export default function Profile() {
                       <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512">
                         <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
                       </svg>
-                      <h1 className='p-1'>Thêm vào tin</h1>
+                      <h1 className='p-1' onClick={() => navigate("/story/create")}>Thêm vào tin</h1>
                     </button>
                     <button className=' w-56 p-2 bg-blue-600 rounded-lg text-base font-semibold text-white hover:bg-blue-700 flex items-center justify-center h-10'>
                       <svg fill='white' xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512">

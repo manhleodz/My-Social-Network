@@ -19,9 +19,18 @@ export const FriendApi = {
         })
     },
 
+    async getFriendOfProfile(id) {
+        return await axios.get(`${ApiUrl}/relationship/profile`, {
+            params: { id: id },
+            headers: {
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            },
+        })
+    },
+
     async deleteFriend(id) {
         return await axios.delete(`${ApiUrl}/relationship/unfriend`, {
-            params: {id: id},
+            params: { id: id },
             headers: {
                 accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }

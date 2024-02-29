@@ -22,7 +22,7 @@ export default function OnlineBar({ userId }) {
                 >
                     <img src={link} alt='qc' className='z-0 absolute w-full h-full top-0 left-0 object-cover rounded-lg scale-100 hover:scale-110' />
                     <div className=' absolute w-full h-full z-50 top-0 left-0 rounded-lg flex justify-center items-center bg-[rgb(0,0,0,0.25)] hover:bg-[rgb(0,0,0,0.28)] cursor-pointer'>
-                        <h1 className='text-white text-3xl font-bold'>{text}</h1>
+                        <h1 className='text-white text-3xl font-bold max-lg:text-2xl'>{text}</h1>
                     </div>
                 </div>
             </div>

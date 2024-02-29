@@ -76,7 +76,10 @@ export default function Story() {
                 <>
                   <div
                     id={`story_${key}`}
-                    onClick={(e) => navigate(`story/${story.id}`, { state: { stories: stories } })}
+                    onClick={(e) => {
+                      if (story.id !== "loading")
+                        navigate(`story/${story.id}`, { state: { stories: stories } })
+                    }}
                     onMouseEnter={() => {
                       document.getElementById(`reel-${story.id}`).style.display = 'block';
                       document.getElementById(`content_${key}`).style.transform = 'scale(1.06)'
@@ -88,6 +91,11 @@ export default function Story() {
                     style={{ backgroundColor: `rgba(138, 146, 147, 255)` || 'gray' }}
                     className=' w-40 h-64 flex justify-center items-center relative rounded-lg shadow-lg border-none cursor-pointer overflow-hidden' key={key}
                   >
+                    {story.id === "loading" && (
+                      <div className=' w-full h-full absolute bg-[rgb(0,0,0,0.4)] z-50 flex justify-center items-center'>
+                        <h1 className=' text-white font-semibold'>Đang đăng</h1>
+                      </div>
+                    )}
                     {story.link.includes("mp4") ? (
                       <>
                         <ReactPlayer
