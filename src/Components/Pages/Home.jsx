@@ -68,7 +68,7 @@ export default function Home() {
       </MobileView>
 
       <BrowserView>
-        <div className=' relative top-16 flex justify-between'>
+        <div className=' relative top-16 flex justify-between items-start'>
           <div className="h-full w-1/5 max-xl:w-1/6 px-3 overflow-y-hidden dark:bg-gray-800 max-lg:hidden">
             <ul className="space-y-2 font-medium fixed w-1/5">
               <li>

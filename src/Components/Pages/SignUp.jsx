@@ -6,6 +6,7 @@ import Generate from '../../Helper/GenerateOTP';
 import OtpInput from "otp-input-react";
 import ConfirmOTP from '../../Helper/ConfirmOTP';
 import Decode from '../../Helper/Encode';
+import backgroundImage from '../../Assets/login bg.jpg';
 
 function SignUp() {
 
@@ -72,7 +73,7 @@ function SignUp() {
     return (
         <>
             <section className="flex flex-row items-center justify-center" style={{
-                backgroundImage: `url(https://www.intotheminds.com/blog/app/uploads/social-media-marketing-smm-banner.jpg)`,
+                backgroundImage: `url("${backgroundImage}")`,
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: 'cover',
                 backgroundAttachment: 'fixed',

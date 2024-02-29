@@ -10,6 +10,7 @@ import { fetchData } from '../../Redux/PostSlice';
 import { fetchStory } from '../../Redux/StorySlice';
 import { fetchFriend } from '../../Redux/FriendSlice';
 import LoginStyle from '../../Assets/SCSS/Login.module.scss';
+import backgroundImage from '../../Assets/login bg.jpg';
 
 const Login = () => {
 
@@ -103,7 +104,7 @@ const Login = () => {
       <section
         className="flex flex-row items-center justify-center w-screen h-screen"
         style={{
-          backgroundImage: `url(https://www.intotheminds.com/blog/app/uploads/social-media-marketing-smm-banner.jpg)`,
+          backgroundImage: `url("${backgroundImage}")`,
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',
           backgroundAttachment: 'fixed',
