@@ -5,13 +5,16 @@ import getCroppedImg from '../../Helper/CropImage';
 import { StoryApi } from '../../Network/Story';
 import { addStory } from '../../Redux/StorySlice';
 import ReactPlayer from 'react-player';
+import { useNavigate } from 'react-router-dom';
 
 export default function MakeStory() {
 
     const user = useSelector(state => state.authentication.user);
     const dispatch = useDispatch();
-    const [options, setOption] = useState(null);
 
+    const navigate = useNavigate();
+
+    const [options, setOption] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
 
     const handleCropComplete = (croppedArea, croppedAreaPixels) => {
@@ -37,6 +40,7 @@ export default function MakeStory() {
                     }).catch((err) => {
                         console.log(err.data);
                     });
+                    navigate("/");
                 }
             }).catch(err => {
                 console.log(err);
@@ -53,6 +57,7 @@ export default function MakeStory() {
                     }).catch((err) => {
                         console.log(err.data);
                     });
+                    navigate("/");
                 }
             }).catch(err => {
                 console.log(err);

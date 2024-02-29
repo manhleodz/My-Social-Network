@@ -33,7 +33,6 @@ const Login = () => {
     getListFriends();
     getStories();
     navigate('/')
-    clearTimeout(timeOut);
   }
 
   const failure = (error) => {
@@ -112,7 +111,7 @@ const Login = () => {
         }}
       >
         <form
-          className="min-h-screen  py-6 flex flex-col justify-center sm:py-12"
+          className="min-h-screen max-[500px]:w-[350px] max-[400px]:w-[350px] max-[350px]:w-[300px] py-6 flex flex-col justify-center sm:py-12"
           onSubmit={onSubmit}
         >
           <div>

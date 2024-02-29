@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 import NavigateBar from '../NavigateBar/NavigateBar';
 import BoxChat from '../BoxChat/BoxChat';
 import { useDispatch, useSelector } from 'react-redux';
-import { openOneBox } from '../../../Redux/MessagerSlice';
+import { openMobileChat, openOneBox } from '../../../Redux/MessagerSlice';
 import { BrowserView, MobileView } from 'react-device-detect';
 
 
@@ -30,23 +30,41 @@ export default function Layout({ children }) {
         <div className='fixed flex flex-col items-end space-y-3 bottom-5 right-2'>
 
           {open && (
-            <div className=' w-[300px] h-[400px] bg-white shadow-2xl rounded-xl relative'>
-              <div className='w-full h-[55px] rounded-t-xl flex items-center justify-center' style={{ backgroundImage: "linear-gradient(to right, #00b09b, #96c93d)" }}>
-                <h1 className=' font-semibold text-white'>Danh sách hội thoại</h1>
-              </div>
-              <div className=' w-full h-[345px] rounded-b-xl overflow-y-auto'>
-                {frs.length > 0 && (
-                  <>
-                    {frs.map(fr => (
-                      <div key={fr.id} className=' w-full h-[60px] flex items-center justify-start hover:bg-gray-100'>
-                        <img className=' w-12 h-12 rounded-full object-cover' src={fr.avatar} />
-                        <div className=' h-full w-[100px] break-all text-ellipsis whitespace-nowrap overflow-hidden'>
-                          <h1>{fr.nickname}</h1>
-                        </div>
-                      </div>
-                    ))}
-                  </>
-                )}
+            <div className='flex items-center justify-center w-[300px] h-[400px] overflow-hidden z-40 scroll-smooth' id='list-contact'>
+              <div className='flex items-center justify-end w-[900px] h-[400px] z-30 duration-1000 scroll-smooth'>
+                <div className=' w-[300px] h-[400px] bg-white shadow-2xl rounded-xl relative' >
+                </div>
+                <div className=' w-[300px] h-[400px] bg-white shadow-2xl rounded-xl relative' >
+                  <div className='w-full h-[55px] rounded-t-xl flex items-center justify-center' style={{ backgroundImage: "linear-gradient(to right, #00b09b, #96c93d)" }}>
+                    <h1 className=' font-semibold text-white'>Danh sách hội thoại</h1>
+                  </div>
+                  <div className=' w-full h-[345px] rounded-b-xl overflow-y-auto p-2'>
+                    {frs.length > 0 && (
+                      <>
+                        {frs.map(fr => (
+                          <div
+                            key={fr.id} className=' w-full h-[60px] flex items-center justify-start hover:bg-gray-100'
+                            onClick={() => {
+                              dispatch(openMobileChat(fr));
+                              document.getElementById('list-contact').scrollLeft += 300;
+                            }}>
+                            <img className=' w-12 h-12 rounded-full object-cover' src={fr.avatar} />
+                            <div className=' h-full w-[200px] text-[16px] font-medium py-2' style={{ wordBreak: "break-all", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: 'hidden' }}>
+                              <h1>{fr.nickname}</h1>
+                            </div>
+                          </div>
+                        ))}
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div className=' w-[300px] h-[400px] bg-white shadow-2xl rounded-xl relative' >
+                  {openChat.length > 0 && (
+                    <>
+                      <BoxChat chat={openChat[0]} socket={socket} />
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           )}
