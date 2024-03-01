@@ -1,5 +1,6 @@
 import React from 'react';
 import Loading from './LoadingPage.module.scss';
+import ProfileStyle from '../../../Assets/SCSS/Profile.module.scss';
 
 function LoadingPage() {
 
@@ -46,4 +47,30 @@ function LoadingPage() {
     )
 }
 
-export default LoadingPage;
+function LoadingProfilePage() {
+    return (
+        <div className=' w-full flex flex-col space-y-5 bg-white' data-mode="light">
+            <div className='w-full relative top-10 flex flex-col items-center divide divide-gray-500'>
+                <div className=' w-full flex justify-center bg-white '>
+                    <div className={`${ProfileStyle.header} relative`} >
+                        <div className={`${ProfileStyle.header_background_image} w-full object-cover object-center rounded-lg animate-pulse bg-gray-200`}></div>
+                        <div className={`${ProfileStyle.header_user_info} absolute w-full h-36 bottom-6 px-16 flex items-center justify-between`}>
+                            <div className='w-36 max-lg:w-28 max-xl:w-32 relative'>
+                                <div className=' w-36 max-lg:w-28 max-xl:w-32 bg-white rounded-full -bottom-16 left-0'>
+                                    <div className='w-36 h-36 max-lg:w-28 max-lg:h-28 max-xl:w-32 max-xl:h-32 object-center object-cover rounded-full bg-gray-100 animate-pulse p-1'></div>
+                                </div>
+                            </div>
+                            <div className={`${ProfileStyle.avatar_container} w-2/3 h-full flex flex-col justify-end items-start max-[1100px]:items-center`}>
+                                <h1 className=' text-3xl max-lg:text-xl font-semibold text-start my-2'></h1>
+                            </div>
+                            <div className='h-full grid sm:grid-flow-col max-sm:grid-flow-dense max-sm:grid-rows-2 max-sm:content-center items-end justify-end space-x-3 max-sm:space-x-0 max-sm:space-y-2'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export { LoadingPage, LoadingProfilePage }

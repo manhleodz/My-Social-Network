@@ -6,7 +6,7 @@ import './CommentBox.module.scss';
 import { PostApi } from '../../../Network/Post';
 import CommentModal from './CommentModal';
 
-export default function Comment({ comment, setComment, comments, newReply, setNewReply, setCommentNumber }) {
+export default function Comment({ comment, setComment, comments, setOpenComment, newReply, setNewReply, setCommentNumber }) {
 
   const [isClicked, setIsClicked] = useState(false);
   const [likeComments, setLikeComments] = useState(comment);
@@ -69,7 +69,11 @@ export default function Comment({ comment, setComment, comments, newReply, setNe
           <img alt='avatar' src={`${comment.User.avatar}`} onClick={() => navigate(`/${comment.User.username}`)} className=' w-10 h-10 rounded-full cursor-pointer' />
           <div >
             <div className=' flex items-center justify-start'>
-              <p className=' text-base break-words'><span className='font-semibold pr-3 cursor-pointer hover:text-gray-500' onClick={() => navigate(`/${comment.User.username}`)}>{comment.User.nickname}</span>{comment.commentBody}</p>
+              <p className=' text-base break-words'><span className='font-semibold pr-3 cursor-pointer hover:text-gray-500' onClick={() => {
+                setOpenComment(false);
+                navigate(`/${comment.User.username}`);
+              }}
+              >{comment.User.nickname}</span>{comment.commentBody}</p>
             </div>
             <div className=' flex items-center space-x-3'>
               <h1 className=' text-sm text-gray-600'>{comment.createdAt.slice(0, 10)} {comment.createdAt.slice(11, 16)}</h1>

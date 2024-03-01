@@ -6,13 +6,14 @@ import ProfileStyle from '../../Assets/SCSS/Profile.module.scss';
 import { FriendApi } from '../../Network/Friend';
 import { fetchFriend } from '../../Redux/FriendSlice';
 import { isMobile } from 'react-device-detect';
+import { LoadingProfilePage } from '../Widgets/Loading/LoadingPage';
 
 export default function Profile() {
 
   const username = useParams().username;
   const user = useSelector(state => state.authentication.user);
   const frs = useSelector(state => state.friends.friends);
-  const [profile, setProfile] = useState();
+  const [profile, setProfile] = useState(null);
   const [isFriend, setIsFriend] = useState();
   const [scrollPosition, setScrollPosition] = useState();
   const scrollRef = useRef();
@@ -61,6 +62,8 @@ export default function Profile() {
   };
 
   useEffect(() => {
+
+    window.scrollTo(0, 0);
     Auth.getProfile(username).then(res => {
       setProfile(res.data.profile);
       setIsFriend(res.data.isFriend);
@@ -70,14 +73,16 @@ export default function Profile() {
     })
   }, [username])
 
-  if (!profile) return null;
+  if (!profile) return (<LoadingProfilePage />);
 
   return (
     <div className=' w-full flex flex-col space-y-5 bg-white' ref={scrollRef} onScroll={handleScroll} data-mode="light">
       <div className='w-full relative top-10 flex flex-col items-center divide divide-gray-500'>
         <div className=' w-full flex justify-center' style={{ backgroundImage: 'linear-gradient(#18171E, white)' }}>
           <div className={`${ProfileStyle.header} relative`} >
-            <img className={`${ProfileStyle.header_background_image} w-full object-cover object-center rounded-lg`} src={profile.background} />
+            <img className={`${ProfileStyle.header_background_image} w-full object-cover object-center rounded-lg`}
+              src={profile.background}
+            />
             <div className={`${ProfileStyle.header_user_info} absolute w-full h-36 bottom-6 px-16 flex items-center justify-between`}>
               <div className='w-36 max-lg:w-28 max-xl:w-32 relative'>
                 <div className=' w-36 max-lg:w-28 max-xl:w-32 bg-white rounded-full -bottom-16 left-0'>
@@ -298,7 +303,7 @@ export default function Profile() {
           </div>
         </div>
         <div className={` w-full bg-gray-100 flex flex-col ${isMobile ? 'p-0' : 'p-3'} justify-center items-center`}>
-          <Outlet context={{ owner: profile, params: username }} />
+          <Outlet context={{ owner: profile, params: username, setProfile: setProfile }} />
         </div>
       </div>
     </div>

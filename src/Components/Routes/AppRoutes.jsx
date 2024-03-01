@@ -14,7 +14,7 @@ import { StoryApi } from '../../Network/Story';
 import { fetchData } from '../../Redux/PostSlice';
 import { fetchStory } from '../../Redux/StorySlice';
 import { fetchFriend } from '../../Redux/FriendSlice';
-import LoadingPage from '../Widgets/Loading/LoadingPage';
+import { LoadingPage } from '../Widgets/Loading/LoadingPage';
 
 
 export default function AppRoutes() {

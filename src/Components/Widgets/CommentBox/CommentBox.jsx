@@ -158,7 +158,7 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
                             <div className=' divide-y divide-gray-300 p-2 w-full pb-20'>
                                 <div className=' space-y-7 py-5'>
                                     {comments.map((comment, id) => (
-                                        <Comment comment={comment} setComment={setComment} comments={comments} key={id} newReply={newReply} setNewReply={setNewReply} setCommentNumber={setCommentNumber} />
+                                        <Comment comment={comment} setComment={setComment} setOpenComment={setOpenComment} comments={comments} key={id} newReply={newReply} setNewReply={setNewReply} setCommentNumber={setCommentNumber} />
                                     ))}
                                 </div>
                             </div>
