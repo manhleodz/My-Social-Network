@@ -15,7 +15,8 @@
 ![image](https://github.com/manhleodz/My-Social-Network/assets/107250543/634763a1-0817-45b5-bd90-09fd8dc7d52d)
 
 # Giao diện trang chủ
-![image](https://github.com/manhleodz/My-Social-Network/assets/107250543/6b7d0be2-67da-4522-8976-5be400319f5e)
+![image](https://github.com/manhleodz/My-Social-Network/assets/107250543/767265f1-aae9-48be-8ce3-06bbb6656911)
+
 
 # Đăng bài 
 https://github.com/manhleodz/My-Social-Network/assets/107250543/da6f93b4-67a5-4775-b177-81dcab2ce1e6
