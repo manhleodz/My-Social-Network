@@ -18,11 +18,13 @@
 ![image](https://github.com/manhleodz/My-Social-Network/assets/107250543/767265f1-aae9-48be-8ce3-06bbb6656911)
 
 
-# Đăng bài 
-https://github.com/manhleodz/My-Social-Network/assets/107250543/da6f93b4-67a5-4775-b177-81dcab2ce1e6
+# Thao tác với bài post, story
+https://github.com/manhleodz/My-Social-Network/assets/107250543/068b60eb-60ea-4877-a719-247948d6a482
 
-# Xem story
-https://github.com/manhleodz/My-Social-Network/assets/107250543/c8b78141-3a79-463e-b3ae-b008c031ff8d
+
+# Search, Boxchat(Realtime), Trang cá nhân(đang hoàn thiện)
+https://github.com/manhleodz/My-Social-Network/assets/107250543/96885de0-6f57-43ae-a827-f8591b16cea8
+
 
 
 # React + Vite
