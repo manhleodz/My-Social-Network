@@ -78,7 +78,7 @@ export default function Profile() {
   return (
     <div className=' w-full flex flex-col space-y-5 bg-white' ref={scrollRef} onScroll={handleScroll} data-mode="light">
       <div className='w-full relative top-10 flex flex-col items-center divide divide-gray-500'>
-        <div className=' w-full flex justify-center' style={{ backgroundImage: 'linear-gradient(#18171E, white)' }}>
+        <div className=' w-full flex justify-center' style={{ backgroundImage: `linear-gradient(${profile.backgroundColor}, white)` }}>
           <div className={`${ProfileStyle.header} relative`} >
             <img className={`${ProfileStyle.header_background_image} w-full object-cover object-center rounded-lg`}
               src={profile.background}
@@ -276,27 +276,27 @@ export default function Profile() {
         <div className=' w-full flex justify-center' style={{ boxShadow: 'box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px' }}>
           <div className={` ${ProfileStyle.navigate_bar} flex items-center space-x-5 max-md:space-x-3 max-sm:space-x-1 border-t-2 border-gray-300 p-1`}>
             <Link to={``}>
-              <div className=' p-3 max-md:p-2 max-sm:p-1.5 font-semibold text-gray-500  cursor-pointer hover:bg-gray-200 rounded-lg'>
+              <div className={`${location.pathname === `/${profile.username}` ? 'text-blue-500 underline-offset-8 underline' : 'text-gray-500 hover:bg-gray-200'} font-semibold p-3 max-md:p-2 max-sm:p-1.5 font-semibol cursor-pointer rounded-lg`}>
                 Bài viết
               </div>
             </Link>
             <Link to={`about`}>
-              <div className=' p-3 max-md:p-2 max-sm:p-1.5 font-semibold text-gray-500  cursor-pointer hover:bg-gray-200 rounded-lg'>
+              <div className={`${location.pathname.includes('about') ? 'text-blue-500 underline-offset-8 underline' : 'text-gray-500 hover:bg-gray-200'} font-semibold p-3 max-md:p-2 max-sm:p-1.5 font-semibol cursor-pointer rounded-lg`}>
                 Giới thiệu
               </div>
             </Link>
             <Link to={`friends`}>
-              <div className=' p-3 max-md:p-2 max-sm:p-1.5 font-semibold text-gray-500  cursor-pointer hover:bg-gray-200 rounded-lg'>
+              <div className={`${location.pathname.includes('friends') ? 'text-blue-500 underline-offset-8 underline' : 'text-gray-500 hover:bg-gray-200'} font-semibold p-3 max-md:p-2 max-sm:p-1.5 font-semibol cursor-pointer rounded-lg`}>
                 Bạn bè
               </div>
             </Link>
             <Link to={`images`}>
-              <div className=' p-3 max-md:p-2 max-sm:p-1.5 font-semibold text-gray-500  cursor-pointer hover:bg-gray-200 rounded-lg'>
+              <div className={`${location.pathname.includes('images') ? 'text-blue-500 underline-offset-8 underline' : 'text-gray-500 hover:bg-gray-200'} font-semibold p-3 max-md:p-2 max-sm:p-1.5 font-semibol cursor-pointer rounded-lg`}>
                 Ảnh
               </div>
             </Link>
             <Link to={`videos`}>
-              <div className=' p-3 max-md:p-2 max-sm:p-1.5 font-semibold text-gray-500  cursor-pointer hover:bg-gray-200 rounded-lg'>
+              <div className={`${location.pathname.includes('videos') ? 'text-blue-500 underline-offset-8 underline' : 'text-gray-500 hover:bg-gray-200'} font-semibold p-3 max-md:p-2 max-sm:p-1.5 font-semibol cursor-pointer rounded-lg`}>
                 Video
               </div>
             </Link>

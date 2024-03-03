@@ -24,7 +24,7 @@ export default function MakeStory() {
     };
 
     const upload = async () => {
-        if (!loading) {
+        if (!loading && options !== 2) {
             setLoading(true);
             if (selectedFile.type.includes('image')) {
                 const { file, url } = await getCroppedImg(

@@ -205,16 +205,15 @@ function SignUp() {
                                         </div>
                                         <div className="divide-y divide-gray-200">
                                             <div className="py-4 text-base leading-6 space-y-8 text-gray-700 sm:text-lg sm:leading-7">
-                                                <div className="relative">
+                                                <div className="relative flex flex-col justify-center items-center">
                                                     <OtpInput
                                                         value={inputOTP}
                                                         onChange={setInputOTP}
                                                         OTPLength={6}
-                                                        style={{}}
+                                                        inputStyles = {{width: "40px", height: "40px", padding: "0px", margin: "1px"}}
                                                         otpType="number"
                                                         disabled={false}
                                                         autoFocus
-                                                        className=" p-2 bg-gray-300 max-sm:p-0"
                                                     >
                                                     </OtpInput>
                                                     {alert === "Sai mã OTP vui lòng kiểm tra lại" && (

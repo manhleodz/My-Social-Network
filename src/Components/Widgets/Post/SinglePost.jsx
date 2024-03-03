@@ -22,6 +22,21 @@ export default function SinglePost({ post }) {
     const posts = useSelector(state => state.posts.posts);
     const dispatch = useDispatch();
     const media = post.Post.Media;
+    let createdAt = new Date(post.Post.createdAt);
+    const now = new Date();
+
+    if (now - createdAt < 3600000) {
+        if (Math.round((now - createdAt) / 60000) === 0) {
+            createdAt = "Vừa xong";
+        } else
+            createdAt = Math.round((now - createdAt) / 60000) + " phút";
+    } else if (now - createdAt < 86400000) {
+        createdAt = Math.round((now - createdAt) / 3600000) + " giờ";
+    } else if (now - createdAt < 604800000) {
+        createdAt = Math.round((now - createdAt) / 86400000) + " ngày";
+    } else {
+        createdAt = createdAt.getDate() + " tháng " + createdAt.getMonth() + " lúc " + createdAt.getHours() + ":" + createdAt.getMinutes();
+    }
 
     const likeAPost = () => {
         setIsClicked(!isClicked);
@@ -68,6 +83,8 @@ export default function SinglePost({ post }) {
         document.querySelector('body').style.paddingRight = "0px"
     }
 
+
+
     return (
         <div className=" rounded-lg shadow-md bg-white">
             <div className=" p-4 space-y-3 ">
@@ -89,18 +106,9 @@ export default function SinglePost({ post }) {
                             <div className="flex items-center space-x-2">
                                 <h1
                                     className=" text-xs text-gray-500 cursor-pointer font-semibold "
-                                    title={`Ngày ${post.Post.createdAt.slice(
-                                        8,
-                                        10
-                                    )} tháng ${post.Post.createdAt.slice(
-                                        5,
-                                        7
-                                    )} năm ${post.Post.createdAt.slice(
-                                        0,
-                                        4
-                                    )}, lúc ${post.Post.createdAt.slice(11, 16)}`}
+                                    title={`${createdAt}`}
                                 >
-                                    {post.Post.createdAt.slice(0, 10)}
+                                    {createdAt}
                                 </h1>
                                 {post.Post.public == 0 ?
                                     <svg className=" cursor-pointer" title="Công khai" xmlns="http://www.w3.org/2000/svg" fill='#A8A59C' height="14" width="14" viewBox="0 0 448 512">
