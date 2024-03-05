@@ -39,7 +39,7 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
                             id: user.id,
                             nickname: user.nickname,
                             username: user.username,
-                            avatar: user.avatar
+                            smallAvatar: user.smallAvatar
                         }
                     }]);
                     setCommentNumber(prev => prev + 1);
@@ -114,7 +114,7 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
                     <div className='p-3 w-full z-50'>
                         <div className=' flex items-center justify-between space-x-2'>
                             <div className='flex items-center'>
-                                <img alt='avatar' src={`${post.User.avatar}`} className=' w-10 h-10 mx-2 object-cover rounded-full cursor-pointer' />
+                                <img alt='avatar' src={`${post.User.smallAvatar}`} className=' w-10 h-10 mx-2 object-cover rounded-full cursor-pointer' />
                                 <div>
                                     <h1 className=' font-semibold cursor-pointer inline '>{post.User.nickname}</h1>
                                     <div

@@ -43,7 +43,7 @@ export default function OnlineBar({ userId }) {
                         }}
                     >
                         <div className='rounded-full relative'>
-                            <img alt={fr.username} src={fr.avatar} className='w-12 h-12 object-center rounded-full object-cover' />
+                            <img alt={fr.username} src={fr.smallAvatar} className='w-12 h-12 object-center rounded-full object-cover' />
                             <div className={`w-3 h-3 rounded-full absolute right-0 bottom-0 border-2 border-white ${fr.online === true ? 'bg-green-600 ' : 'bg-gray-400'}`}></div>
                         </div>
                         <h1 className=' font-semibold px-2 w-8/12 max-xl:text-sm break-words text-ellipsis whitespace-nowrap overflow-hidden'>{fr.nickname}</h1>

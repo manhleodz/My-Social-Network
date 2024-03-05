@@ -69,7 +69,7 @@ export default function NavigateBar() {
                         </button>
                         <button
                             onClick={() => {
-                                navigate("/listpage");
+                                navigate("/friends");
                             }}
                             className="w-full flex items-center justify-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group cursor-pointer"
                         >
@@ -114,7 +114,7 @@ export default function NavigateBar() {
                             </svg>
                         </div>
                         <div className='  rounded-full hover:bg-gray-400 active:ring-gray-300 active:ring cursor-pointer relative' onClick={() => setOpen(!open)}>
-                            <img alt='avatar' src={`${user.avatar}`} className='w-10 h-10 rounded-full object-cover z-0' />
+                            <img alt='avatar' src={`${user.smallAvatar}`} className='w-10 h-10 rounded-full object-cover z-0' />
                             <div className='absolute bottom-0 right-0 z-50 bg-gray-200 rounded-full p-1 border-2 border-white'>
                                 <svg xmlns="http://www.w3.org/2000/svg" height="7" width="7" viewBox="0 0 512 512">
                                     <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z" />
@@ -127,7 +127,7 @@ export default function NavigateBar() {
                             >
                                 <div className='w-full rounded-xl' style={{ boxShadow: "rgba(0, 0, 0, 0.2) 0px 4px 15px" }}>
                                     <div className='flex items-center divide divide-gray-300 p-2 hover:bg-gray-100 rounded-xl cursor-pointer' onClick={() => navigate(`/${user.username}`)}>
-                                        <img alt='avatar' src={user.avatar} className='w-10 h-10 rounded-full object-cover' />
+                                        <img alt='avatar' src={user.smallAvatar} className='w-10 h-10 rounded-full object-cover' />
                                         <h1 className='text-lg font-semibold px-2'>{user.nickname}</h1>
                                     </div>
                                     <div>

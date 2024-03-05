@@ -16,6 +16,8 @@ export default function Profile() {
   const [profile, setProfile] = useState(null);
   const [isFriend, setIsFriend] = useState();
   const [scrollPosition, setScrollPosition] = useState();
+  const [newAvatar, setNewAvatar] = useState(null);
+  const [newBackground, setNewBackground] = useState(null);
   const scrollRef = useRef();
 
   const dispatch = useDispatch();
@@ -32,6 +34,30 @@ export default function Profile() {
       document.activeElement.blur();
     };
   };
+
+  const update = async () => {
+    if (newAvatar) {
+      const formData = new FormData();
+      formData.append('files', newAvatar, newAvatar.name);
+      formData.append('type', 'avatar');
+      Auth.changeUserInterface(formData).then((res) => {
+
+      }).catch((err) => {
+        alert(err.response);
+      });
+    }
+
+    if (newBackground) {
+      const formData = new FormData();
+      formData.append('files', newBackground, newBackground.name);
+      formData.append('type', 'background');
+      Auth.changeUserInterface(formData).then((res) => {
+
+      }).catch((err) => {
+        alert(err.response);
+      });
+    }
+  }
 
   const getListFriends = async () => {
     await FriendApi.getListFriend().then((res) => {
@@ -64,6 +90,8 @@ export default function Profile() {
   useEffect(() => {
 
     window.scrollTo(0, 0);
+    setNewAvatar(null);
+    setNewBackground(null);
     Auth.getProfile(username).then(res => {
       setProfile(res.data.profile);
       setIsFriend(res.data.isFriend);
@@ -80,19 +108,67 @@ export default function Profile() {
       <div className='w-full relative top-10 flex flex-col items-center divide divide-gray-500'>
         <div className=' w-full flex justify-center' style={{ backgroundImage: `linear-gradient(${profile.backgroundColor}, white)` }}>
           <div className={`${ProfileStyle.header} relative`} >
-            <img className={`${ProfileStyle.header_background_image} w-full object-cover object-center rounded-lg`}
-              src={profile.background}
-            />
+            {(newAvatar || newBackground) && (
+              <div className='w-full h-[45px] p-2 flex justify-end items-center top-3 absolute left-0 z-30' style={{ backgroundColor: 'rgb(0,0,0,0.6)' }}>
+                <button onClick={() => {
+                  setNewAvatar(null);
+                  setNewBackground(null);
+                }} className='p-2 bg-gray-400 text-white mx-2 rounded-lg font-semibold'>
+                  Hủy
+                </button>
+                <button onClick={update} className='p-2 bg-blue-600 text-white mx-2 rounded-lg font-semibold'>
+                  Lưu thay đổi
+                </button>
+              </div>
+            )}
+            <div className=' relative'>
+              <img className={`${ProfileStyle.header_background_image} w-full object-cover object-center rounded-lg`}
+                src={`${newBackground === null ? profile.background : newBackground.preview}`}
+              />
+              {profile.id === user.id && (
+                <div className={` absolute flex items-center justify-center bottom-3 right-2 max-lg:bottom-3 max-lg:right-3 w-32 h-8 max-lg:w-4 border-2 border-white max-lg:h-4 rounded-lg bg-white p-1`}>
+                  <input type='file' accept='image/*' className=' hidden' id='update-background' onChange={e => {
+                    const file = e.target.files[0];
+                    Object.assign(file, {
+                      preview: URL.createObjectURL(file)
+                    })
+                    setNewBackground(file);
+                  }} />
+                  <label htmlFor='update-background' className='z-50 cursor-pointer flex items-center text-lg font-semibold'>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className=' fill-gray-600 w-6 mx-1'>
+                      <path d="M220.6 121.2L271.1 96 448 96v96H333.2c-21.9-15.1-48.5-24-77.2-24s-55.2 8.9-77.2 24H64V128H192c9.9 0 19.7-2.3 28.6-6.8zM0 128V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H271.1c-9.9 0-19.7 2.3-28.6 6.8L192 64H160V48c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16l0 16C28.7 64 0 92.7 0 128zM168 304a88 88 0 1 1 176 0 88 88 0 1 1 -176 0z" />
+                    </svg>
+                    Ảnh nền
+                  </label>
+                </div>
+              )}
+            </div>
             <div className={`${ProfileStyle.header_user_info} absolute w-full h-36 bottom-6 px-16 flex items-center justify-between`}>
               <div className='w-36 max-lg:w-28 max-xl:w-32 relative'>
                 <div className=' w-36 max-lg:w-28 max-xl:w-32 bg-white rounded-full -bottom-16 left-0'>
-                  <img className='w-36 h-36 max-lg:w-28 max-lg:h-28 max-xl:w-32 max-xl:h-32 object-center object-cover rounded-full p-1' src={profile.avatar} />
-                  <div className={` absolute bottom-4 right-2 max-lg:bottom-3 max-lg:right-3 w-6 h-6 max-lg:w-4 border-2 border-white max-lg:h-4 rounded-full ${profile.online ? 'bg-green-500' : 'hidden'} `}></div>
+                  <img className='w-36 h-36 max-lg:w-28 max-lg:h-28 max-xl:w-32 max-xl:h-32 object-center object-cover rounded-full p-1' alt='avatar' src={`${newAvatar === null ? profile.smallAvatar : newAvatar.preview}`} />
+                  {profile.id === user.id ? (
+                    <div className={` absolute bottom-3 right-2 max-lg:bottom-3 max-lg:right-3 w-8 h-8 max-lg:w-4 border-2 border-white max-lg:h-4 rounded-full bg-white p-1`}>
+                      <input type='file' accept='image/*' className=' hidden' id='update-avatar' onChange={e => {
+                        const file = e.target.files[0];
+                        Object.assign(file, {
+                          preview: URL.createObjectURL(file)
+                        })
+                        setNewAvatar(file);
+                      }} />
+                      <label htmlFor='update-avatar' className=' cursor-pointer'>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className=' fill-gray-600 w-6'>
+                          <path d="M220.6 121.2L271.1 96 448 96v96H333.2c-21.9-15.1-48.5-24-77.2-24s-55.2 8.9-77.2 24H64V128H192c9.9 0 19.7-2.3 28.6-6.8zM0 128V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H271.1c-9.9 0-19.7 2.3-28.6 6.8L192 64H160V48c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16l0 16C28.7 64 0 92.7 0 128zM168 304a88 88 0 1 1 176 0 88 88 0 1 1 -176 0z" />
+                        </svg>
+                      </label>
+                    </div>
+                  ) : (
+                    <div className={` absolute bottom-4 right-2 max-lg:bottom-3 max-lg:right-3 w-6 h-6 max-lg:w-4 border-2 border-white max-lg:h-4 rounded-full ${profile.online ? 'bg-green-500' : 'hidden'} `}></div>
+                  )}
                 </div>
               </div>
               <div className={`${ProfileStyle.avatar_container} w-2/3 h-full flex flex-col justify-end items-start max-[1100px]:items-center`}>
                 <h1 className=' text-3xl max-lg:text-xl font-semibold text-start my-2'>{profile.nickname}</h1>
-                {/* <h1 className=' text-base max-lg:text-sm text-gray-500 font-mono'>8 bạn chung</h1> */}
               </div>
               <div className='h-full grid sm:grid-flow-col max-sm:grid-flow-dense max-sm:grid-rows-2 max-sm:content-center items-end justify-end space-x-3 max-sm:space-x-0 max-sm:space-y-2'>
                 {profile.id === user.id ? (
@@ -303,7 +379,11 @@ export default function Profile() {
           </div>
         </div>
         <div className={` w-full bg-gray-100 flex flex-col ${isMobile ? 'p-0' : 'p-3'} justify-center items-center`}>
-          <Outlet context={{ owner: profile, params: username, setProfile: setProfile }} />
+          <Outlet context={{
+            owner: profile,
+            params: username,
+            setProfile: setProfile,
+          }} />
         </div>
       </div>
     </div>

@@ -107,7 +107,7 @@ export default function MakeStory() {
                             <h1 className=' cursor-pointer'>Cài đặt</h1>
                         </div>
                         <div className='flex items-center space-x-4'>
-                            <img alt='main-user' src={`${user.avatar}`} className=' w-16 h-16 max-sm:w-13 max-sm:h-13 rounded-full object-cover' />
+                            <img alt='main-user' src={`${user.smallAvatar}`} className=' w-16 h-16 max-sm:w-13 max-sm:h-13 rounded-full object-cover' />
                             <h1 className=' text-lg font-semibold'>{user.nickname}</h1>
                         </div>
                     </div>

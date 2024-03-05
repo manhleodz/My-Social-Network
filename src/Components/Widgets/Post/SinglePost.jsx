@@ -93,7 +93,7 @@ export default function SinglePost({ post }) {
                         <img
                             onClick={() => navigate(`/${post.Post.User.username}`)}
                             alt="avatar"
-                            src={`${post.Post.User.avatar}`}
+                            src={`${post.Post.User.smallAvatar}`}
                             className=" w-10 h-10 object-cover rounded-full cursor-pointer"
                         />
                         <div className="">

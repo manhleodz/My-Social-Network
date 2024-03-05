@@ -66,7 +66,7 @@ export default function Comment({ comment, setComment, comments, setOpenComment,
         }}
       >
         <div className=' flex items-center space-x-3'>
-          <img alt='avatar' src={`${comment.User.avatar}`} onClick={() => navigate(`/${comment.User.username}`)} className=' w-10 h-10 rounded-full cursor-pointer' />
+          <img alt='avatar' src={`${comment.User.smallAvatar}`} onClick={() => navigate(`/${comment.User.username}`)} className=' w-10 h-10 rounded-full cursor-pointer' />
           <div >
             <div className=' flex items-center justify-start'>
               <p className=' text-base break-words'><span className='font-semibold pr-3 cursor-pointer hover:text-gray-500' onClick={() => {

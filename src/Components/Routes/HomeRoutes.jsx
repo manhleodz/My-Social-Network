@@ -6,6 +6,7 @@ import Home from "../Pages/Home";
 
 const About = lazy(() => import('../Widgets/About/About'));
 const Search = lazy(() => import('../Pages/Search'));
+const Friend = lazy(() => import('../Pages/Friend'));
 const ProfileVideos = lazy(() => import('../Widgets/ProfileVideos/ProfileVideos'));
 const ProfileImages = lazy(() => import('../Widgets/ProfileImages/ProfileImages'));
 const ProfileReels = lazy(() => import('../Widgets/ProfileReels/ProfileReels'));
@@ -39,9 +40,9 @@ export default function HomeRoutes() {
             <Suspense fallback={<Loading />}>
                 <Layout>
                     <Routes>
-                        <Route path="/" element={<Home />}>
-                            <Route path=":userId/:postId" component={<CommentBox />} />
-                        </Route>
+                        <Route path="/" element={<Home />} />
+                        <Route path=":userId/:postId" component={<CommentBox />} />
+                        <Route path="friends" element={<Friend />} />
                         <Route path="/:username" element={<Profile />}>
                             <Route path="" element={<ProfilePosts />} />
                             <Route path="about" element={<About />} />

@@ -110,7 +110,7 @@ export default function Search() {
                                             </div>
                                             <p className=' font-semibold'>{value.nickname}</p>
                                         </div>
-                                        <img alt='avatar' src={`${value.avatar}`} className=' w-10 h-10 rounded-xl object-cover' />
+                                        <img alt='avatar' src={`${value.smallAvatar}`} className=' w-10 h-10 rounded-xl object-cover' />
                                     </div>
                                 ))}
                                 <div

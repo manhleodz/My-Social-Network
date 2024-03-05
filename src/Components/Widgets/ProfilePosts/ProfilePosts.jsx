@@ -55,20 +55,25 @@ export default function ProfilePosts() {
 
     useEffect(() => {
 
-        FriendApi.getFriendOfProfile(owner.id).then((res) => {
-            setFriend(res.data.data);
-        })
+        async function fetchData() {
 
-        PostApi.getPostByProfile(owner.id, page.current).then(res => {
-            if (res.status !== 204) {
-                setPost(res.data.data);
-                page.current = 1;
-            }
-            else {
-                setPost([]);
-                hasMore.current = false;
-            }
-        });
+            await PostApi.getPostByProfile(owner.id, page.current).then(res => {
+                if (res.status !== 204) {
+                    setPost(res.data.data);
+                    page.current = 1;
+                }
+                else {
+                    setPost([]);
+                    hasMore.current = false;
+                }
+            });
+
+            await FriendApi.getFriendOfProfile(owner.id).then((res) => {
+                setFriend(res.data.data);
+            })
+        }
+
+        fetchData();
 
         return () => {
             page.current = 0;

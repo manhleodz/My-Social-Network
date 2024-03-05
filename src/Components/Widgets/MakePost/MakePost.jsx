@@ -91,7 +91,7 @@ export default function MakePost() {
     return (
         <>
             <div className=' flex items-center mb-2  space-x-3'>
-                <img alt='avatar' src={user.avatar} className=' w-12 h-12 rounded-full object-cover' />
+                <img alt='avatar' src={user.smallAvatar} className=' w-12 h-12 rounded-full object-cover' />
                 <div className=' w-full p-3 h-12 rounded-3xl bg-gray-100 hover:bg-gray-200 cursor-pointer flex items-center text-gray-600 text-lg max-md:text-base max-md:rounded-2xl' onClick={(e) => setOpen(true)}>{user.nickname}, bạn đang nghĩ gì thế?</div>
             </div>
             <div className='flex items-center justify-between'>
@@ -115,7 +115,7 @@ export default function MakePost() {
                                     </div>
                                     <div className=' p-3 w-full space-y-3 overflow-y-auto'>
                                         <div className='flex items-center space-x-2'>
-                                            <img alt='avatar1' src={user.avatar} className=' w-12 h-12 rounded-full object-cover' />
+                                            <img alt='avatar1' src={user.smallAvatar} className=' w-12 h-12 rounded-full object-cover' />
                                             <div className='flex flex-col items-start'>
                                                 <h1 className=' font-semibold'>{user.nickname}</h1>
                                                 <div

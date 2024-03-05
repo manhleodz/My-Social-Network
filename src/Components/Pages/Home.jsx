@@ -78,7 +78,7 @@ export default function Home() {
                   }}
                   className="w-full flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700 group cursor-pointer"
                 >
-                  <img alt='avatar' src={`${user.avatar}`} className='w-10 h-10 rounded-full object-cover' />
+                  <img alt='avatar' src={`${user.smallAvatar}`} className='w-10 h-10 rounded-full object-cover' />
                   <span className="ml-3 text-lg">{user.nickname}</span>
                 </button>
               </li>

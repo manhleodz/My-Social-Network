@@ -106,7 +106,7 @@ export default function SearchAll() {
                                 {users.map((result, key) => (
                                     <div key={key} className='w-full flex justify-between items-center'>
                                         <div className='flex items-center space-x-2'>
-                                            <img src={result.avatar} className=' w-16 h-16 rounded-full object-cover cursor-pointer' onClick={() => navigate(`/${result.username}`)} />
+                                            <img src={result.smallAvatar} className=' w-16 h-16 rounded-full object-cover cursor-pointer' onClick={() => navigate(`/${result.username}`)} />
                                             <div className=' flex flex-col justify-center'>
                                                 <h1 className=' font-semibold  cursor-pointer hover:underline' onClick={() => navigate(`/${result.username}`)}>{result.nickname}</h1>
                                                 {(result.address && result.address.length > 0) && (

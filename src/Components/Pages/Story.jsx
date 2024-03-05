@@ -161,7 +161,7 @@ export default function Story() {
                         >
                             <div className={`rounded-full ${seen.includes(reel.id) ? '' : 'border-blue-500 border-4 '}  p-0.5`} style={{ width: "60px", height: "60px" }}>
                                 <img
-                                    alt='avatar' src={reel.User.avatar}
+                                    alt='avatar' src={reel.User.smallAvatar}
                                     className=' w-full h-full rounded-full object-cover'
                                 />
                             </div>
@@ -197,7 +197,7 @@ export default function Story() {
                                 </div>
                                 <div className='text-white flex items-center justify-between'>
                                     <div className='flex items-center'>
-                                        <img onClick={() => navigate(`/${playing.User.username}`)} alt='avtar' src={playing.User.avatar} className=' cursor-pointer w-10 h-10 mx-3 object-cover rounded-full' />
+                                        <img onClick={() => navigate(`/${playing.User.username}`)} alt='avtar' src={playing.User.smallAvatar} className=' cursor-pointer w-10 h-10 mx-3 object-cover rounded-full' />
                                         <h1 onClick={() => navigate(`/${playing.User.username}`)} className=' cursor-pointer font-semibold'>{playing.User.nickname}</h1>
                                     </div>
                                     <div className='flex item space-x-3'>

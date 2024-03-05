@@ -76,7 +76,7 @@ export default function BoxChat({ chat, socket }) {
         <div className={`${Styles.boxchat} ${isMobile ? 'w-[300px] h-[400px]' : 'w-80 h-[430px]'} rounded-xl shadow-xl  bg-white flex flex-col items-start relative`}>
             <div className={`h-[60px] flex items-center justify-between p-0.5 ${isMobile ? 'w-[300px]' : 'w-80'}`} style={{ boxShadow: '0px 10px 10px -15px #111' }}>
                 <div className='flex items-center w-7/12 hover:bg-gray-100 p-0.5 rounded-lg cursor-pointer'>
-                    <img alt='avatar' src={chat.avatar} className=' rounded-full object-cover w-12 h-12 p-1' />
+                    <img alt='avatar' src={chat.smallAvatar} className=' rounded-full object-cover w-12 h-12 p-1' />
                     <div className=' w-8/12 '>
                         <h1 className=' break-words font-semibold text-[16px] text-ellipsis whitespace-nowrap overflow-hidden w-full' title={chat.nickname}>{chat.nickname}</h1>
                         {chat.online ? (
@@ -145,7 +145,7 @@ export default function BoxChat({ chat, socket }) {
                                 ) : (
                                     <>
                                         <div className=' flex items-center space-x-2 justify-start w-full mb-1' key={message.id}>
-                                            <img src={chat.avatar} className=' w-8 h-8 rounded-full object-cover' />
+                                            <img src={chat.smallAvatar} className=' w-8 h-8 rounded-full object-cover' />
                                             <h1 className={` p-2 rounded-2xl text-black bg-gray-300 text-[14.5px] break-words`} style={{ maxWidth: "230px" }}>{message.message}</h1>
                                         </div>
                                     </>

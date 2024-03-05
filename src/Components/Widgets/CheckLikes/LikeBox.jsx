@@ -46,7 +46,7 @@ export default function LikeBox({ PostId, setOpenLike, user }) {
                             {list.map((like, index) => (
                                 <div className=' flex justify-between full my-3' key={index}>
                                     <div className='flex items-center space-x-2'>
-                                        <img alt='avatar' src={`${like.User.avatar}`} className='w-8 h-8 object-cover rounded-full cursor-pointer' onClick={() => {
+                                        <img alt='avatar' src={`${like.User.smallAvatar}`} className='w-8 h-8 object-cover rounded-full cursor-pointer' onClick={() => {
                                             setOpenLike(false);
                                             navigate(`/${like.User.username}`)
                                         }} />

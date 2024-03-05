@@ -76,6 +76,22 @@ export const Auth = {
         })
     },
 
+    async changeUserInterface(data) {
+        return await axios.put(`${ApiUrl}/auth/upload`, data, {
+            headers: {
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            },
+        })
+    },
+
+    async getFriendRequests() {
+        return await axios.get(`${ApiUrl}/relationship/request`, {
+            headers: {
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            },
+        })
+    },
+
     async refreshStateUser(success, unAuthorized, failure) {
 
         const accessToken = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");

@@ -51,7 +51,7 @@ export default function Story() {
             }}
             className=' w-40 h-64 relative rounded-lg shadow-lg border-slate-300 border cursor-pointer'
             style={{
-              backgroundImage: `url(${user.avatar})`,
+              backgroundImage: `url(${user.smallAvatar})`,
               backgroundRepeat: 'no-repeat',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
@@ -113,7 +113,7 @@ export default function Story() {
                       </>
                     )}
                     <div className='absolute top-1 left-1 p-1 bg-blue-600 rounded-full'>
-                      <img alt='avatar' src={`${story.User.avatar}`} className=' w-10 h-10 object-cover rounded-full' />
+                      <img alt='avatar' src={`${story.User.smallAvatar}`} className=' w-10 h-10 object-cover rounded-full' />
                     </div>
                     <div id={`reel-${story.id}`} className='absolute w-40 h-64 rounded-lg hidden' style={{ backgroundColor: 'rgb(0,0,0,0.1)' }}>
                     </div>

@@ -38,6 +38,7 @@ export default function ConfirmAccount() {
                 username,
                 nickname,
                 avatar,
+                smallAvatar: avatar,
                 address,
                 workAt,
                 studyAt,
