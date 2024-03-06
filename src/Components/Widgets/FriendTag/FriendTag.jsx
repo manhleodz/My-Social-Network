@@ -43,12 +43,18 @@ export default function FriendTag({ friend, status }) {
                 {status === 2 && (
                     <>
                         {isConfirm && (
-                            <></>
+                            <div
+                                className=' w-full bg-gray-200 text-base font-semibold text-black rounded-lg p-2 '
+                            >
+                                Xác nhận thành công
+                            </div>
                         )}
                         {isDelete && (
-                            <>
-
-                            </>
+                            <div
+                                className=' w-full bg-gray-200 text-base font-semibold text-black rounded-lg p-2 '
+                            >
+                                Đã hủy lời mời
+                            </div>
                         )}
                         {(!isConfirm && !isDelete) && (
                             <>
@@ -71,7 +77,22 @@ export default function FriendTag({ friend, status }) {
 
                 {status === 1 && (
                     <>
-
+                        {isDelete ? (
+                            <>
+                                <div
+                                    className=' w-full bg-gray-200 text-base font-semibold text-black rounded-lg p-2 '
+                                >
+                                    Đã hủy lời mời
+                                </div>
+                            </>
+                        ) : (
+                            <button
+                                className=' w-full bg-gray-200 text-base font-semibold text-black rounded-lg p-2 hover:bg-gray-300'
+                                onClick={() => deleteFriend(friend.id)}
+                            >
+                                Hủy
+                            </button>
+                        )}
                     </>
                 )}
             </div>

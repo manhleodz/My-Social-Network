@@ -54,6 +54,7 @@ export default function Comment({ comment, setComment, comments, setOpenComment,
     setOption(false);
   }
 
+  console.log(comment);
   return (
     <>
       <div

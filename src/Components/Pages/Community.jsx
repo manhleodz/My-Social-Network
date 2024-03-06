@@ -7,6 +7,8 @@ export default function Community() {
   }, [])
 
   return (
-    <div>Community</div>
+    <div className='h-screen w-screen flex items-center justify-center'>
+      Community is coming soon!
+    </div>
   )
 }

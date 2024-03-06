@@ -6,6 +6,7 @@ import { BrowserView, isMobile, MobileView } from 'react-device-detect';
 export default function Friend() {
 
     const [requests, setRequest] = useState(null);
+    const [unconfirmedRequests, setUnconfirmedRequests] = useState(null);
 
     useEffect(() => {
         document.title = "Bạn bè | ML";
@@ -15,9 +16,15 @@ export default function Friend() {
         }).catch(err => {
             console.error(err);
         });
+
+        Auth.getUnconfirmedRequest().then(res => {
+            setUnconfirmedRequests(res.data.data)
+        }).catch(err => {
+            console.error(err);
+        });
     }, []);
 
-    if (!requests) return null;
+    if (!requests || !unconfirmedRequests) return null;
 
     return (
         <div
@@ -28,9 +35,9 @@ export default function Friend() {
                     <>
                         <h1 className=' text-2xl font-bold mb-3'>Lời mời kết bạn</h1>
                         <div className=' w-full grid grid-cols-8 justify-center gap-8 max-[1600px]:grid-cols-6 max-[1600px]:gap-6
-                    max-[1400px]:grid-cols-5 max-[1400px]:gap-5 max-[1200px]:grid-cols-4 max-[1200px]:gap-4
-                    max-[850px]:grid-cols-3 max-[850px]:gap-3
-                    max-[650px]:grid-cols-2 max-[650px]:gap-2'
+                            max-[1400px]:grid-cols-5 max-[1400px]:gap-5 max-[1200px]:grid-cols-4 max-[1200px]:gap-4
+                            max-[850px]:grid-cols-3 max-[850px]:gap-3
+                            max-[650px]:grid-cols-2 max-[650px]:gap-2'
                         >
                             {requests.length > 0 && requests.map(request => (
                                 <>
@@ -47,9 +54,9 @@ export default function Friend() {
                     max-[850px]:grid-cols-3 max-[850px]:gap-3
                     max-[650px]:grid-cols-2 max-[650px]:gap-2'
                 >
-                    {requests.length > 0 && requests.map(request => (
+                    {unconfirmedRequests.length > 0 && unconfirmedRequests.map(request => (
                         <>
-                            <FriendTag key={request.id} friend={request.Sender} status={1} />
+                            <FriendTag key={request.id} friend={request.Receiver} status={1} />
                         </>
                     ))}
                 </div>

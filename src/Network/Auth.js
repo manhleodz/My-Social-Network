@@ -92,6 +92,14 @@ export const Auth = {
         })
     },
 
+    async getUnconfirmedRequest() {
+        return await axios.get(`${ApiUrl}/relationship/unconfirmed`, {
+            headers: {
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            },
+        })
+    },
+
     async refreshStateUser(success, unAuthorized, failure) {
 
         const accessToken = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
