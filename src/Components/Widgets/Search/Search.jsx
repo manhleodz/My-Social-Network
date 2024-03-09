@@ -2,8 +2,11 @@ import React, { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { SearchAPI } from '../../../Network/Search';
 import Styles from './Search.module.scss';
+import { useSelector } from 'react-redux';
 
 export default function Search() {
+
+    const user = useSelector(state => state.authentication.user);
 
     const [cache, setCache] = useState([]);
     const [input, setInput] = useState("");
@@ -74,7 +77,7 @@ export default function Search() {
                         className={`block ${input.length !== 0 ? 'w-full' : ''} max-md:w-[200px] text-xl pl-10 text-gray-900 border border-gray-300 rounded-3xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                         placeholder="Tìm kiếm"
                         ref={searchRef}
-                        onChange={search}
+                        onChangeCapture={search}
                         onKeyDownCapture={(e) => {
                             if (e.key === 'Enter' && input.length !== 0) {
                                 setInput("");
@@ -108,7 +111,24 @@ export default function Search() {
                                                     <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                                                 </svg>
                                             </div>
-                                            <p className=' font-semibold'>{value.nickname}</p>
+                                            <div>
+                                                <p className=' font-semibold'>{value.nickname}</p>
+                                                {(() => {
+                                                    if (value.id === user.id) {
+                                                        return (
+                                                            <span className=' text-[13px] text-gray-600'>Bạn</span>
+                                                        )
+                                                    } else if (value.isFriend === 3) {
+                                                        return (
+                                                            <span className=' text-[13px] text-gray-600'>Bạn bè</span>
+                                                        )
+                                                    } else {
+                                                        return (
+                                                            <span className=' text-[13px] text-gray-600'>Người</span>
+                                                        )
+                                                    }
+                                                })()}
+                                            </div>
                                         </div>
                                         <img alt='avatar' src={`${value.smallAvatar}`} className=' w-10 h-10 rounded-xl object-cover' />
                                     </div>

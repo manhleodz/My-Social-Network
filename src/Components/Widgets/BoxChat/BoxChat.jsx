@@ -5,14 +5,21 @@ import ScrollToBottom from 'react-scroll-to-bottom';
 import { closeOneBox, smallOneBox } from '../../../Redux/MessagerSlice';
 import Styles from './BoxChat.module.scss';
 import { isBrowser, isMobile } from 'react-device-detect';
+import socket from '../../../Network/Socket';
+import typingAnimation from '../../../Assets/Gif icons/Typing2.gif';
 
-export default function BoxChat({ chat, socket }) {
+export default function BoxChat({ chat }) {
 
     const user = useSelector(state => state.authentication.user);
+
     const dispatch = useDispatch();
 
     const [listMessage, setListMessage] = useState([]);
     const [newMessenger, setNewMessenger] = useState("");
+    const [format, setFormat] = useState("text");
+    const [typing, setTyping] = useState(false);
+
+    console.log(123);
 
     const sendMessage = async () => {
         if (newMessenger !== "") {
@@ -20,24 +27,27 @@ export default function BoxChat({ chat, socket }) {
                 sender: user.id,
                 receiver: chat.id,
                 message: newMessenger,
-                room: chat.relationshipId,
+                RelationshipId: chat.relationshipId,
+                type: format
             };
 
             await ChatApi.sendMessage(messageData).then(async (res) => {
 
                 const newMess = res.data.data;
 
-                await socket.emit("send_message", {
+                socket.emit("send_message", {
                     id: newMess.id,
-                    room: chat.relationshipId,
+                    room: `coversation-${chat.relationshipId}`,
                     createdAt: newMess.createdAt,
                     sender: user.id,
+                    nickname: user.nickname,
+                    type: format,
                     message: newMess.message,
                 });
 
                 setListMessage(prev => [...prev, {
                     id: newMess.id,
-                    room: chat.relationshipId,
+                    RelationshipId: chat.relationshipId,
                     createdAt: newMess.createdAt,
                     sender: user.id,
                     message: newMess.message,
@@ -50,18 +60,46 @@ export default function BoxChat({ chat, socket }) {
         }
     };
 
+    const typingHandler = (e) => {
+        setNewMessenger(e.target.value);
+
+        if (!socket.connected) return;
+
+        if (!typing) {
+            setTyping(true);
+            socket.emit("typing", { room: `coversation-${chat.relationshipId}`, userId: user.id });
+        }
+        let lastTypingTime = new Date().getTime();
+        var timerLength = 3000;
+        setTimeout(() => {
+            var timeNow = new Date().getTime();
+            var timeDiff = timeNow - lastTypingTime;
+            if (timeDiff >= timerLength && typing) {
+                socket.emit("stop typing", { room: `coversation-${chat.relationshipId}`, userId: user.id });
+                setTyping(false);
+            }
+        }, timerLength);
+    };
+
     useEffect(() => {
         socket.on("receive_message", (data) => {
-            if (data.room === chat.relationshipId)
+            if (data.room === `coversation-${chat.relationshipId}`) {
+                console.log(data.nickname + " send you a message");
                 setListMessage(prev => [...prev, data]);
+            }
         });
 
     }, [socket, chat]);
 
     useEffect(() => {
-        socket.emit("join_room", chat.relationshipId);
+        socket.on("typing", () => setTyping(true));
+        socket.on("stop typing", () => setTyping(false));
+    }, [])
 
-        ChatApi.getMessage(chat.id).then((res) => {
+    useEffect(() => {
+        socket.emit("join_room", `coversation-${chat.relationshipId}`);
+
+        ChatApi.getMessage(chat.relationshipId).then((res) => {
             if (res.status === 200) {
                 setListMessage(prev => prev = [...prev, ...res.data.data]);
             } else
@@ -152,6 +190,12 @@ export default function BoxChat({ chat, socket }) {
                                 )}
                             </div>
                         ))}
+                        {(typing && newMessenger.length === 0) && (
+                            <div className=' flex items-center space-x-2 justify-start w-full mb-1' key="typing">
+                                <img src={chat.smallAvatar} className=' w-8 h-8 rounded-full object-cover' />
+                                <img alt='typing' src={typingAnimation} className='h-8 w-12 object-fill rounded-2xl bg-gray-300' />
+                            </div>
+                        )}
                     </ScrollToBottom>
                 </div>
             )}
@@ -169,9 +213,7 @@ export default function BoxChat({ chat, socket }) {
                     className=' p-2 rounded-xl h-10 bg-gray-200 relative flex items-center'
                 >
                     <input
-                        onChange={(e) => {
-                            setNewMessenger(e.target.value);
-                        }}
+                        onChange={typingHandler}
                         value={newMessenger}
                         className='bg-gray-200 outline-none ring-0 p-2 rounded-xl'
                     />

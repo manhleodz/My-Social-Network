@@ -9,13 +9,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Auth } from '../../Network/Auth';
 import { PostApi } from '../../Network/Post';
 import { FriendApi } from '../../Network/Friend';
-import { setUser, signOut } from '../../Redux/UserSlice';
+import { setStatus, setUser, signOut } from '../../Redux/UserSlice';
 import { StoryApi } from '../../Network/Story';
 import { fetchData } from '../../Redux/PostSlice';
 import { fetchStory } from '../../Redux/StorySlice';
 import { fetchFriend } from '../../Redux/FriendSlice';
 import { LoadingPage } from '../Widgets/Loading/LoadingPage';
-
+import socket from '../../Network/Socket';
 
 export default function AppRoutes() {
 
@@ -25,6 +25,7 @@ export default function AppRoutes() {
 
     const success = (e) => {
         dispatch(setUser(e));
+        socket.emit("online", e);
         getPosts();
         getStories();
         getListFriends();
@@ -79,6 +80,27 @@ export default function AppRoutes() {
         }
         Auth.refreshStateUser(success, unAuthorized, failure);
 
+    }, []);
+
+    useEffect(() => {
+
+        setTimeout(() => {
+            socket.disconnect();
+            Auth.refreshStateUser(success, unAuthorized, failure);
+        }, 1800000)
+    });
+
+    useEffect(() => {
+        const unloadCallback = (event) => {
+            if (user)
+                socket.disconnect();
+            event.preventDefault();
+            event.returnValue = "";
+            return "";
+        };
+
+        window.addEventListener("beforeunload", unloadCallback);
+        return () => window.removeEventListener("beforeunload", unloadCallback);
     }, []);
 
     if (user === "") {

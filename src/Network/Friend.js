@@ -18,6 +18,13 @@ export const FriendApi = {
             }
         })
     },
+    async openChannelMessageRequest(data) {
+        return await axios.post(`${ApiUrl}/relationship/addMessageRequest`, data, {
+            headers: {
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            }
+        })
+    },
 
     async getFriendOfProfile(id) {
         return await axios.get(`${ApiUrl}/relationship/profile`, {

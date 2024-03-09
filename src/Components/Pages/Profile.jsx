@@ -7,6 +7,7 @@ import { FriendApi } from '../../Network/Friend';
 import { fetchFriend } from '../../Redux/FriendSlice';
 import { isMobile } from 'react-device-detect';
 import { LoadingProfilePage } from '../Widgets/Loading/LoadingPage';
+import { addBoxChat, openMobileChat, openOneBox, setIsOpenChat } from '../../Redux/MessagerSlice';
 
 export default function Profile() {
 
@@ -19,6 +20,7 @@ export default function Profile() {
   const [newAvatar, setNewAvatar] = useState(null);
   const [newBackground, setNewBackground] = useState(null);
   const scrollRef = useRef();
+  const [excuting, setExcuting] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -40,9 +42,7 @@ export default function Profile() {
       const formData = new FormData();
       formData.append('files', newAvatar, newAvatar.name);
       formData.append('type', 'avatar');
-      Auth.changeUserInterface(formData).then((res) => {
-
-      }).catch((err) => {
+      await Auth.changeUserInterface(formData).catch((err) => {
         alert(err.response);
       });
     }
@@ -51,9 +51,7 @@ export default function Profile() {
       const formData = new FormData();
       formData.append('files', newBackground, newBackground.name);
       formData.append('type', 'background');
-      Auth.changeUserInterface(formData).then((res) => {
-
-      }).catch((err) => {
+      await Auth.changeUserInterface(formData).catch((err) => {
         alert(err.response);
       });
     }
@@ -87,9 +85,31 @@ export default function Profile() {
     });
   };
 
+  const openMessageRequest = () => {
+    FriendApi.openChannelMessageRequest({ user: profile.id }).then(res => {
+      const newChat = {
+        id: profile.id,
+        nickname: profile.nickname,
+        username: profile.username,
+        smallAvatar: profile.smallAvatar,
+        relationshipId: res.data.relationshipId.id
+      }
+
+      if (isMobile) {
+        dispatch(openMobileChat(newChat));
+        dispatch(setIsOpenChat(true));
+      } else {
+
+        dispatch(addBoxChat(newChat));
+        dispatch(openOneBox(newChat));
+      }
+    })
+  }
+
   useEffect(() => {
 
     window.scrollTo(0, 0);
+    setExcuting(false);
     setNewAvatar(null);
     setNewBackground(null);
     Auth.getProfile(username).then(res => {
@@ -108,15 +128,20 @@ export default function Profile() {
       <div className='w-full relative top-10 flex flex-col items-center divide divide-gray-500'>
         <div className=' w-full flex justify-center' style={{ backgroundImage: `linear-gradient(${profile.backgroundColor}, white)` }}>
           <div className={`${ProfileStyle.header} relative`} >
-            {(newAvatar || newBackground) && (
+            {excuting && (
               <div className='w-full h-[45px] p-2 flex justify-end items-center top-3 absolute left-0 z-30' style={{ backgroundColor: 'rgb(0,0,0,0.6)' }}>
                 <button onClick={() => {
+                  setExcuting(false);
                   setNewAvatar(null);
                   setNewBackground(null);
                 }} className='p-2 bg-gray-400 text-white mx-2 rounded-lg font-semibold'>
                   Hủy
                 </button>
-                <button onClick={update} className='p-2 bg-blue-600 text-white mx-2 rounded-lg font-semibold'>
+                <button onClick={() => {
+                  update().then(() => {
+                    setExcuting(false);
+                  })
+                }} className='p-2 bg-blue-600 text-white mx-2 rounded-lg font-semibold'>
                   Lưu thay đổi
                 </button>
               </div>
@@ -128,6 +153,7 @@ export default function Profile() {
               {profile.id === user.id && (
                 <div className={` absolute flex items-center justify-center bottom-3 right-2 max-lg:bottom-3 max-lg:right-3 w-32 h-8 max-lg:w-4 border-2 border-white max-lg:h-4 rounded-lg bg-white p-1`}>
                   <input type='file' accept='image/*' className=' hidden' id='update-background' onChange={e => {
+                    setExcuting(true);
                     const file = e.target.files[0];
                     Object.assign(file, {
                       preview: URL.createObjectURL(file)
@@ -150,6 +176,7 @@ export default function Profile() {
                   {profile.id === user.id ? (
                     <div className={` absolute bottom-3 right-2 max-lg:bottom-3 max-lg:right-3 w-8 h-8 max-lg:w-4 border-2 border-white max-lg:h-4 rounded-full bg-white p-1`}>
                       <input type='file' accept='image/*' className=' hidden' id='update-avatar' onChange={e => {
+                        setExcuting(true);
                         const file = e.target.files[0];
                         Object.assign(file, {
                           preview: URL.createObjectURL(file)
@@ -337,7 +364,7 @@ export default function Profile() {
                         </div>
                       </>
                     )}
-                    <button className=' w-28 p-2 bg-blue-600 rounded-lg text-base font-semibold text-white hover:bg-blue-700 flex items-center justify-center h-10'>
+                    <button onClick={openMessageRequest} className=' w-28 p-2 bg-blue-600 rounded-lg text-base font-semibold text-white hover:bg-blue-700 flex items-center justify-center h-10'>
                       <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512" fill='white'>
                         <path d="M256.6 8C116.5 8 8 110.3 8 248.6c0 72.3 29.7 134.8 78.1 177.9 8.4 7.5 6.6 11.9 8.1 58.2A19.9 19.9 0 0 0 122 502.3c52.9-23.3 53.6-25.1 62.6-22.7C337.9 521.8 504 423.7 504 248.6 504 110.3 396.6 8 256.6 8zm149.2 185.1l-73 115.6a37.4 37.4 0 0 1 -53.9 9.9l-58.1-43.5a15 15 0 0 0 -18 0l-78.4 59.4c-10.5 7.9-24.2-4.6-17.1-15.7l73-115.6a37.4 37.4 0 0 1 53.9-9.9l58.1 43.5a15 15 0 0 0 18 0l78.4-59.4c10.4-8 24.1 4.5 17.1 15.6z" />
                       </svg>

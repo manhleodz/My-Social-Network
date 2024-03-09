@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { addBoxChat, openOneBox } from '../../../Redux/MessagerSlice';
 import Bar from './OnlineBar.module.scss';
+import socket from '../../../Network/Socket';
 
 export default function OnlineBar({ userId }) {
 
@@ -9,7 +10,17 @@ export default function OnlineBar({ userId }) {
     const dispatch = useDispatch();
     const [link, setLink] = useState("https://images.ctfassets.net/m3qyzuwrf176/5KozoZzaJPtsTlGPEVziad/7be04e4d62922b31292acd2116de7571/9_before_sunrise-thumbnail.jpg?w=2000");
     const [text, setText] = useState("Before Sunrise");
+    const [listUserOnline, setListUserOnline] = useState([]);
+    const [socketConnected, setSocketConnected] = useState(false);
 
+    useEffect(() => {
+        // socket.on("joined", (data) => {
+        //     setListUserOnline(data)
+        //     console.log(data);
+        // })
+
+        socket.on("connected", () => setSocketConnected(true));
+    }, []);
 
     return (
         <div
@@ -44,7 +55,7 @@ export default function OnlineBar({ userId }) {
                     >
                         <div className='rounded-full relative'>
                             <img alt={fr.username} src={fr.smallAvatar} className='w-12 h-12 object-center rounded-full object-cover' />
-                            <div className={`w-3 h-3 rounded-full absolute right-0 bottom-0 border-2 border-white ${fr.online === true ? 'bg-green-600 ' : 'bg-gray-400'}`}></div>
+                            <div className={`w-3 h-3 rounded-full absolute right-0 bottom-0 border-2 border-white ${listUserOnline.some(id => id === fr.id) ? 'bg-green-600 ' : 'bg-gray-400'}`}></div>
                         </div>
                         <h1 className=' font-semibold px-2 w-8/12 max-xl:text-sm break-words text-ellipsis whitespace-nowrap overflow-hidden'>{fr.nickname}</h1>
                     </div>

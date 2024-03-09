@@ -1,12 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Auth } from '../Network/Auth';
-
 export const userSlice = createSlice({
     name: 'authentication',
     initialState: {
         user: "",
     },
     reducers: {
+
         setUser(state, action) {
             state.user = action.payload;
         },
@@ -16,6 +15,6 @@ export const userSlice = createSlice({
     }
 })
 
-export const { setUser, signOut } = userSlice.actions;
+export const { setUser, signOut, setStatus } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

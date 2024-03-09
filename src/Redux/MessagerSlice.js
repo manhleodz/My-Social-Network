@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 export const MessengerSlice = createSlice({
     name: 'messenger',
     initialState: {
+        isOpen: false,
+        messages: [],
         openChat: [],
         boxChat: [],
     },
@@ -40,7 +42,11 @@ export const MessengerSlice = createSlice({
 
             if (canPush(state.openChat, action.payload))
                 state.openChat = [action.payload];
-        }
+        },
+
+        setIsOpenChat(state, action) {
+            state.isOpen = action.payload;
+        },
     }
 })
 
@@ -51,6 +57,6 @@ const canPush = (boxs, myObj) => {
     return true;
 }
 
-export const { addBoxChat, openOneBox, closeOneBox, smallOneBox, openMobileChat } = MessengerSlice.actions;
+export const { addBoxChat, openOneBox, closeOneBox, smallOneBox, openMobileChat, setIsOpenChat } = MessengerSlice.actions;
 
 export const messengerReducer = MessengerSlice.reducer;
