@@ -13,7 +13,6 @@ export default function Layout({ children }) {
   const frs = useSelector(state => state.friends.friends);
   const dispatch = useDispatch();
 
-  console.log(isOpenChatMobile);
   const [open, setOpen] = useState(false);
 
   return (

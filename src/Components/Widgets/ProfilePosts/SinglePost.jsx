@@ -61,6 +61,23 @@ export default function SinglePost({ post, posts, setPost }) {
         document.querySelector('body').style.paddingRight = "0px"
     }
 
+    function myFunction() {
+        var more = document.getElementById(`more-btn-${post.Post.id}`);
+        var less = document.getElementById(`less-btn-${post.Post.id}`);
+        var moreText = document.getElementById(`more-${post.Post.id}`);
+
+        if (more.style.display === "none") {
+            more.style.display = "inline";
+            less.style.display = "none";
+            moreText.style.display = "none";
+        } else {
+            less.style.display = "block";
+            more.style.display = "none";
+            moreText.style.display = "block";
+        }
+    }
+
+
     return (
         <div className=" rounded-lg shadow-md bg-white">
             <div className=" p-4 space-y-3 ">
@@ -146,7 +163,16 @@ export default function SinglePost({ post, posts, setPost }) {
                         )}
                     </div>
                 </div>
-                <pre className=" text-base font-normal break-words font-noto">{post.Post.postText && post.Post.postText.replace(/@@newline@@/g, '\n')}</pre>
+                <pre className=" text-base font-normal w-full break-words whitespace-pre-wrap font-noto">
+                    {post.Post.postText && (post.Post.postText.replace(/@@newline@@/g, '\n').slice(0, 200))}
+                    {post.Post.postText.length > 200 && (
+                        <>
+                            <span id={`more-btn-${post.Post.id}`} className=" font-semibold text-sm cursor-pointer hover:underline-offset-1" onClick={myFunction}>...Xem thêm</span>
+                            <pre id={`more-${post.Post.id}`} className="hidden text-base w-full font-normal break-words whitespace-pre-wrap font-noto">{post.Post.postText && (post.Post.postText.replace(/@@newline@@/g, '\n').slice(200))}</pre>
+                            <span id={`less-btn-${post.Post.id}`} className="hidden font-semibold text-sm cursor-pointer hover:underline-offset-1" onClick={myFunction}>...Bớt đi</span>
+                        </>
+                    )}
+                </pre>
             </div>
             <div className=" flex justify-center items-center max-h-md bg-black">
                 {media.length == 0 && (

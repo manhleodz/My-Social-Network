@@ -19,8 +19,6 @@ export default function BoxChat({ chat }) {
     const [format, setFormat] = useState("text");
     const [typing, setTyping] = useState(false);
 
-    console.log(123);
-
     const sendMessage = async () => {
         if (newMessenger !== "") {
             const messageData = {
@@ -41,6 +39,7 @@ export default function BoxChat({ chat }) {
                     createdAt: newMess.createdAt,
                     sender: user.id,
                     nickname: user.nickname,
+                    receiver: chat.id,
                     type: format,
                     message: newMess.message,
                 });
@@ -62,29 +61,34 @@ export default function BoxChat({ chat }) {
 
     const typingHandler = (e) => {
         setNewMessenger(e.target.value);
+        if (newMessenger.length > 0) {
+            if (!socket.connected) return;
 
-        if (!socket.connected) return;
-
-        if (!typing) {
-            setTyping(true);
-            socket.emit("typing", { room: `coversation-${chat.relationshipId}`, userId: user.id });
-        }
-        let lastTypingTime = new Date().getTime();
-        var timerLength = 3000;
-        setTimeout(() => {
-            var timeNow = new Date().getTime();
-            var timeDiff = timeNow - lastTypingTime;
-            if (timeDiff >= timerLength && typing) {
-                socket.emit("stop typing", { room: `coversation-${chat.relationshipId}`, userId: user.id });
-                setTyping(false);
+            if (!typing) {
+                setTyping(true);
+                socket.emit("typing", { room: `coversation-${chat.relationshipId}`, userId: user.id });
             }
-        }, timerLength);
+        } else {
+
+            if (typing) {
+
+                let lastTypingTime = new Date().getTime();
+                var timerLength = 3000;
+                setTimeout(() => {
+                    var timeNow = new Date().getTime();
+                    var timeDiff = timeNow - lastTypingTime;
+                    if (timeDiff >= timerLength && typing) {
+                        socket.emit("stop typing", { room: `coversation-${chat.relationshipId}`, userId: user.id });
+                        setTyping(false);
+                    }
+                }, timerLength);
+            }
+        }
     };
 
     useEffect(() => {
         socket.on("receive_message", (data) => {
             if (data.room === `coversation-${chat.relationshipId}`) {
-                console.log(data.nickname + " send you a message");
                 setListMessage(prev => [...prev, data]);
             }
         });
@@ -190,12 +194,12 @@ export default function BoxChat({ chat }) {
                                 )}
                             </div>
                         ))}
-                        {(typing && newMessenger.length === 0) && (
+                        {/* {(typing && newMessenger.length === 0) && (
                             <div className=' flex items-center space-x-2 justify-start w-full mb-1' key="typing">
                                 <img src={chat.smallAvatar} className=' w-8 h-8 rounded-full object-cover' />
                                 <img alt='typing' src={typingAnimation} className='h-8 w-12 object-fill rounded-2xl bg-gray-300' />
                             </div>
-                        )}
+                        )} */}
                     </ScrollToBottom>
                 </div>
             )}
