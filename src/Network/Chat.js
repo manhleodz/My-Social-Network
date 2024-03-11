@@ -26,5 +26,13 @@ export const ChatApi = {
                 accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             },
         });
+    },
+
+    async getGroupChat() {
+        return axios.get(`${ApiUrl}/inbox/group/all`, {
+            headers: {
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            },
+        })
     }
 }

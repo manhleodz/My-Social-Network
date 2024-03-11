@@ -4,15 +4,20 @@ export const MessengerSlice = createSlice({
     name: 'messenger',
     initialState: {
         isOpen: false,
-        messages: [],
         openChat: [],
         boxChat: [],
+        groupChat: [],
     },
     reducers: {
 
         addBoxChat(state, action) {
             if (canPush(state.boxChat, action.payload))
                 state.boxChat = [...state.boxChat, action.payload];
+        },
+
+        addGroupChat(state, action) {
+            if (canPush(state.groupChat, action.payload))
+                state.groupChat = [...state.groupChat, ...action.payload];
         },
 
         openOneBox(state, action) {
@@ -57,6 +62,6 @@ const canPush = (boxs, myObj) => {
     return true;
 }
 
-export const { addBoxChat, openOneBox, closeOneBox, smallOneBox, openMobileChat, setIsOpenChat } = MessengerSlice.actions;
+export const { addBoxChat, openOneBox, closeOneBox, addGroupChat, smallOneBox, openMobileChat, setIsOpenChat } = MessengerSlice.actions;
 
 export const messengerReducer = MessengerSlice.reducer;

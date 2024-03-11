@@ -1,26 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { addBoxChat, openOneBox } from '../../../Redux/MessagerSlice';
+import { addBoxChat, addGroupChat, openOneBox } from '../../../Redux/MessagerSlice';
 import Bar from './OnlineBar.module.scss';
-import socket from '../../../Network/Socket';
+import { ChatApi } from '../../../Network/Chat';
+import UserTag from './UserTag';
 
 export default function OnlineBar({ userId }) {
 
     const frs = useSelector(state => state.friends.friends);
+    const groupChats = useSelector(state => state.messenger.groupChat);
     const dispatch = useDispatch();
     const [link, setLink] = useState("https://images.ctfassets.net/m3qyzuwrf176/5KozoZzaJPtsTlGPEVziad/7be04e4d62922b31292acd2116de7571/9_before_sunrise-thumbnail.jpg?w=2000");
     const [text, setText] = useState("Before Sunrise");
-    const [listUserOnline, setListUserOnline] = useState([]);
-    const [socketConnected, setSocketConnected] = useState(false);
 
     useEffect(() => {
-        // socket.on("joined", (data) => {
-        //     setListUserOnline(data)
-        //     console.log(data);
-        // })
-
-        socket.on("connected", () => setSocketConnected(true));
-    }, []);
+        ChatApi.getGroupChat().then((res) => {
+            dispatch(addGroupChat(res.data.data));
+        })
+    }, [])
 
     return (
         <div
@@ -45,19 +42,27 @@ export default function OnlineBar({ userId }) {
                     </svg>
                 </div>
                 {frs.map(((fr, index) => (
+                    <UserTag fr={fr} key={index} />
+                )))}
+            </div>
+            <div>
+                <div className='flex items-center justify-between'>
+                    <h1>Nhóm của bạn</h1>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="25" width="30" viewBox="0 0 512 512" className=' cursor-pointer hover:bg-gray-300 rounded-full p-1'>
+                        <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                    </svg>
+                </div>
+                {groupChats.map(((group, index) => (
                     <div
                         key={index} className='flex items-center  w-full cursor-pointer hover:bg-gray-200 p-1.5 rounded-lg'
                         onClick={() => {
-                            sessionStorage.setItem('openBox', JSON.stringify(fr));
-                            dispatch(addBoxChat(fr));
-                            dispatch(openOneBox(fr));
+                            sessionStorage.setItem('openBox', JSON.stringify(group));
                         }}
                     >
                         <div className='rounded-full relative'>
-                            <img alt={fr.username} src={fr.smallAvatar} className='w-12 h-12 object-center rounded-full object-cover' />
-                            <div className={`w-3 h-3 rounded-full absolute right-0 bottom-0 border-2 border-white ${listUserOnline.some(id => id === fr.id) ? 'bg-green-600 ' : 'bg-gray-400'}`}></div>
+                            <img alt={group.name} src={group.avatar} className='w-12 h-12 object-center rounded-full object-cover' />
                         </div>
-                        <h1 className=' font-semibold px-2 w-8/12 max-xl:text-sm break-words text-ellipsis whitespace-nowrap overflow-hidden'>{fr.nickname}</h1>
+                        <h1 className=' font-semibold px-2 w-8/12 max-xl:text-sm break-words text-ellipsis whitespace-nowrap overflow-hidden'>{group.name}</h1>
                     </div>
                 )))}
             </div>

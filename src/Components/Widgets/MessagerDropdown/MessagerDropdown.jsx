@@ -18,9 +18,6 @@ export default function MessagerDropdown() {
 
     }, [socket]);
 
-    console.log(messages);
-    console.log(frs);
-
     return (
         <div className=' w-10 h-10 flex justify-center items-center relative bg-gray-300 rounded-full hover:bg-gray-400 active:ring-gray-300 active:ring cursor-pointer'>
             <svg xmlns="http://www.w3.org/2000/svg" height="1.4em" viewBox="0 0 512 512" className=' fill-gray-700'>

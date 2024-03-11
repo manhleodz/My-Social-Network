@@ -44,7 +44,7 @@ export const PostApi = {
     },
 
     async updateLikeNum(id) {
-        return await axios.post(`${ApiUrl}/posts/like/${id}`, {
+        return await axios.put(`${ApiUrl}/posts/like/${id}`, {
             headers: {
                 accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
@@ -52,7 +52,7 @@ export const PostApi = {
     },
 
     async updateCommentNum(id) {
-        return await axios.post(`${ApiUrl}/posts/comment/${id}`, {
+        return await axios.put(`${ApiUrl}/posts/comment/${id}`, {
             headers: {
                 accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             }
