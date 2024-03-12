@@ -3,7 +3,7 @@ import NavigateBar from '../NavigateBar/NavigateBar';
 import BoxChat from '../BoxChat/BoxChat';
 import { useDispatch, useSelector } from 'react-redux';
 import { openMobileChat, openOneBox, setIsOpenChat } from '../../../Redux/MessagerSlice';
-import { BrowserView, MobileView } from 'react-device-detect';
+import { BrowserView, MobileView, isMobile } from 'react-device-detect';
 
 export default function Layout({ children }) {
 
@@ -18,7 +18,7 @@ export default function Layout({ children }) {
   return (
     <div className="h-full bg-gray-100 relative">
       <div className="flex flex-col h-screen">
-        <div className=" z-40" id='sidebar'>
+        <div className={`z-40 ${isMobile ? ' mb-14' : ''}`} id='sidebar'>
           <NavigateBar />
         </div>
         <main className=" w-full h-full bg-gray-100" id='children'>{children}</main>

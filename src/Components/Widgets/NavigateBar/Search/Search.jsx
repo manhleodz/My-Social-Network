@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { SearchAPI } from '../../../Network/Search';
+import { SearchAPI } from '../../../../Network/Search';
 import Styles from './Search.module.scss';
 import { useSelector } from 'react-redux';
 
