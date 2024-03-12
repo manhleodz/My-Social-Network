@@ -5,7 +5,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 import Search from '../Search/Search';
 import { Auth } from '../../../Network/Auth';
-import MessagerDropdown from '../MessagerDropdown/MessagerDropdown';
+import MessagerDropdown from './MessagerDropdown/MessagerDropdown';
+import Notification from './Notification/Notification';
 
 
 export default function NavigateBar() {
@@ -101,11 +102,7 @@ export default function NavigateBar() {
                     </div>
                     <div className='flex items-center justify-end space-x-4  w-[350px] max-sm:hidden'>
                         <MessagerDropdown />
-                        <div className=' w-10 h-10 flex justify-center items-center bg-gray-300 rounded-full hover:bg-gray-400 active:ring-gray-300 active:ring cursor-pointer'>
-                            <svg xmlns="http://www.w3.org/2000/svg" height="1.4em" viewBox="0 0 448 512" className=' fill-gray-700'>
-                                <path d="M224 0c-17.7 0-32 14.3-32 32V51.2C119 66 64 130.6 64 208v18.8c0 47-17.3 92.4-48.5 127.6l-7.4 8.3c-8.4 9.4-10.4 22.9-5.3 34.4S19.4 416 32 416H416c12.6 0 24-7.4 29.2-18.9s3.1-25-5.3-34.4l-7.4-8.3C401.3 319.2 384 273.9 384 226.8V208c0-77.4-55-142-128-156.8V32c0-17.7-14.3-32-32-32zm45.3 493.3c12-12 18.7-28.3 18.7-45.3H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7z" />
-                            </svg>
-                        </div>
+                        <Notification />
                         <div className='  rounded-full hover:bg-gray-400 active:ring-gray-300 active:ring cursor-pointer relative' onClick={() => setOpen(!open)}>
                             <img alt='avatar' src={`${user.smallAvatar}`} className='w-10 h-10 rounded-full object-cover z-0' />
                             <div className='absolute bottom-0 right-0 z-50 bg-gray-200 rounded-full p-1 border-2 border-white'>
@@ -116,7 +113,7 @@ export default function NavigateBar() {
                         </div>
                         {open && (
                             <div
-                                id='modal1' className='bg-white fixed shadow-inner space-y-3 right-10 top-14 rounded-xl p-3' style={{ width: "360px" }}
+                                id='modal1' className='bg-white fixed shadow-inner space-y-3 right-10 top-12 rounded-xl p-3' style={{ width: "360px" }}
                             >
                                 <div className='w-full rounded-xl' style={{ boxShadow: "rgba(0, 0, 0, 0.2) 0px 4px 15px" }}>
                                     <div className='flex items-center divide divide-gray-300 p-2 hover:bg-gray-100 rounded-xl cursor-pointer' onClick={() => navigate(`/${user.username}`)}>

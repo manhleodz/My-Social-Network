@@ -1,19 +1,45 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FriendApi } from '../../../../Network/Friend';
+import socket from '../../../../Network/Socket';
+import { useDispatch } from 'react-redux';
+import { fetchFriend } from '../../../../Redux/FriendSlice';
 
 export default function UserTag({ result, user }) {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [status, setStatus] = useState(result.isFriend);
 
+    const getListFriends = async () => {
+        await FriendApi.getListFriend().then((res) => {
+            dispatch(fetchFriend(res.data));
+        })
+    }
+
     const addFriend = async (userId) => {
         FriendApi.addFriend({ user: userId }).then(() => {
-            if (isFriend === 0)
-                setIsFriend(1);
-            else if (isFriend === 2)
-                setIsFriend(3);
+            if (status === 0) {
+                socket.emit("notification", {
+                    message: `${user.nickname} gửi lời mời kết bạn`,
+                    sender: user.id,
+                    smallAvatar: user.smallAvatar,
+                    date: new Date(),
+                    receiver: result.id
+                })
+                setStatus(1);
+            }
+            else if (status === 2) {
+                socket.emit("notification", {
+                    message: `${user.nickname} chấp nhận lời mời kết bạn`,
+                    sender: user.id,
+                    smallAvatar: user.smallAvatar,
+                    date: new Date(),
+                    receiver: result.id
+                })
+                setStatus(3);
+            }
             getListFriends();
         }).catch(err => {
             console.log(err.message);

@@ -14,9 +14,8 @@ export default function OnlineBar({ userId }) {
     const [text, setText] = useState("Before Sunrise");
 
     useEffect(() => {
-        ChatApi.getGroupChat().then((res) => {
-            dispatch(addGroupChat(res.data.data));
-        })
+
+        
     }, [])
 
     return (

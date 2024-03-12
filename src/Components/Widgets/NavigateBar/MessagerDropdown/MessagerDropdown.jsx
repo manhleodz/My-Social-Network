@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import socket from '../../../Network/Socket';
+import socket from '../../../../Network/Socket';
 import { useSelector } from 'react-redux';
 
 export default function MessagerDropdown() {

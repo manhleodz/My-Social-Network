@@ -16,6 +16,8 @@ import { fetchStory } from '../../Redux/StorySlice';
 import { fetchFriend } from '../../Redux/FriendSlice';
 import { LoadingPage } from '../Widgets/Loading/LoadingPage';
 import socket from '../../Network/Socket';
+import { ChatApi } from '../../Network/Chat';
+import { addGroupChat } from '../../Redux/MessagerSlice';
 
 export default function AppRoutes() {
 
@@ -31,6 +33,8 @@ export default function AppRoutes() {
         getListFriends();
     }
 
+
+
     const unAuthorized = (e) => {
         dispatch(setUser(e));
     }
@@ -42,6 +46,11 @@ export default function AppRoutes() {
     const getListFriends = async () => {
         await FriendApi.getListFriend().then((res) => {
             dispatch(fetchFriend(res.data));
+        })
+
+        ChatApi.getGroupChat().then((res) => {     // group chat
+            if (res.status === 200)
+                dispatch(addGroupChat(res.data.data));
         })
     }
 

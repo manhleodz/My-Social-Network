@@ -16,8 +16,7 @@ export const MessengerSlice = createSlice({
         },
 
         addGroupChat(state, action) {
-            if (canPush(state.groupChat, action.payload))
-                state.groupChat = [...state.groupChat, ...action.payload];
+            state.groupChat = [...state.groupChat, ...action.payload];
         },
 
         openOneBox(state, action) {

@@ -8,6 +8,7 @@ import { fetchFriend } from '../../Redux/FriendSlice';
 import { isMobile } from 'react-device-detect';
 import { LoadingProfilePage } from '../Widgets/Loading/LoadingPage';
 import { addBoxChat, openMobileChat, openOneBox, setIsOpenChat } from '../../Redux/MessagerSlice';
+import socket from '../../Network/Socket';
 
 export default function Profile() {
 
@@ -65,11 +66,27 @@ export default function Profile() {
 
   const addFriend = (userId) => {
     FriendApi.addFriend({ user: userId }).then(() => {
-      if (isFriend === 0)
+      if (isFriend === 0) {
+        socket.emit("notification", {
+          message: `${user.nickname} gửi lời mời kết bạn`,
+          sender: user.id,
+          smallAvatar: user.smallAvatar,
+          date: new Date(),
+          receiver: userId
+        })
         setIsFriend(1);
-      else if (isFriend === 2)
+      }
+      else if (isFriend === 2) {
+        socket.emit("notification", {
+          message: `${user.nickname} chấp nhận lời mời kết bạn`,
+          sender: user.id,
+          smallAvatar: user.smallAvatar,
+          date: new Date(),
+          receiver: userId
+        })
         setIsFriend(3);
-      getListFriends();
+        getListFriends();
+      }
     }).catch(err => {
       console.log(err.message);
     });

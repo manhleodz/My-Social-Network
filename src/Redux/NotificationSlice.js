@@ -4,14 +4,21 @@ export const NotificationSlice = createSlice({
     name: 'notifications',
     initialState: {
         notifications: [],
-        page: 0,
-        hasMore: true
+        isOpen: false,
+        count: 0,
     },
     reducers: {
-        fetchNotifications(state, action) {
-            state.page++;
-            state.notifications = [...state.notifications, ...action.payload];
+
+        setOpenNotification(state, action) {
+            state.isOpen = action.payload;
+            state.count = 0;
         },
+
+        fetchNotifications(state, action) {
+            state.notifications = [...state.notifications, ...action.payload];
+            state.count = (Number)(state.count) + action.payload.length;
+        },
+
         setNotifications(state, action) {
             state.notifications = action.payload;
         },
@@ -20,14 +27,18 @@ export const NotificationSlice = createSlice({
         },
         addNotification(state, action) {
             state.notifications = [action.payload, ...state.notifications];
+            if (!state.isOpen)
+                state.count++;
         },
-        deleteNptification(state, action) {
-            if (state.notifications.length > 0)
+        deleteNotification(state, action) {
+            if (state.notifications.length > 0) {
+                state.count--;
                 state.notifications.map(post => { return post.id !== action.id });
+            }
         }
     }
 })
 
-export const { fetchNotifications, stopFetchNotifications, addNotification, deleteNptification, setNotifications } = NotificationSlice.actions;
+export const { setOpenNotification, fetchNotifications, stopFetchNotifications, addNotification, deleteNotification, setNotifications } = NotificationSlice.actions;
 
-export const postReducer = NotificationSlice.reducer;
+export const notificationReducer = NotificationSlice.reducer;

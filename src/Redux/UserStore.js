@@ -4,6 +4,7 @@ import { postReducer } from './PostSlice';
 import { storyReducer } from './StorySlice';
 import { friendReducer } from './FriendSlice';
 import { messengerReducer } from './MessagerSlice';
+import { notificationReducer } from "./NotificationSlice";
 
 export const userStore = configureStore({
     reducer: {
@@ -11,6 +12,7 @@ export const userStore = configureStore({
         posts: postReducer,
         stories: storyReducer,
         friends: friendReducer,
-        messenger: messengerReducer
+        messenger: messengerReducer,
+        notifications: notificationReducer
     }
 })
