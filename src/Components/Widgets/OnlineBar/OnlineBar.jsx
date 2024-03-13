@@ -4,19 +4,22 @@ import { addBoxChat, addGroupChat, openOneBox } from '../../../Redux/MessagerSli
 import Bar from './OnlineBar.module.scss';
 import { ChatApi } from '../../../Network/Chat';
 import UserTag from './UserTag';
+import axios from 'axios';
 
 export default function OnlineBar({ userId }) {
 
     const frs = useSelector(state => state.friends.friends);
     const groupChats = useSelector(state => state.messenger.groupChat);
     const dispatch = useDispatch();
-    const [link, setLink] = useState("https://images.ctfassets.net/m3qyzuwrf176/5KozoZzaJPtsTlGPEVziad/7be04e4d62922b31292acd2116de7571/9_before_sunrise-thumbnail.jpg?w=2000");
-    const [text, setText] = useState("Before Sunrise");
+
+    const [movie, setmovie] = useState();
 
     useEffect(() => {
+        axios.get(`https://64b8c65721b9aa6eb07a334e.mockapi.io/movies/${Math.floor(Math.random() * 5) + 1}`).then(res => {
+            setmovie(res.data);
+        })
 
-        
-    }, [])
+    }, [userId])
 
     return (
         <div
@@ -24,14 +27,19 @@ export default function OnlineBar({ userId }) {
         >
             <div className=' w-full'>
                 <h1 className=' text-xl font-semibold'>Phim hôm nay</h1>
-                <div
-                    className='w-full h-[180px] flex items-center justify-center relative'
-                >
-                    <img src={link} alt='qc' className='z-0 absolute w-full h-full top-0 left-0 object-cover rounded-lg scale-100 hover:scale-110' />
-                    <div className=' absolute w-full h-full z-50 top-0 left-0 rounded-lg flex justify-center items-center bg-[rgb(0,0,0,0.25)] hover:bg-[rgb(0,0,0,0.28)] cursor-pointer'>
-                        <h1 className='text-white text-3xl font-bold max-lg:text-2xl'>{text}</h1>
+                {movie ? (
+
+                    <div
+                        className='w-full h-[180px] flex items-center justify-center relative'
+                    >
+                        <img src={movie.poster} alt='qc' className='z-0 absolute w-full h-full top-0 left-0 object-cover rounded-lg scale-100 hover:scale-110' />
+                        <div className=' absolute w-full h-full z-50 top-0 left-0 rounded-lg flex justify-center items-center bg-[rgb(0,0,0,0.25)] hover:bg-[rgb(0,0,0,0.28)] cursor-pointer'>
+                            <h1 className='text-white text-3xl font-bold max-lg:text-2xl'>{movie.name}</h1>
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    <div className='w-full h-[180px] flex items-center justify-center relative bg-gray-200 animate-pulse'></div>
+                )}
             </div>
             <div>
                 <div className='flex items-center justify-between'>
