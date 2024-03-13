@@ -1,12 +1,12 @@
 # Trang web vẫn đang trong giai đoạn đầu nên rất nhiều tính năng chưa được hoàn thiện. 
-Đây là một số tính năng đã hoàn thiện và có thể cải tiến trong tương lai
--Trang chủ: bài post(có thể like, comment, ẩn). Tạo bài post mới (Hiện tại chỉ có đăng caption, hình ảnh và video). Liên hệ, xem trạng thái hoạt động, thông báo(realtime )
--Nhắn tin: realtime, có thể xem trạng thái online hay ko của người dùng. Hạn chế là chưa làm đc danh sách các box chat như Messenger(Khi có tin nhắn mới từ 1 boxchat thì boxchat đó chuyển lên đầu)
--Trang cá nhân: Hiển thị phần giới thiệu, danh sách bạn bè, danh sách bài post
--Tìm kiếm(Chưa hoàn thiện bộ lọc)
--Tạo story
--Xem danh sách kết bạn, lời mời, lời gửi. Hạn chể là chưa có đề xuất
-
+Đây là một số tính năng đã hoàn thiện và có thể cải tiến trong tương lai  
+-Trang chủ: bài post(có thể like, comment, ẩn). Tạo bài post mới (Hiện tại chỉ có đăng caption, hình ảnh và video). Liên hệ, xem trạng thái hoạt động, thông báo(realtime )  
+-Nhắn tin: realtime, có thể xem trạng thái online hay ko của người dùng. Hạn chế là chưa làm đc danh sách các box chat như Messenger(Khi có tin nhắn mới từ 1 boxchat thì boxchat đó chuyển lên đầu)  
+-Trang cá nhân: Hiển thị phần giới thiệu, danh sách bạn bè, danh sách bài post  
+-Tìm kiếm(Chưa hoàn thiện bộ lọc)  
+-Tạo story  
+-Xem danh sách kết bạn, lời mời, lời gửi. Hạn chể là chưa có đề xuất  
+  
 # Bạn có thể truy cập bằng tài khoản này cho nhanh: manhleo -pass:12345678 
 
 Ý tưởng thực hiện là từ FB :)))))) và my tình yêu to lớn với âm nhạc
