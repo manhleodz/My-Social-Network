@@ -4,11 +4,24 @@ export const MessengerSlice = createSlice({
     name: 'messenger',
     initialState: {
         isOpen: false,
+        createGroup: false,
         openChat: [],
         boxChat: [],
         groupChat: [],
+        allChat: [],
+        messageCache: [],
     },
     reducers: {
+
+        fetchAllChat(state, action) {
+            state.allChat = [...action.payload, ...state.allChat];
+
+            state.allChat = state.allChat.sort(compare)
+        },
+
+        saveMessage(state, action) {
+            state.messageCache = [...state.messageCache, action.payload];
+        },
 
         addBoxChat(state, action) {
             if (canPush(state.boxChat, action.payload))
@@ -51,8 +64,22 @@ export const MessengerSlice = createSlice({
         setIsOpenChat(state, action) {
             state.isOpen = action.payload;
         },
+
+        setCreateGroup(state, action) {
+            state.createGroup = action.payload;
+        },
     }
 })
+
+function compare(a, b) {
+    if (a.updatedAt > b.updatedAt) {
+        return -1;
+    } else if (a.updatedAt === b.updatedAt) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
 
 const canPush = (boxs, myObj) => {
     for (let box of boxs)
@@ -61,6 +88,6 @@ const canPush = (boxs, myObj) => {
     return true;
 }
 
-export const { addBoxChat, openOneBox, closeOneBox, addGroupChat, smallOneBox, openMobileChat, setIsOpenChat } = MessengerSlice.actions;
+export const { addBoxChat, openOneBox, closeOneBox, addGroupChat, smallOneBox, openMobileChat, setIsOpenChat, fetchAllChat, saveMessage, setCreateGroup } = MessengerSlice.actions;
 
 export const messengerReducer = MessengerSlice.reducer;

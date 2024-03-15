@@ -20,6 +20,23 @@ export const ChatApi = {
         });
     },
 
+    async getGroupMessage(id) {
+
+        return axios.get(`${ApiUrl}/inbox/group/${id}`, {
+            headers: {
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            },
+        });
+    },
+
+    async sendGroupMessage(data) {
+        return axios.post(`${ApiUrl}/inbox/group`, data, {
+            headers: {
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            },
+        });
+    },
+
     async deleteMessage(id) {
         return axios.delete(`${ApiUrl}/inbox/${id}`, {
             headers: {

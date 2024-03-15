@@ -4,6 +4,7 @@ import BoxChat from '../BoxChat/BoxChat';
 import { useDispatch, useSelector } from 'react-redux';
 import { openMobileChat, openOneBox, setIsOpenChat } from '../../../Redux/MessagerSlice';
 import { BrowserView, MobileView, isMobile } from 'react-device-detect';
+import CreateNewMessage from '../CreateNewGroupChat/CreateNewMessage';
 
 export default function Layout({ children }) {
 
@@ -11,9 +12,9 @@ export default function Layout({ children }) {
   const openChat = useSelector(state => state.messenger.openChat);
   const isOpenChatMobile = useSelector(state => state.messenger.isOpen);
   const frs = useSelector(state => state.friends.friends);
-  const dispatch = useDispatch();
+  const createGroup = useSelector(state => state.messenger.createGroup);
 
-  const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
 
   return (
     <div className="h-full bg-gray-100 relative">
@@ -106,13 +107,22 @@ export default function Layout({ children }) {
               </svg>
             </div>
           </div>
-          {openChat.length > 0 && (
-            <div className='fixed flex items-center space-x-2 z-50 bottom-5 right-20 rounded-2xl shadow-2xl' id='box-chat'>
-              {openChat.map((chat, index) => (
-                <BoxChat chat={chat} key={index} />
-              ))}
-            </div>
-          )}
+          <div className='fixed flex items-center space-x-2 z-50 bottom-5 right-20 rounded-2xl shadow-2xl' id='box-chat'>
+            {openChat.length > 0 && (
+              <>
+                {
+                  openChat.map((chat, index) => (
+                    <BoxChat chat={chat} key={index} />
+                  ))
+                }
+              </>
+            )}
+            {createGroup && (
+              <>
+                <CreateNewMessage />
+              </>
+            )}
+          </div>
         </BrowserView>
       </div>
     </div>

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { addBoxChat, addGroupChat, openOneBox } from '../../../Redux/MessagerSlice';
+import { addBoxChat, openOneBox } from '../../../Redux/MessagerSlice';
 import Bar from './OnlineBar.module.scss';
-import { ChatApi } from '../../../Network/Chat';
 import UserTag from './UserTag';
 import axios from 'axios';
 
@@ -10,6 +9,7 @@ export default function OnlineBar({ userId }) {
 
     const frs = useSelector(state => state.friends.friends);
     const groupChats = useSelector(state => state.messenger.groupChat);
+
     const dispatch = useDispatch();
 
     const [movie, setmovie] = useState();
@@ -64,6 +64,8 @@ export default function OnlineBar({ userId }) {
                         key={index} className='flex items-center  w-full cursor-pointer hover:bg-gray-200 p-1.5 rounded-lg'
                         onClick={() => {
                             sessionStorage.setItem('openBox', JSON.stringify(group));
+                            dispatch(addBoxChat(group));
+                            dispatch(openOneBox(group));
                         }}
                     >
                         <div className='rounded-full relative'>
