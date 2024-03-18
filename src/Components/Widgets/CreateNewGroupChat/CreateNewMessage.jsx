@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SearchAPI } from '../../../Network/Search';
 import { setCreateGroup } from '../../../Redux/MessagerSlice';
 import CreateNewGroupChat from './CreateNewGroupChat';
+import SendMessageToAnother from './SendMessageToAnother';
 
 export default function CreateNewMessage() {
 
-    const frs = useSelector(state => state.friends.friends);
+    const user = useSelector(state => state.authentication.user);
     const dispatch = useDispatch();
 
     const [newUser, setNewUser] = useState([]);
@@ -72,7 +73,7 @@ export default function CreateNewMessage() {
                         <>
                             {result.map((value, key) => (
                                 <>
-                                    {!newUser.some(user => user.id === value.id) && (
+                                    {(!newUser.some(user => user.id === value.id) && value.id !== user.id) && (
                                         <div
                                             onClick={() => {
                                                 setNewUser(prev => [...prev, value]);
@@ -93,7 +94,7 @@ export default function CreateNewMessage() {
             ) : (
                 <>
                     {newUser.length === 1 && (
-                        <CreateNewGroupChat newUser={newUser} setNewUser={setNewUser} />
+                        <SendMessageToAnother newUser={newUser[0]} />
                     )}
                     {newUser.length > 1 && (
                         <CreateNewGroupChat newUser={newUser} setNewUser={setNewUser} />

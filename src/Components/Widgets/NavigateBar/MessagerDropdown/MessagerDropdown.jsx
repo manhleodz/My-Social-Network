@@ -24,6 +24,8 @@ export default function MessagerDropdown() {
 
     }, [socket]);
 
+    console.log(allChat);
+
     return (
         <>
             <BrowserView>
@@ -40,7 +42,7 @@ export default function MessagerDropdown() {
                     )}
                 </div>
 
-                {isOpen && (
+                {/* {isOpen && (
                     <div className='bg-white fixed shadow-xl right-10 top-12 rounded-xl pl-3 pb-3 pt-3 overflow-y-auto' style={{ width: "360px", maxHeight: "90%" }}>
                         <div className=' flex items-center justify-between'>
                             <h1 className=' font-bold text-[25px]'>Đoạn chat</h1>
@@ -83,7 +85,7 @@ export default function MessagerDropdown() {
                             </div>
                         )}
                     </div>
-                )}
+                )} */}
             </BrowserView>
 
             <MobileView>

@@ -47,10 +47,10 @@ export default function AppRoutes() {
             dispatch(fetchAllChat(res.data));
         })
 
-        ChatApi.getGroupChat().then((res) => {     // group chat
+        await ChatApi.getGroupChat().then((res) => {     // group chat
             if (res.status === 200) {
-                dispatch(addGroupChat(res.data.data));
-                dispatch(fetchAllChat(res.data.data));
+                dispatch(addGroupChat(res.data.data.channels));
+                dispatch(fetchAllChat(res.data.data.channels));
             }
         })
     }
@@ -102,11 +102,12 @@ export default function AppRoutes() {
 
     useEffect(() => {
         const unloadCallback = (event) => {
-            if (user)
+            if (user) {
                 socket.disconnect();
-            event.preventDefault();
-            event.returnValue = "";
-            return "";
+                event.preventDefault();
+                event.returnValue = "";
+                return "";
+            }
         };
 
         window.addEventListener("beforeunload", unloadCallback);

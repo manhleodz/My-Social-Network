@@ -30,7 +30,6 @@ export default function SinglePost({ post, posts, setPost }) {
             } else {
                 setLikeNum((likeNum) => (likeNum = likeNum + 1));
             }
-            PostApi.updateLikeNum(post.Post.id);
         });
     };
 

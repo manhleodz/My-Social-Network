@@ -48,12 +48,14 @@ export default function SinglePost({ post }) {
         PostApi.like({
             PostId: post.Post.id,
             UserId: user.id,
-        }).then((response) => {
-            PostApi.updateLikeNum(post.Post.id).catch(() => {
+        })
+            .then((response) => {
+                // PostApi.updateLikeNum(post.Post.id).catch(() => {
+                // });
+            }).catch(() => {
                 setIsClicked(!isClicked);
                 setLikeNum((likeNum) => (likeNum = likeNum - 1));
             });
-        });
     };
 
     const deletePost = async (id) => {

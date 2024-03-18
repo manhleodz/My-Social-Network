@@ -30,8 +30,6 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
                     commentBody: newComment,
                 }).then((res) => {
 
-                    PostApi.updateCommentNum(post.id);
-
                     let resComment = res.data.newComment;
                     setComment(prev => [...prev, {
                         ...resComment,

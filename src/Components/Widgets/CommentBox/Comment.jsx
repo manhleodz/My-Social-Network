@@ -42,7 +42,6 @@ export default function Comment({ comment, setComment, comments, setOpenComment,
   const deleteCmt = () => {
     CommentApi.deleteComment(comment.id).then(() => {
       setOption(false);
-      PostApi.updateCommentNum(comment.PostId)
       setComment(comments.filter(comment1 => comment1.id !== comment.id));
       setCommentNumber(prev => prev - 1);
     }).catch(err => {
@@ -54,7 +53,6 @@ export default function Comment({ comment, setComment, comments, setOpenComment,
     setOption(false);
   }
 
-  console.log(comment);
   return (
     <>
       <div
