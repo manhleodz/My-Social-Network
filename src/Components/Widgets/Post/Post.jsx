@@ -62,7 +62,7 @@ function Post({ posts }) {
                 className='space-y-4'
             >
                 {posts.posts.map((post) => (
-                    <SinglePost key={post.Post.id} post={post} />
+                    <SinglePost key={post.id} post={post} />
                 ))}
             </InfiniteScroll>
         </>

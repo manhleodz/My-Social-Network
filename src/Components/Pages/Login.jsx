@@ -11,6 +11,8 @@ import { fetchStory } from '../../Redux/StorySlice';
 import { fetchFriend } from '../../Redux/FriendSlice';
 import LoginStyle from '../../Assets/SCSS/Login.module.scss';
 import backgroundImage from '../../Assets/login bg.jpg';
+import { addGroupChat, fetchAllChat } from '../../Redux/MessagerSlice';
+import { ChatApi } from '../../Network/Chat';
 
 const Login = () => {
 
@@ -32,6 +34,7 @@ const Login = () => {
     getPosts();
     getListFriends();
     getStories();
+    getGroups();
     navigate('/')
   }
 
@@ -71,7 +74,16 @@ const Login = () => {
 
   const getListFriends = async () => {
     await FriendApi.getListFriend().then((res) => {
-      dispatch(fetchFriend(res.data));
+      dispatch(fetchFriend(res.data.data));
+    })
+  }
+
+  const getGroups = async () => {
+    await ChatApi.getGroupChat().then((res) => {     // group chat
+      if (res.status === 200) {
+        dispatch(addGroupChat(res.data.data));
+        dispatch(fetchAllChat(res.data.data));
+      }
     })
   }
 

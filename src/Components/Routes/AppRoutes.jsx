@@ -30,6 +30,7 @@ export default function AppRoutes() {
         socket.emit("online", e);
         getPosts();
         getStories();
+        getGroups();
         getListFriends();
     }
 
@@ -42,15 +43,19 @@ export default function AppRoutes() {
     }
 
     const getListFriends = async () => {
-        await FriendApi.getListFriend().then((res) => {
-            dispatch(fetchFriend(res.data));
-            dispatch(fetchAllChat(res.data));
+        await FriendApi.getListFriend().then(res => {
+            if (res.status === 200) {
+                dispatch(fetchFriend(res.data.data));
+                dispatch(fetchAllChat(res.data.data));
+            }
         })
+    }
 
+    const getGroups = async () => {
         await ChatApi.getGroupChat().then((res) => {     // group chat
             if (res.status === 200) {
-                dispatch(addGroupChat(res.data.data.channels));
-                dispatch(fetchAllChat(res.data.data.channels));
+                dispatch(addGroupChat(res.data.data));
+                dispatch(fetchAllChat(res.data.data));
             }
         })
     }

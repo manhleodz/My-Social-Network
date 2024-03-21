@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MobileView, BrowserView } from 'react-device-detect';
 import SingleChat from './SingleChat';
 import { setCreateGroup, setIsOpenChat } from '../../../../Redux/MessagerSlice';
+import GroupChat from './GroupChat';
 
 
 export default function MessagerDropdown() {
@@ -24,8 +25,6 @@ export default function MessagerDropdown() {
 
     }, [socket]);
 
-    console.log(allChat);
-
     return (
         <>
             <BrowserView>
@@ -42,8 +41,8 @@ export default function MessagerDropdown() {
                     )}
                 </div>
 
-                {/* {isOpen && (
-                    <div className='bg-white fixed shadow-xl right-10 top-12 rounded-xl pl-3 pb-3 pt-3 overflow-y-auto' style={{ width: "360px", maxHeight: "90%" }}>
+                {isOpen && (
+                    <div className='bg-white fixed right-10 top-12 rounded-xl pl-3 pb-3 pt-3 overflow-y-auto' style={{ width: "360px", maxHeight: "90%", boxShadow: " rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
                         <div className=' flex items-center justify-between'>
                             <h1 className=' font-bold text-[25px]'>Đoạn chat</h1>
                             <svg
@@ -78,14 +77,20 @@ export default function MessagerDropdown() {
                         {allChat.length === 0 ? (
                             <h1></h1>
                         ) : (
-                            <div className=' w-full'>
+                            <div className=' w-full pr-3'>
                                 {allChat.map((chat, index) => (
-                                    <SingleChat key={index} chat={chat} />
+                                    <>
+                                        {chat.relationshipId ? (
+                                            <SingleChat key={index} chat={chat} />
+                                        ) : (
+                                            <GroupChat key={index} chat={chat} />
+                                        )}
+                                    </>
                                 ))}
                             </div>
                         )}
                     </div>
-                )} */}
+                )}
             </BrowserView>
 
             <MobileView>

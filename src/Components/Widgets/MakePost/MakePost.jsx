@@ -65,13 +65,12 @@ export default function MakePost() {
         fd.append('postText', postText);
         fd.append('public', isPublic);
         setProcessing(true);
+
         await PostApi.create(fd).then(async (res) => {
 
             setProcessing(false);
             await PostApi.getPostById(res.data.newPost.id).then((post) => {
-                dispatch(addPost({
-                    Post: post.data.data
-                }));
+                dispatch(addPost(post.data.data));
                 setOpen(false);
                 setPostText("");
                 setFileUploads(null);
@@ -332,7 +331,10 @@ export default function MakePost() {
                     <img alt='video' src={video} className=' w-8 h-8 max-sm:w-5 max-sm:h-5' />
                     <h1 className='px-2 max-sm:hidden' style={{ fontSize: "15px" }}>Video trực tiếp</h1>
                 </div>
-                <div className=' flex items-center justify-center w-full text-center font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 h-10 py-7 rounded-lg mt-2'>
+                <div onClick={() => {
+                    setOpen(true);
+                    setFileUploads([]);
+                }} className=' flex items-center justify-center w-full text-center font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 h-10 py-7 rounded-lg mt-2'>
                     <svg className=' w-8 h-8 max-sm:w-5 max-sm:h-5' viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
                         <path d="M910.4 843.8H174.6c-27.4 0-49.7-22.3-49.7-49.7V298.2c0-27.4 22.3-49.7 49.7-49.7h735.8c27.4 0 49.7 22.3 49.7 49.7v495.9c0 27.4-22.3 49.7-49.7 49.7z" fill="#A7B8C6" />
                         <path d="M272.1 193.8H118.7c-22.8 0-41.2 18.5-41.2 41.2v512.7c0 22.8 18.5 41.2 41.2 41.2h752.7c22.8 0 41.2-18.5 41.2-41.2V235c0-22.8-18.5-41.2-41.2-41.2H272.1z" fill="#FFFFFF" />

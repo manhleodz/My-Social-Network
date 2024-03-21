@@ -5,17 +5,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openMobileChat, openOneBox, setIsOpenChat } from '../../../Redux/MessagerSlice';
 import { BrowserView, MobileView, isMobile } from 'react-device-detect';
 import CreateNewMessage from '../CreateNewGroupChat/CreateNewMessage';
+import GroupChat from './GroupChat';
+import SingleChat from './SingleChat';
 
 export default function Layout({ children }) {
 
   const boxChat = useSelector(state => state.messenger.boxChat);
   const openChat = useSelector(state => state.messenger.openChat);
   const isOpenChatMobile = useSelector(state => state.messenger.isOpen);
-  const frs = useSelector(state => state.friends.friends);
+  const user = useSelector(state => state.authentication.user);
+  const allChat = useSelector(state => state.messenger.allChat);
   const createGroup = useSelector(state => state.messenger.createGroup);
 
   const dispatch = useDispatch();
 
+  if (allChat.length === 0) return null;
   return (
     <div className="h-full bg-gray-100 relative">
       <div className="flex flex-col h-screen">
@@ -39,32 +43,26 @@ export default function Layout({ children }) {
                       <h1 className=' font-semibold text-white'>Danh sách hội thoại</h1>
                     </div>
                     <div className=' w-full h-[345px] rounded-b-xl overflow-y-auto p-2'>
-                      {frs.length > 0 && (
+                      {allChat.length > 0 && (
                         <>
-                          {frs.map(fr => (
-                            <div
-                              key={fr.id} className=' w-full h-[60px] flex items-center justify-start hover:bg-gray-100'
-                              onClick={() => {
-                                dispatch(openMobileChat(fr));
-                                document.getElementById('list-contact').scrollLeft += 300;
-                              }}>
-                              <img className=' w-12 h-12 rounded-full object-cover' src={fr.smallAvatar} />
-                              <div className=' h-full w-[200px] text-[16px] font-medium py-2' style={{ wordBreak: "break-all", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: 'hidden' }}>
-                                <h1>{fr.nickname}</h1>
-                                {fr.online ? (
-                                  <>
-                                    <div className=' text-[12px] w-full text-gray-500 flex items-center'>
-                                      <div className='w-[8px] h-[8px] rounded-full bg-green-400 mr-1'></div>
-                                      Đang hoạt động
-                                    </div>
-                                  </>
-                                ) : (
-                                  <>
-                                    <h1 className=' text-[12px] w-full text-gray-500'>Không hoạt động</h1>
-                                  </>
-                                )}
-                              </div>
-                            </div>
+                          {allChat.map((chat, index) => (
+                            <>
+                              {chat.relationshipId ? (
+                                <div className=' w-full h-fit' onClick={() => {
+                                  dispatch(openMobileChat(chat));
+                                  document.getElementById('list-contact').scrollLeft += 300;
+                                }}>
+                                  <SingleChat chat={chat} key={index} />
+                                </div>
+                              ) : (
+                                <div className=' w-full h-fit' onClick={() => {
+                                  dispatch(openMobileChat(chat));
+                                  document.getElementById('list-contact').scrollLeft += 300;
+                                }}>
+                                  <GroupChat chat={chat} key={index} />
+                                </div>
+                              )}
+                            </>
                           ))}
                         </>
                       )}
@@ -94,7 +92,7 @@ export default function Layout({ children }) {
               <>
                 {boxChat.map((chat, index) => (
                   <div className='rounded-full relative' key={index} onClick={() => dispatch(openOneBox(chat))}>
-                    <img alt={chat.username} src={chat.smallAvatar} className='w-14 h-14 object-center rounded-full object-cover' />
+                    <img alt={chat.username} src={chat.smallAvatar || chat.avatar} className='w-14 h-14 object-center rounded-full object-cover' />
                     <div className={`w-3 h-3 rounded-full absolute right-1 bottom-0 border-2 border-white ${chat.online === true ? 'bg-green-600 ' : 'bg-gray-400'}`}></div>
                   </div>
                 ))}

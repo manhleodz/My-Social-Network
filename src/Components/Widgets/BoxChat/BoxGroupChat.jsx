@@ -22,8 +22,6 @@ export default function BoxGroupChat({ chat }) {
     const sendMessage = async () => {
         if (newMessenger !== "") {
             const messageData = {
-                sender: user.id,
-                receiver: chat.id,
                 message: newMessenger,
                 ChannelId: chat.id,
                 type: format
@@ -37,24 +35,35 @@ export default function BoxGroupChat({ chat }) {
                     id: newMess.id,
                     room: `group-${chat.id}`,
                     createdAt: newMess.createdAt,
-                    sender: user.id,
-                    Sender: {
-                        username: user.username,
-                        nickname: user.nickname,
-                        smallAvatar: user.smallAvatar
-                    },
-                    nickname: user.nickname,
-                    receiver: chat.id,
-                    type: format,
-                    message: newMess.message,
+                    message: newMessenger,
+                    sender: chat.ChannelMembers.id,
+                    ChannelMember: {
+                        UserId: user.id,
+                        nickname: chat.ChannelMembers.nickname,
+                        role: chat.ChannelMembers.role,
+                        User: {
+                            smallAvatar: user.smallAvatar,
+                            username: user.username
+                        }
+                    }
                 });
 
                 setListMessage(prev => [...prev, {
                     id: newMess.id,
                     ChannelId: chat.id,
                     createdAt: newMess.createdAt,
-                    sender: user.id,
-                    message: newMess.message,
+                    updatedAt: newMess.updatedAt,
+                    message: newMessenger,
+                    sender: chat.ChannelMembers.id,
+                    ChannelMember: {
+                        UserId: user.id,
+                        nickname: chat.ChannelMembers.nickname,
+                        role: chat.ChannelMembers.role,
+                        User: {
+                            smallAvatar: user.smallAvatar,
+                            username: user.username
+                        }
+                    }
                 }]);
 
             }).catch((err) => {
@@ -171,16 +180,16 @@ export default function BoxGroupChat({ chat }) {
                     <ScrollToBottom className={`${Styles.boxchat_listmess} overflow-y-visible overflow-x-hidden ${isMobile ? 'w-[300px] h-[290px]' : 'w-80 h-[300px]'} p-2 duration-500`}>
                         {listMessage.map((message, index) => (
                             <div key={index}>
-                                {message.sender === user.id ? (
+                                {message.ChannelMember.UserId === user.id ? (
                                     <>
                                         <div className=' flex items-center justify-end w-full mb-1' key={message.id}>
                                             <h1 className={` p-2 rounded-2xl text-white bg-blue-500 text-[14.5px] break-words`} style={{ maxWidth: "230px" }}>{message.message}</h1>
                                         </div>
                                     </>
                                 ) : (
-                                    <>  <h1 className=' text-[13px] text-gray-600'>{message.Sender.nickname}</h1>
+                                    <>  <h1 className=' text-[13px] text-gray-600'>{message.ChannelMember.nickname}</h1>
                                         <div className=' flex items-center space-x-2 justify-start w-full mb-1' key={message.id}>
-                                            <img src={message.Sender.smallAvatar} className=' w-8 h-8 rounded-full object-cover' />
+                                            <img src={message.ChannelMember.User.smallAvatar} className=' w-8 h-8 rounded-full object-cover' />
                                             <h1 className={` p-2 rounded-2xl text-black bg-gray-300 text-[14.5px] break-words`} style={{ maxWidth: "230px" }}>{message.message}</h1>
                                         </div>
                                     </>

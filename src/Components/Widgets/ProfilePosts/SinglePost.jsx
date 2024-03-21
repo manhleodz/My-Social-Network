@@ -10,19 +10,19 @@ export default function SinglePost({ post, posts, setPost }) {
 
     const navigate = useNavigate();
     const user = useSelector(state => state.authentication.user);
-    const [isClicked, setIsClicked] = useState(post.isLiked);
-    const [likeNum, setLikeNum] = useState(post.Post.likeNumber);
+    const [isClicked, setIsClicked] = useState(post.Likes.length === 1);
+    const [likeNum, setLikeNum] = useState(post.likeNumber);
     const [isSaved, setIsSaved] = useState(false);
     const [dropdown, setDropdown] = useState(false);
     const [openLike, setOpenLike] = useState(false);
     const [openComment, setOpenComment] = useState(false);
 
-    const media = post.Post.Media;
+    const media = post.Media;
 
     const likeAPost = () => {
         setIsClicked(!isClicked);
         PostApi.like({
-            PostId: post.Post.id,
+            PostId: post.id,
             UserId: user.id,
         }).then((response) => {
             if (response.data === false) {
@@ -35,7 +35,7 @@ export default function SinglePost({ post, posts, setPost }) {
 
     const deletePost = async (id) => {
         await PostApi.delete(id).then((res) => {
-            const newLists = posts.filter(post => post.Post.id !== id);
+            const newLists = posts.filter(post => post.id !== id);
             setPost(newLists);
         }).catch((err) => {
             console.log(err);
@@ -43,7 +43,7 @@ export default function SinglePost({ post, posts, setPost }) {
     }
 
     const hidePost = (id) => {
-        const newLists = posts.filter(post => post.Post.id !== id);
+        const newLists = posts.filter(post => post.id !== id);
         setPost(newLists);
     }
 
@@ -61,9 +61,9 @@ export default function SinglePost({ post, posts, setPost }) {
     }
 
     function myFunction() {
-        var more = document.getElementById(`more-btn-${post.Post.id}`);
-        var less = document.getElementById(`less-btn-${post.Post.id}`);
-        var moreText = document.getElementById(`more-${post.Post.id}`);
+        var more = document.getElementById(`more-btn-${post.id}`);
+        var less = document.getElementById(`less-btn-${post.id}`);
+        var moreText = document.getElementById(`more-${post.id}`);
 
         if (more.style.display === "none") {
             more.style.display = "inline";
@@ -83,35 +83,35 @@ export default function SinglePost({ post, posts, setPost }) {
                 <div className=" flex justify-between">
                     <div className=" flex space-x-2">
                         <img
-                            onClick={() => navigate(`/${post.Post.User.username}`)}
+                            onClick={() => navigate(`/${post.User.username}`)}
                             alt="avatar"
-                            src={`${post.Post.User.smallAvatar}`}
+                            src={`${post.User.smallAvatar}`}
                             className=" w-10 h-10 object-cover rounded-full cursor-pointer"
                         />
                         <div className="">
                             <h1
-                                onClick={() => navigate(`/${post.Post.User.username}`)}
+                                onClick={() => navigate(`/${post.User.username}`)}
                                 className=" break-words font-semibold hover:underline cursor-pointer"
                             >
-                                {post.Post.User.nickname}
+                                {post.User.nickname}
                             </h1>
                             <div className="flex items-center space-x-2">
                                 <h1
                                     className=" text-xs text-gray-500 cursor-pointer font-semibold "
-                                    title={`Ngày ${post.Post.createdAt.slice(
+                                    title={`Ngày ${post.createdAt.slice(
                                         8,
                                         10
-                                    )} tháng ${post.Post.createdAt.slice(
+                                    )} tháng ${post.createdAt.slice(
                                         5,
                                         7
-                                    )} năm ${post.Post.createdAt.slice(
+                                    )} năm ${post.createdAt.slice(
                                         0,
                                         4
-                                    )}, lúc ${post.Post.createdAt.slice(11, 16)}`}
+                                    )}, lúc ${post.createdAt.slice(11, 16)}`}
                                 >
-                                    {post.Post.createdAt.slice(0, 10)}
+                                    {post.createdAt.slice(0, 10)}
                                 </h1>
-                                {post.Post.public == 0 ?
+                                {post.public == 0 ?
                                     <svg className=" cursor-pointer" title="Công khai" xmlns="http://www.w3.org/2000/svg" fill='#A8A59C' height="14" width="14" viewBox="0 0 448 512">
                                         <path d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z" />
                                     </svg>
@@ -124,11 +124,11 @@ export default function SinglePost({ post, posts, setPost }) {
                         </div>
                     </div>
                     <div className=" flex items-center relative">
-                        {user.username === post.Post.User.username && (
+                        {user.username === post.User.username && (
                             <>
                                 {dropdown && (
                                     <div className=" bg-white p-2 rounded-lg shadow-lg">
-                                        <div className=" w-full" onClick={() => deletePost(post.Post.id)}>
+                                        <div className=" w-full" onClick={() => deletePost(post.id)}>
                                             Chuyển vào thùng rác
                                         </div>
                                     </div>
@@ -148,8 +148,8 @@ export default function SinglePost({ post, posts, setPost }) {
                                 <path d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z" />
                             </svg>
                         </div>
-                        {user.username !== post.Post.User.username && (
-                            <div onClick={() => hidePost(post.Post.id)} className=" flex justify-center items-center cursor-pointer w-9 h-9 active:bg-gray-300 hover:bg-gray-200 rounded-full">
+                        {user.username !== post.User.username && (
+                            <div onClick={() => hidePost(post.id)} className=" flex justify-center items-center cursor-pointer w-9 h-9 active:bg-gray-300 hover:bg-gray-200 rounded-full">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     height="1em"
@@ -163,12 +163,12 @@ export default function SinglePost({ post, posts, setPost }) {
                     </div>
                 </div>
                 <pre className=" text-base font-normal w-full break-words whitespace-pre-wrap font-noto">
-                    {post.Post.postText && (post.Post.postText.replace(/@@newline@@/g, '\n').slice(0, 200))}
-                    {post.Post.postText.length > 200 && (
+                    {post.postText && (post.postText.replace(/@@newline@@/g, '\n').slice(0, 200))}
+                    {post.postText.length > 200 && (
                         <>
-                            <span id={`more-btn-${post.Post.id}`} className=" font-semibold text-sm cursor-pointer hover:underline-offset-1" onClick={myFunction}>...Xem thêm</span>
-                            <pre id={`more-${post.Post.id}`} className="hidden text-base w-full font-normal break-words whitespace-pre-wrap font-noto">{post.Post.postText && (post.Post.postText.replace(/@@newline@@/g, '\n').slice(200))}</pre>
-                            <span id={`less-btn-${post.Post.id}`} className="hidden font-semibold text-sm cursor-pointer hover:underline-offset-1" onClick={myFunction}>...Bớt đi</span>
+                            <span id={`more-btn-${post.id}`} className=" font-semibold text-sm cursor-pointer hover:underline-offset-1" onClick={myFunction}>...Xem thêm</span>
+                            <pre id={`more-${post.id}`} className="hidden text-base w-full font-normal break-words whitespace-pre-wrap font-noto">{post.postText && (post.postText.replace(/@@newline@@/g, '\n').slice(200))}</pre>
+                            <span id={`less-btn-${post.id}`} className="hidden font-semibold text-sm cursor-pointer hover:underline-offset-1" onClick={myFunction}>...Bớt đi</span>
                         </>
                     )}
                 </pre>
@@ -316,17 +316,17 @@ export default function SinglePost({ post, posts, setPost }) {
                     )}
                     <div className="flex items-center space-x-3">
                         <h1 className=" cursor-pointer hover:underline">
-                            {post.Post.commentNumber} {post.Post.commentNumber < 2 ? "comment" : "comments"}
+                            {post.commentNumber} {post.commentNumber < 2 ? "comment" : "comments"}
                         </h1>
                     </div>
                 </div>
             </div>
             {openLike && (
-                <LikeBox PostId={post.Post.id} setOpenLike={setOpenLike} user={user} />
+                <LikeBox PostId={post.id} setOpenLike={setOpenLike} user={user} />
             )}
             {openComment && (
                 <CommentBox
-                    post={post.Post}
+                    post={post}
                     setOpenComment={setOpenComment}
                     likeAPost={likeAPost}
                     likeNum={likeNum}

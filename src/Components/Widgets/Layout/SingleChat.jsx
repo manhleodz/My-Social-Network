@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import socket from '../../../../Network/Socket';
-import { addBoxChat, openOneBox, setIsOpenChat } from '../../../../Redux/MessagerSlice';
+import socket from '../../../Network/Socket';
 
 export default function SingleChat({ chat }) {
 
@@ -50,11 +49,6 @@ export default function SingleChat({ chat }) {
     return (
         <div
             className=' flex items-center justify-between rounded-lg hover:bg-gray-100 w-full p-2 cursor-pointer'
-            onClick={() => {
-                dispatch(setIsOpenChat(false))
-                dispatch(openOneBox(chat));
-                dispatch(addBoxChat(chat))
-            }}
         >
             <div className=' w-10/12 flex items-center space-x-2'>
                 <div className='w-16 h-16 rounded-full relative'>

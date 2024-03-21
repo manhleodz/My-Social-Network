@@ -43,7 +43,7 @@ export default function Notification() {
                     )}
                 </div>
                 {isOpen && (
-                    <div className='bg-white fixed shadow-xl right-10 top-12 rounded-xl pl-3 pb-3 pt-3' style={{ width: "360px" }}>
+                    <div className='bg-white fixed shadow-xl right-10 top-12 rounded-xl pl-3 pb-3 pt-3' style={{ width: "360px", boxShadow: " rgba(0, 0, 0, 0.35) 0px 5px 15px", maxHeight: "80%" }}>
                         <div className=' overflow-y-auto space-y-3 rounded-xl w-full h-full'>
                             <h1 className=' font-bold text-[25px]'>Thông báo</h1>
                             <div className=' flex items-center space-x-2'>
