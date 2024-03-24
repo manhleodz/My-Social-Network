@@ -16,6 +16,22 @@ export default function Comment({ comment, setComment, comments, setOpenComment,
   const user = useSelector(state => state.authentication.user);
   const navigate = useNavigate();
 
+  let createdAt = new Date(comment.createdAt);
+  const now = new Date();
+
+  if (now - createdAt < 3600000) {
+    if (Math.round((now - createdAt) / 60000) === 0) {
+      createdAt = "Vừa xong";
+    } else
+      createdAt = Math.round((now - createdAt) / 60000) + " phút";
+  } else if (now - createdAt < 86400000) {
+    createdAt = Math.round((now - createdAt) / 3600000) + " giờ";
+  } else if (now - createdAt < 604800000) {
+    createdAt = Math.round((now - createdAt) / 86400000) + " ngày";
+  } else {
+    createdAt = createdAt.getDate() + " tháng " + createdAt.getMonth() + " lúc " + createdAt.getHours() + ":" + createdAt.getMinutes();
+  }
+
   useEffect(() => {
     if (likeComments.length > 0) {
       for (let i of likeComments) {
@@ -75,7 +91,12 @@ export default function Comment({ comment, setComment, comments, setOpenComment,
               >{comment.User.nickname}</span>{comment.commentBody}</p>
             </div>
             <div className=' flex items-center space-x-3'>
-              <h1 className=' text-sm text-gray-600'>{comment.createdAt.slice(0, 10)} {comment.createdAt.slice(11, 16)}</h1>
+              <h1
+                className=" text-xs text-gray-500 cursor-pointer font-semibold "
+                title={`${createdAt}`}
+              >
+                {createdAt}
+              </h1>
               <h1 className=' text-sm text-gray-600 cursor-pointer'>{likeNum} {likeNum < 2 ? 'like' : 'likes'}</h1>
               <h1 className=' text-sm text-gray-600 font-medium cursor-pointer' onClick={() => setNewReply(`@${comment.User.nickname} `)}>Reply</h1>
               <h1 className=' cursor-pointer hidden' onClick={() => setOption(true)} id={`delete-${comment.id}`}><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z" /></svg></h1>

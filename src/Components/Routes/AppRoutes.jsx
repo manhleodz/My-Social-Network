@@ -119,45 +119,44 @@ export default function AppRoutes() {
         return () => window.removeEventListener("beforeunload", unloadCallback);
     }, []);
 
-    if (user === "") {
-        return (
-            <>
-                <Routes>
-                    <Route path='/*' element={<LoadingPage />} />
-                </Routes>
-            </>
-        )
-    } else if (user === null) {
-        return (
-            <>
-                <Routes>
-                    <Route path='/*' element={<Login />} />
-                    <Route path='signup' element={<SignUp />} />
-                    <Route path='forgotpassword' element={<ForgotPassword />} />
-                </Routes>
-            </>
-        )
-    } else {
-        if (user.confirm === 0) {
-            return (
-                <>
-                    <Routes>
-                        <Route path='/*' element={<ConfirmAccount />} />
-                        <Route path='signup' element={<SignUp />} />
-                        <Route path='login' element={<Login />} />
-                        <Route path='forgotpassword' element={<ForgotPassword />} />
-                    </Routes>
-                </>
-            )
-        } else {
-            return (
-                <>
-                    <Routes>
-                        <Route path='*' element={<HomeRoutes />} />
-                    </Routes>
-                </>
-            )
-        }
-    }
-
+    // if (user === "") {
+    //     return (
+    //         <>
+    //             <Routes>
+    //                 <Route path='/*' element={<LoadingPage />} />
+    //             </Routes>
+    //         </>
+    //     )
+    // } else if (user === null) {
+    //     return (
+    //         <>
+    //             <Routes>
+    //                 <Route path='/*' element={<Login />} />
+    //                 <Route path='signup' element={<SignUp />} />
+    //                 <Route path='forgotpassword' element={<ForgotPassword />} />
+    //             </Routes>
+    //         </>
+    //     )
+    // } else {
+    //     if (user.confirm === 0) {
+    //         return (
+    //             <>
+    //                 <Routes>
+    //                     <Route path='/*' element={<ConfirmAccount />} />
+    //                     <Route path='signup' element={<SignUp />} />
+    //                     <Route path='login' element={<Login />} />
+    //                     <Route path='forgotpassword' element={<ForgotPassword />} />
+    //                 </Routes>
+    //             </>
+    //         )
+    //     } else {
+    //         return (
+    //             <>
+    //                 <Routes>
+    //                     <Route path='*' element={<HomeRoutes />} />
+    //                 </Routes>
+    //             </>
+    //         )
+    //     }
+    // }
 }

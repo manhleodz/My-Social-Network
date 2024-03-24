@@ -21,6 +21,22 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
         setShowPicker(false);
     };
 
+    let createdAt = new Date(post.createdAt);
+    const now = new Date();
+
+    if (now - createdAt < 3600000) {
+        if (Math.round((now - createdAt) / 60000) === 0) {
+            createdAt = "Vừa xong";
+        } else
+            createdAt = Math.round((now - createdAt) / 60000) + " phút";
+    } else if (now - createdAt < 86400000) {
+        createdAt = Math.round((now - createdAt) / 3600000) + " giờ";
+    } else if (now - createdAt < 604800000) {
+        createdAt = Math.round((now - createdAt) / 86400000) + " ngày";
+    } else {
+        createdAt = createdAt.getDate() + " tháng " + createdAt.getMonth() + " lúc " + createdAt.getHours() + ":" + createdAt.getMinutes();
+    }
+
     const onSubmit = (e) => {
         if (e.key === 'Enter') {
             if (newComment.length !== 0) {
@@ -128,7 +144,12 @@ export default function CommentBox({ post, setOpenComment, likeAPost, likeNum, i
                                             4
                                         )}, lúc ${post.createdAt.slice(11, 16)}`}
                                     >
-                                        <h1>{post.createdAt.slice(0, 10)}</h1>
+                                        <h1
+                                            className=" text-xs text-gray-500 cursor-pointer font-semibold "
+                                            title={`${createdAt}`}
+                                        >
+                                            {createdAt}
+                                        </h1>
                                         {post.public == 0 ?
                                             <svg xmlns="http://www.w3.org/2000/svg" fill='#A8A59C' height="14" width="14" viewBox="0 0 448 512"><path d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z" /></svg>
                                             :
