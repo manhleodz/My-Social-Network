@@ -9,7 +9,6 @@ export default function GroupChat({ chat }) {
 
     const dispatch = useDispatch();
 
-    const [online, setOnline] = useState(false);
     const [isWatched, setIsWatched] = useState(chat.seen);
     const [lastMessage, setLastMessage] = useState(chat.InboxGroups[0]);
 

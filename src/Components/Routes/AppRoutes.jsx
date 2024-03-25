@@ -43,11 +43,9 @@ export default function AppRoutes() {
     }
 
     const getListFriends = async () => {
-        await FriendApi.getListFriend().then(res => {
-            if (res.status === 200) {
-                dispatch(fetchFriend(res.data.data));
-                dispatch(fetchAllChat(res.data.data));
-            }
+        await FriendApi.getListFriend().then((res) => {
+            dispatch(fetchFriend(res.data.data));
+            dispatch(fetchAllChat(res.data.data));
         })
     }
 
@@ -97,13 +95,13 @@ export default function AppRoutes() {
 
     }, []);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        setTimeout(() => {
-            socket.disconnect();
-            Auth.refreshStateUser(success, unAuthorized, failure);
-        }, 1800000)
-    });
+    //     setTimeout(() => {
+    //         socket.disconnect();
+    //         Auth.refreshStateUser(success, unAuthorized, failure);
+    //     }, 1800000)
+    // });
 
     useEffect(() => {
         const unloadCallback = (event) => {
@@ -117,46 +115,38 @@ export default function AppRoutes() {
 
         window.addEventListener("beforeunload", unloadCallback);
         return () => window.removeEventListener("beforeunload", unloadCallback);
-    }, []);
+    }, [user]);
 
-    // if (user === "") {
-    //     return (
-    //         <>
-    //             <Routes>
-    //                 <Route path='/*' element={<LoadingPage />} />
-    //             </Routes>
-    //         </>
-    //     )
-    // } else if (user === null) {
-    //     return (
-    //         <>
-    //             <Routes>
-    //                 <Route path='/*' element={<Login />} />
-    //                 <Route path='signup' element={<SignUp />} />
-    //                 <Route path='forgotpassword' element={<ForgotPassword />} />
-    //             </Routes>
-    //         </>
-    //     )
-    // } else {
-    //     if (user.confirm === 0) {
-    //         return (
-    //             <>
-    //                 <Routes>
-    //                     <Route path='/*' element={<ConfirmAccount />} />
-    //                     <Route path='signup' element={<SignUp />} />
-    //                     <Route path='login' element={<Login />} />
-    //                     <Route path='forgotpassword' element={<ForgotPassword />} />
-    //                 </Routes>
-    //             </>
-    //         )
-    //     } else {
-    //         return (
-    //             <>
-    //                 <Routes>
-    //                     <Route path='*' element={<HomeRoutes />} />
-    //                 </Routes>
-    //             </>
-    //         )
-    //     }
-    // }
+    if (user === null) {
+        return (
+            <>
+                <Routes>
+                    <Route path='/*' element={<Login />} />
+                    <Route path='signup' element={<SignUp />} />
+                    <Route path='forgotpassword' element={<ForgotPassword />} />
+                </Routes>
+            </>
+        )
+    } else {
+        if (user.confirm === 0) {
+            return (
+                <>
+                    <Routes>
+                        <Route path='/*' element={<ConfirmAccount />} />
+                        <Route path='signup' element={<SignUp />} />
+                        <Route path='login' element={<Login />} />
+                        <Route path='forgotpassword' element={<ForgotPassword />} />
+                    </Routes>
+                </>
+            )
+        } else {
+            return (
+                <>
+                    <Routes>
+                        <Route path='*' element={<HomeRoutes />} />
+                    </Routes>
+                </>
+            )
+        }
+    }
 }

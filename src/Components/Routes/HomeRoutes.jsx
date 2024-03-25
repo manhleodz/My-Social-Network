@@ -35,6 +35,7 @@ const Loading = () => (
 )
 
 export default function HomeRoutes() {
+
     return (
         <>
             <Suspense fallback={<Loading />}>

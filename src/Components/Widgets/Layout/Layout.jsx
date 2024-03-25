@@ -19,7 +19,6 @@ export default function Layout({ children }) {
 
   const dispatch = useDispatch();
 
-  if (allChat.length === 0) return null;
   return (
     <div className="h-full bg-gray-100 relative">
       <div className="flex flex-col h-screen">
@@ -44,10 +43,10 @@ export default function Layout({ children }) {
                     </div>
                     <div className=' w-full h-[345px] rounded-b-xl overflow-y-auto p-2'>
                       {allChat.length > 0 && (
-                        <>
+                        <div className=' w-full h-fit' key="list">
                           {allChat.map((chat, index) => (
                             <>
-                              {chat.relationshipId ? (
+                              {chat.RelationshipId ? (
                                 <div className=' w-full h-fit' onClick={() => {
                                   dispatch(openMobileChat(chat));
                                   document.getElementById('list-contact').scrollLeft += 300;
@@ -64,7 +63,7 @@ export default function Layout({ children }) {
                               )}
                             </>
                           ))}
-                        </>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -108,11 +107,9 @@ export default function Layout({ children }) {
           <div className='fixed flex items-center space-x-2 z-50 bottom-5 right-20 rounded-2xl shadow-2xl' id='box-chat'>
             {openChat.length > 0 && (
               <>
-                {
-                  openChat.map((chat, index) => (
-                    <BoxChat chat={chat} key={index} />
-                  ))
-                }
+                {openChat.map((chat, index) => (
+                  <BoxChat chat={chat} key={index} />
+                ))}
               </>
             )}
             {createGroup && (

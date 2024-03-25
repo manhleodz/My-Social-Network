@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ChatApi } from '../../../Network/Chat';
+import { ChatApi } from '../../../../Network/Chat';
 import { useDispatch, useSelector } from 'react-redux';
 import ScrollToBottom from 'react-scroll-to-bottom';
-import { closeOneBox, smallOneBox } from '../../../Redux/MessagerSlice';
-import Styles from './BoxChat.module.scss';
+import { closeOneBox, smallOneBox } from '../../../../Redux/MessagerSlice';
+import Styles from '../BoxChat.module.scss';
 import { isBrowser, isMobile } from 'react-device-detect';
-import socket from '../../../Network/Socket';
-import typingAnimation from '../../../Assets/Gif icons/Typing2.gif';
-import PopChat from './Popover/PopChat';
+import socket from '../../../../Network/Socket';
+import typingAnimation from '../../../../Assets/Gif icons/Typing2.gif';
+import PopChat from '../Popover/PopChat';
 
 export default function BoxGroupChat({ chat }) {
 
@@ -137,9 +137,9 @@ export default function BoxGroupChat({ chat }) {
 
             </div>
             <div className={`${Styles.boxchat} ${isMobile ? 'w-[300px] h-[400px]' : 'w-80 h-[430px]'} rounded-xl shadow-xl  bg-white flex flex-col items-start relative`}>
-                <div class=" absolute -left-80 top-10 w-72 h-full">
+                {/* <div class=" absolute -left-80 top-10 w-72 h-full">
                     <PopChat chat={chat} />
-                </div>
+                </div> */}
                 <div className={`h-[60px] flex items-center justify-between p-0.5 ${isMobile ? 'w-[300px]' : 'w-80'}`} style={{ boxShadow: '0px 10px 10px -15px #111' }}>
                     <div className='flex items-center w-7/12 hover:bg-gray-100 p-0.5 rounded-lg cursor-pointer'>
                         <img alt='avatar' src={chat.avatar} className=' rounded-full object-cover w-12 h-12 p-1' />

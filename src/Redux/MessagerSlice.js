@@ -4,6 +4,7 @@ export const MessengerSlice = createSlice({
     name: 'messenger',
     initialState: {
         isOpen: false,
+        unread: 0,
         createGroup: false,
         openChat: [],
         boxChat: [],
@@ -23,9 +24,16 @@ export const MessengerSlice = createSlice({
             state.messageCache = [...state.messageCache, action.payload];
         },
 
+        updateMessageCache(state, action) {
+            const { RelationshipId, message, id, sender, type, updatedAt } = action.payload;
+            let idx = state.messageCache.findIndex(e => e.RelationshipId == RelationshipId);
+
+            state.messageCache[idx].messages.push({ RelationshipId, message, id, sender, type, updatedAt })
+        },
+
         addBoxChat(state, action) {
             if (canPush(state.boxChat, action.payload))
-                state.boxChat = [...state.boxChat, action.payload];
+                state.boxChat = [action.payload, ...state.boxChat];
         },
 
         addGroupChat(state, action) {
@@ -35,6 +43,46 @@ export const MessengerSlice = createSlice({
         openOneBox(state, action) {
             if (canPush(state.openChat, action.payload))
                 state.openChat = [...state.openChat, action.payload];
+        },
+
+        seenMessage(state, action) {
+            const RelationshipId = action.payload;
+            let idx = state.allChat.findIndex(e => e.RelationshipId === RelationshipId);
+            state.allChat[idx].seen = true;
+        },
+
+        updateOneChat(state, action) {
+            const { RelationshipId, message, sender, type, updatedAt } = action.payload;
+            let idx = state.allChat.findIndex(e => e.RelationshipId === RelationshipId);
+
+            state.allChat[idx].message = message;
+            state.allChat[idx].sender = sender;
+            state.allChat[idx].seen = false;
+            state.allChat[idx].updatedAt = updatedAt;
+            state.allChat[idx].type = type;
+
+            state.allChat = state.allChat.sort(compare)
+        },
+
+        updateAfterDeleteMessage(state, action) {
+            const { RelationshipId, id } = action.payload;
+
+            const idx = state.messageCache.findIndex(e => e.RelationshipId == RelationshipId);
+            if (idx !== -1) {
+                const newList = state.messageCache[idx].messages.filter(message => message.id !== id);
+                state.messageCache[idx] = {
+                    ...state.messageCache[idx],
+                    messages: newList
+                }
+            }
+        },
+
+        inscreaseUnread(state, action) {
+            if (state.isOpen === false) state.unread++;
+        },
+
+        clearUnread(state, action) {
+            if (state.isOpen === false) state.unread++;
         },
 
         closeOneBox(state, action) {
@@ -88,6 +136,6 @@ const canPush = (boxs, myObj) => {
     return true;
 }
 
-export const { addBoxChat, openOneBox, closeOneBox, addGroupChat, smallOneBox, openMobileChat, setIsOpenChat, fetchAllChat, saveMessage, setCreateGroup } = MessengerSlice.actions;
+export const { addBoxChat, inscreaseUnread, seenMessage, updateAfterDeleteMessage, clearUnread, openOneBox, closeOneBox, updateOneChat, updateMessageCache, addGroupChat, smallOneBox, openMobileChat, setIsOpenChat, fetchAllChat, saveMessage, setCreateGroup } = MessengerSlice.actions;
 
 export const messengerReducer = MessengerSlice.reducer;

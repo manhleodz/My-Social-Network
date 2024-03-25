@@ -11,7 +11,6 @@ export default function SingleChat({ chat }) {
 
     const [online, setOnline] = useState(false);
     const [isWatched, setIsWatched] = useState(chat.seen);
-    const [lastMessage, setLastMessage] = useState(chat.message);
 
     let updatedAt = new Date(chat.updatedAt);
     const now = new Date();
@@ -45,7 +44,7 @@ export default function SingleChat({ chat }) {
                 if (data === chat.id) setIsWatched(true);
             })
         }
-    }, [socket, chat.id]);
+    }, [socket, chat]);
 
     return (
         <div
@@ -65,11 +64,11 @@ export default function SingleChat({ chat }) {
                 </div>
                 <div style={{ wordBreak: "break-all", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: 'hidden' }}>
                     <h1 className=' font-semibold'>{chat.nickname}</h1>
-                    {lastMessage && (
+                    {chat.message && (
                         <span className={` text-[14px] ${!isWatched ? 'font-semibold' : 'text-gray-600'}`}>{chat.sender == user.id ? (
-                            `bạn: ${lastMessage}`
+                            `bạn: ${chat.message}`
                         ) : (
-                            `${lastMessage}`
+                            `${chat.message}`
                         )}
                             . {updatedAt}
                         </span>

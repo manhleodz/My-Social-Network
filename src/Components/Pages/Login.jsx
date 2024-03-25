@@ -75,6 +75,7 @@ const Login = () => {
   const getListFriends = async () => {
     await FriendApi.getListFriend().then((res) => {
       dispatch(fetchFriend(res.data.data));
+      dispatch(fetchAllChat(res.data.data));
     })
   }
 

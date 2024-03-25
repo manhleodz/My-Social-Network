@@ -20,6 +20,14 @@ export const ChatApi = {
         });
     },
 
+    async seenMessage(id) {
+        return axios.put(`${ApiUrl}/inbox/seen/${id}`, {}, {
+            headers: {
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            },
+        });
+    },
+
     async getGroupMessage(id) {
 
         return axios.get(`${ApiUrl}/inbox/group/${id}`, {

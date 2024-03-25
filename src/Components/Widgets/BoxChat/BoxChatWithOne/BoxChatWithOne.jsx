@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { ChatApi } from '../../../Network/Chat';
+import { ChatApi } from '../../../../Network/Chat';
 import { useDispatch, useSelector } from 'react-redux';
-import ScrollToBottom from 'react-scroll-to-bottom';
-import { closeOneBox, saveMessage, smallOneBox } from '../../../Redux/MessagerSlice';
-import Styles from './BoxChat.module.scss';
-import { isBrowser, isMobile } from 'react-device-detect';
-import socket from '../../../Network/Socket';
-import typingAnimation from '../../../Assets/Gif icons/Typing2.gif';
+import { closeOneBox, updateAfterDeleteMessage, saveMessage, smallOneBox, updateMessageCache, updateOneChat, seenMessage } from '../../../../Redux/MessagerSlice';
+import Styles from '../BoxChat.module.scss';
+import { isMobile } from 'react-device-detect';
+import socket from '../../../../Network/Socket';
+import typingAnimation from '../../../../Assets/Gif icons/Typing2.gif';
+import ListMessage from './ListMessage';
 
 export default function BoxChatWithOne({ chat }) {
 
     const user = useSelector(state => state.authentication.user);
-    const allChat = useSelector(state => state.messenger.allChat);
     const messageCache = useSelector(state => state.messenger.messageCache);
 
     const dispatch = useDispatch();
@@ -23,12 +22,15 @@ export default function BoxChatWithOne({ chat }) {
 
     const sendMessage = async () => {
         if (newMessenger !== "") {
+
+            const now = Date.now();
             const messageData = {
                 sender: user.id,
                 receiver: chat.id,
                 message: newMessenger,
-                RelationshipId: chat.relationshipId,
-                type: format
+                RelationshipId: chat.RelationshipId,
+                type: format,
+                updatedAt: new Date(now).toISOString(),
             };
 
             await ChatApi.sendMessage(messageData).then(async (res) => {
@@ -37,21 +39,33 @@ export default function BoxChatWithOne({ chat }) {
 
                 socket.emit("send_message", {
                     id: newMess.id,
-                    room: `coversation-${chat.relationshipId}`,
+                    room: `coversation-${chat.RelationshipId}`,
                     createdAt: newMess.createdAt,
+                    updatedAt: new Date(now).toISOString(),
                     sender: user.id,
                     nickname: user.nickname,
                     receiver: chat.id,
+                    RelationshipId: chat.RelationshipId,
                     type: format,
-                    message: newMess.message,
+                    message: newMessenger,
                 });
+
+                dispatch(updateOneChat(messageData));
+
+                dispatch(updateMessageCache({
+                    id: newMess.id,
+                    RelationshipId: chat.RelationshipId,
+                    createdAt: newMess.createdAt,
+                    sender: user.id,
+                    message: newMessenger,
+                }));
 
                 setListMessage(prev => [...prev, {
                     id: newMess.id,
-                    RelationshipId: chat.relationshipId,
+                    RelationshipId: chat.RelationshipId,
                     createdAt: newMess.createdAt,
                     sender: user.id,
-                    message: newMess.message,
+                    message: newMessenger,
                 }]);
 
             }).catch((err) => {
@@ -68,7 +82,7 @@ export default function BoxChatWithOne({ chat }) {
 
             if (!typing) {
                 setTyping(true);
-                socket.emit("typing", { room: `coversation-${chat.relationshipId}`, userId: user.id });
+                socket.emit("typing", { room: `coversation-${chat.RelationshipId}`, userId: user.id });
             }
         } else {
 
@@ -80,7 +94,7 @@ export default function BoxChatWithOne({ chat }) {
                     var timeNow = new Date().getTime();
                     var timeDiff = timeNow - lastTypingTime;
                     if (timeDiff >= timerLength && typing) {
-                        socket.emit("stop typing", { room: `coversation-${chat.relationshipId}`, userId: user.id });
+                        socket.emit("stop typing", { room: `coversation-${chat.RelationshipId}`, userId: user.id });
                         setTyping(false);
                     }
                 }, timerLength);
@@ -90,12 +104,23 @@ export default function BoxChatWithOne({ chat }) {
 
     useEffect(() => {
         socket.on("receive_message", (data) => {
-            if (data.room === `coversation-${chat.relationshipId}`) {
+            if (data.room === `coversation-${chat.RelationshipId}`) {
                 setListMessage(prev => [...prev, data]);
+                dispatch(updateMessageCache(data));
             }
         });
 
-    }, [socket, chat]);
+        socket.on("delete_message_receiver", async (data) => {
+            if (user.id === data.receiver) {
+                setListMessage(prev => prev = prev.filter(e => e.id !== data.id));
+                dispatch(updateAfterDeleteMessage({
+                    RelationshipId: chat.RelationshipId,
+                    id: data.id
+                }));
+            }
+        });
+
+    }, [socket]);
 
     useEffect(() => {
         socket.on("typing", () => setTyping(true));
@@ -103,17 +128,22 @@ export default function BoxChatWithOne({ chat }) {
     }, [])
 
     useEffect(() => {
-        socket.emit("join_room", `coversation-${chat.relationshipId}`);
+        socket.emit("join_room", `coversation-${chat.RelationshipId}`);
 
-        const idx = messageCache.findIndex(e => e.relationshipId === chat.relationshipId);
+        if (chat.seen === false) {
+            ChatApi.seenMessage(chat.RelationshipId);
+            dispatch(seenMessage(chat.RelationshipId));
+        }
+
+        const idx = messageCache.findIndex(e => e.RelationshipId === chat.RelationshipId);
 
         if (idx === -1) {
 
-            ChatApi.getMessage(chat.relationshipId).then((res) => {
+            ChatApi.getMessage(chat.RelationshipId).then((res) => {
                 if (res.status === 200) {
                     setListMessage(prev => prev = [...prev, ...res.data.data]);
                     dispatch(saveMessage({
-                        relationshipId: chat.relationshipId,
+                        RelationshipId: chat.RelationshipId,
                         messages: res.data.data
                     }));
                 } else
@@ -186,41 +216,9 @@ export default function BoxChatWithOne({ chat }) {
                     )}
                 </div>
             </div>
-            {listMessage && (
-                <div className={` space-y-2`} >
-                    <ScrollToBottom className={`${Styles.boxchat_listmess} overflow-y-visible overflow-x-hidden ${isMobile ? 'w-[300px] h-[290px]' : 'w-80 h-[300px]'} p-2 duration-500`}>
-                        {listMessage.map((message, index) => (
-                            <div key={index}>
-                                {message.sender === user.id ? (
-                                    <>
-                                        <div className=' flex items-center justify-end w-full mb-1 space-x-2' key={message.id}>
-                                            <div onClick={() => ChatApi.deleteMessage(message.id)}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512" className=' w-6 h-6 p-1 hover:bg-gray-200 fill-gray-500 cursor-pointer rounded-full'>
-                                                    <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                                                </svg>
-                                            </div>
-                                            <h1 className={` p-2 rounded-2xl text-white bg-blue-500 text-[14.5px] break-words`} style={{ maxWidth: "230px" }}>{message.message}</h1>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className=' flex items-center space-x-2 justify-start w-full mb-1' key={message.id}>
-                                            <img src={chat.smallAvatar} className=' w-8 h-8 rounded-full object-cover' />
-                                            <h1 className={` p-2 rounded-2xl text-black bg-gray-300 text-[14.5px] break-words`} style={{ maxWidth: "230px" }}>{message.message}</h1>
-                                        </div>
-                                    </>
-                                )}
-                            </div>
-                        ))}
-                        {/* {(typing && newMessenger.length === 0) && (
-                            <div className=' flex items-center space-x-2 justify-start w-full mb-1' key="typing">
-                                <img src={chat.smallAvatar} className=' w-8 h-8 rounded-full object-cover' />
-                                <img alt='typing' src={typingAnimation} className='h-8 w-12 object-fill rounded-2xl bg-gray-300' />
-                            </div>
-                        )} */}
-                    </ScrollToBottom>
-                </div>
-            )}
+            <div className={`${isMobile ? 'w-[300px] h-[290px]' : 'w-80 h-[300px]'}`}>
+                <ListMessage listMessage={listMessage} chat={chat} setListMessage={setListMessage} />
+            </div>
             <div className={`w-full ${isMobile ? 'h-[40px] p-2 py-3' : 'h-[70px]  p-2 py-4'} flex items-center justify-between`}>
                 <div>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className=' w-5 h-5 cursor-pointer bg-gray-200 fill-black'>
@@ -232,12 +230,14 @@ export default function BoxChatWithOne({ chat }) {
                         e.preventDefault();
                         await sendMessage();
                     }}
-                    className=' p-2 rounded-xl h-10 bg-gray-200 relative flex items-center'
+                    className=' p-2 rounded-3xl h-10 bg-gray-200 relative flex items-center'
                 >
                     <input
                         onChange={typingHandler}
                         value={newMessenger}
-                        className='bg-gray-200 outline-none ring-0 p-2 rounded-xl'
+                        placeholder='Tin nhắn mới'
+                        className='bg-gray-200 outline-none ring-0 p-2 rounded-3xl'
+                        autoFocus
                     />
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className=' w-5 h-5 cursor-pointer bg-gray-200 fill-black'>
                         <path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm177.6 62.1C192.8 334.5 218.8 352 256 352s63.2-17.5 78.4-33.9c9-9.7 24.2-10.4 33.9-1.4s10.4 24.2 1.4 33.9c-22 23.8-60 49.4-113.6 49.4s-91.7-25.5-113.6-49.4c-9-9.7-8.4-24.9 1.4-33.9s24.9-8.4 33.9 1.4zM144.4 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm192-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" />

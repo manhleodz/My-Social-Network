@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import video from '../../Assets/Email Marketing.mp4';
 import ReactPlayer from 'react-player';
 import { Auth } from '../../Network/Auth';
-import { useDispatch } from 'react-redux';
-import { setUser, signOut } from '../../Redux/UserSlice';
-import { useNavigate } from 'react-router-dom';
+import hello from '../../hello.jpg';
 
 export default function ConfirmAccount() {
 
@@ -19,12 +17,13 @@ export default function ConfirmAccount() {
     const [birthday, setBirthday] = useState("");
     const [gender, setGender] = useState("Nam");
 
-    const dispatch = useDispatch();
-
     const success = (e) => {
         localStorage.setItem("accessToken", e.data.token);
         sessionStorage.removeItem("accessToken");
-        window.location.reload();
+        setTimeout(() => {
+
+            window.location.reload();
+        }, 1000);
     }
 
     const failure = (e) => {
@@ -189,7 +188,7 @@ export default function ConfirmAccount() {
                             <h1 className=' text-center text-2xl m-5 font-semibold max-lg:m-3 max-sm:m-1'>Bắt đầu hành trình mới</h1>
                             <div className='w-full flex justify-center items-center'>
                                 <div className='w-10/12 max-sm:w-full flex max-md:flex-col-reverse max-md:items-center justify-center items-start space-x-10'>
-                                    <img alt='bomay' className=' w-4/12 max-md:w-10/12 h-96 object-cover max-sm:hidden' src='https://firebasestorage.googleapis.com/v0/b/my-social-network-815dc.appspot.com/o/stories%2Fhello.jpg_2024-2-19%2022%3A47%3A51_0cf006fe-873e-4c7b-a9e7-3def53cae307?alt=media&token=b49f9b4b-9cc5-4468-9b61-b32d7b8abb1c' />
+                                    <img alt='bomay' className=' w-4/12 max-md:w-10/12 h-96 object-cover max-sm:hidden' src={hello} />
                                     <div className='w-5/12 max-md:w-10/12'>
                                         <h1 className=' text-2xl font-semibold mb-5'>Điều khoản bắt buộc</h1>
                                         <ul className=' list-disc space-y-2'>
