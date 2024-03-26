@@ -12,6 +12,8 @@ function Mailbox({ allChat }) {
         dispatch(clearUnread());
     }, [])
 
+    console.log(allChat);
+
     return (
         <>
             <div className='bg-white fixed right-10 top-12 rounded-xl pl-3 pb-3 pt-3 overflow-y-auto' style={{ width: "360px", maxHeight: "90%", boxShadow: " rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
@@ -52,7 +54,7 @@ function Mailbox({ allChat }) {
                     <div className=' w-full pr-3' key="list">
                         {allChat.map((chat, index) => (
                             <>
-                                {chat.RelationshipId !== null ? (
+                                {chat.RelationshipId != null ? (
                                     <SingleChat key={index} chat={chat} />
                                 ) : (
                                     <GroupChat key={index} chat={chat} />

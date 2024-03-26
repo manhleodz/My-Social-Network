@@ -17,6 +17,8 @@ export default function UserTag({ fr }) {
         socket.on('disconnected', (data) => {
             if (data === fr.id) setOnline(false);
         })
+
+        return () => socket.disconnect();
     }, [socket, fr.id])
 
     return (

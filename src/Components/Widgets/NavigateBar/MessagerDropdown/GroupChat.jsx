@@ -10,7 +10,7 @@ export default function GroupChat({ chat }) {
     const dispatch = useDispatch();
 
     const [isWatched, setIsWatched] = useState(chat.seen);
-    const [lastMessage, setLastMessage] = useState(chat.InboxGroups[0]);
+    const [lastMessage, setLastMessage] = useState(chat.InboxGroups && chat.InboxGroups[0]);
 
     let updatedAt = new Date(chat.updatedAt);
     const now = new Date();

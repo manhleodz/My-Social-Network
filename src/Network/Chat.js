@@ -59,5 +59,21 @@ export const ChatApi = {
                 accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
             },
         })
-    }
+    },
+
+    async createNewGroupChat(data) {
+        return axios.post(`${ApiUrl}/inbox/group/newgroup`, data, {
+            headers: {
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            },
+        });
+    },
+
+    async addUserIntoGroup(data) {
+        return axios.post(`${ApiUrl}/inbox/group/addUser`, data, {
+            headers: {
+                accessToken: localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")
+            },
+        });
+    },
 }

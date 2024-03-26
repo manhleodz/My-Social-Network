@@ -109,7 +109,7 @@ export default function Profile() {
         nickname: profile.nickname,
         username: profile.username,
         smallAvatar: profile.smallAvatar,
-        relationshipId: res.data.relationshipId.id
+        RelationshipId: res.data.relationshipId.id
       }
 
       if (isMobile) {

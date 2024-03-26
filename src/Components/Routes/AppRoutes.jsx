@@ -107,9 +107,9 @@ export default function AppRoutes() {
         const unloadCallback = (event) => {
             if (user) {
                 socket.disconnect();
-                event.preventDefault();
-                event.returnValue = "";
-                return "";
+                // event.preventDefault();
+                // event.returnValue = "";
+                // return "";
             }
         };
 

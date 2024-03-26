@@ -21,14 +21,41 @@ export const MessengerSlice = createSlice({
         },
 
         saveMessage(state, action) {
-            state.messageCache = [...state.messageCache, action.payload];
+
+            const { RelationshipId, messages } = action.payload;
+
+            // Lặp qua từng tin nhắn
+            // Tạo dictionary để lưu trữ tin nhắn theo ngày
+            const messagesByDate = {};
+
+            // Lặp qua từng tin nhắn
+            for (const message of messages) {
+                // Trích xuất ngày từ createdAt (bỏ phần giờ)
+                const date = new Date(message.createdAt).toLocaleDateString();
+
+                // Kiểm tra ngày đã tồn tại trong dictionary hay chưa
+                if (!messagesByDate.hasOwnProperty(date)) {
+                    // Tạo list mới để lưu trữ tin nhắn của ngày
+                    messagesByDate[date] = [];
+                }
+
+                // Thêm tin nhắn vào list của ngày tương ứng
+                messagesByDate[date].push(message);
+            }
+
+            state.messageCache = [...state.messageCache, {
+                RelationshipId: RelationshipId,
+                messages: messagesByDate
+            }]
         },
 
         updateMessageCache(state, action) {
-            const { RelationshipId, message, id, sender, type, updatedAt } = action.payload;
-            let idx = state.messageCache.findIndex(e => e.RelationshipId == RelationshipId);
+            const data = action.payload;
+            let date = data.createdAt;
+            date = new Date(date).toLocaleDateString();
+            let idx = state.messageCache.findIndex(e => e.RelationshipId == data.RelationshipId);
 
-            state.messageCache[idx].messages.push({ RelationshipId, message, id, sender, type, updatedAt })
+            state.messageCache[idx].messages[date].push(data)
         },
 
         addBoxChat(state, action) {
@@ -65,14 +92,15 @@ export const MessengerSlice = createSlice({
         },
 
         updateAfterDeleteMessage(state, action) {
-            const { RelationshipId, id } = action.payload;
+            const { RelationshipId, id, date } = action.payload;
 
             const idx = state.messageCache.findIndex(e => e.RelationshipId == RelationshipId);
             if (idx !== -1) {
-                const newList = state.messageCache[idx].messages.filter(message => message.id !== id);
+                const updatedDate = { ...state.messageCache[idx].messages };
+                updatedDate[date] = updatedDate[date].filter(message => message.id !== id);
                 state.messageCache[idx] = {
                     ...state.messageCache[idx],
-                    messages: newList
+                    messages: updatedDate
                 }
             }
         },
@@ -82,7 +110,7 @@ export const MessengerSlice = createSlice({
         },
 
         clearUnread(state, action) {
-            if (state.isOpen === false) state.unread++;
+            if (state.isOpen === true) state.unread = 0;
         },
 
         closeOneBox(state, action) {

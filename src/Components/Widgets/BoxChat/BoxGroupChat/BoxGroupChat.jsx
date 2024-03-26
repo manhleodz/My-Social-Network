@@ -131,11 +131,11 @@ export default function BoxGroupChat({ chat }) {
 
     return (
         <>
-            <div
+            {/* <div
                 className=' fixed top-0 left-0 z-50 w-screen h-screen flex justify-center items-center p-10 max-[500px]:p-4 max-[500px]:py-14' style={{ backgroundColor: 'rgb(0,0,0,0.1)' }}
             >
 
-            </div>
+            </div> */}
             <div className={`${Styles.boxchat} ${isMobile ? 'w-[300px] h-[400px]' : 'w-80 h-[430px]'} rounded-xl shadow-xl  bg-white flex flex-col items-start relative`}>
                 {/* <div class=" absolute -left-80 top-10 w-72 h-full">
                     <PopChat chat={chat} />
