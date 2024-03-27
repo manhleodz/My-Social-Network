@@ -56,10 +56,16 @@ export default function InputForm({ listMessage, setListMessage, chat, user, typ
                 let date = newMessage.createdAt;
                 date = new Date(date).toLocaleDateString();
 
-                const newListMessage = { ...listMessage };
+                let newListMessage = { ...listMessage };
 
-                newListMessage[date].push(newMessage);
-                setListMessage(newListMessage);
+                if (newListMessage[date] !== undefined) {
+
+                    newListMessage[date].push(newMessage);
+                    setListMessage(newListMessage);
+                } else {
+                    newListMessage[date] = [newMessage];
+                    setListMessage(newListMessage);
+                }
                 dispatch(updateMessageCache(newMessage));
 
             }).catch((err) => {

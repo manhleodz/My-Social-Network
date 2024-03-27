@@ -37,46 +37,43 @@ function ListMessage({ listMessage, chat, setListMessage }) {
 
     useEffect(() => {
         socket.on("delete_message_receiver", async (data) => {
-            if (user.id === data.receiver) {
-                const date = data.date
-                const id = data.id;
-                let newListMessage = { ...listMessage };
-                const dataChange = newListMessage[date].filter(m => m.id !== id);
-                setListMessage({
-                    ...newListMessage,
-                    dataChange
-                })
-                dispatch(updateAfterDeleteMessage({
-                    RelationshipId: data.RelationshipId,
-                    id: id,
-                    date: date
-                }));
-            }
+            const date = data.date
+            const id = data.id;
+            let newListMessage = { ...listMessage };
+            const dataChange = newListMessage[date].filter(m => m.id !== id);
+            setListMessage({
+                ...newListMessage,
+                dataChange
+            })
+            dispatch(updateAfterDeleteMessage({
+                RelationshipId: data.RelationshipId,
+                id: id,
+                date: date
+            }));
         });
 
-        return () => socket.disconnect();
-    }, [socket]);
-
-
-    const messagesByDateKeys = Object.keys(listMessage);
-
-    useEffect(() => {
         socket.on("receive_message", (data) => {
-            if (data.room === `coversation-${chat.RelationshipId}`) {
-                let date = data.createdAt;
-                date = new Date(date).toLocaleDateString();
+            let date = data.createdAt;
+            date = new Date(date).toLocaleDateString();
 
-                const newListMessage = { ...listMessage };
+            let newListMessage = { ...listMessage };
+
+            if (newListMessage[date] !== undefined) {
 
                 newListMessage[date].push(data);
                 setListMessage(newListMessage);
-                dispatch(updateMessageCache(data));
+            } else {
+                newListMessage[date] = [newMessage];
+                setListMessage(newListMessage);
             }
+            dispatch(updateMessageCache(data));
         });
 
-        return () => socket.disconnect();
+        // return () => socket.disconnect();
     }, [socket]);
 
+    console.log(listMessage);
+    const messagesByDateKeys = Object.keys(listMessage);
 
     return (
         <>

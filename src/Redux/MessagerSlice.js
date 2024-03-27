@@ -55,7 +55,13 @@ export const MessengerSlice = createSlice({
             date = new Date(date).toLocaleDateString();
             let idx = state.messageCache.findIndex(e => e.RelationshipId == data.RelationshipId);
 
-            state.messageCache[idx].messages[date].push(data)
+            if (idx !== -1 && state.messageCache[idx].messages[date] !== undefined) {
+                state.messageCache[idx].messages[date].push(data)
+            } else if (idx !== -1) {
+                state.messageCache[idx].messages[date] = [data]
+            } else {
+                
+            }
         },
 
         addBoxChat(state, action) {

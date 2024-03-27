@@ -20,13 +20,15 @@ export default function ChatContainer({ chat }) {
         setListMessage({});
     }, []);
 
+
     useEffect(() => {
+        socket.emit("join_room", `coversation-${chat.RelationshipId}`);
+
         socket.on("typing", () => setTyping(true));
         socket.on("stop typing", () => setTyping(false));
     }, [])
 
     useEffect(() => {
-        socket.emit("join_room", `coversation-${chat.RelationshipId}`);
 
         if (chat.seen === false) {
             ChatApi.seenMessage(chat.RelationshipId);
